@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.mainView.contacts;
+package com.pgizka.gsenger.mainView.friends;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,12 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.provider.pojos.Friend;
 
 import java.util.List;
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
 
-    private List<Contact> contacts;
+    private List<Friend> friends;
 
     private OnContactClickListener onContactClickListener;
 
@@ -42,32 +43,32 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final Contact contact = contacts.get(position);
+        final Friend friend = friends.get(position);
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onContactClickListener != null) {
-                    onContactClickListener.onContactClicked(0, position, contact);
+                    onContactClickListener.onContactClicked(0, position, friend);
                 }
             }
         });
 
-        holder.userNameText.setText(contact.getUserName());
-        holder.statusText.setText(contact.getStatus());
+        holder.userNameText.setText(friend.getUserName());
+        holder.statusText.setText(friend.getStatus());
 
     }
 
     @Override
     public int getItemCount() {
-        if(contacts != null) {
-            return contacts.size();
+        if(friends != null) {
+            return friends.size();
         } else {
             return 0;
         }
     }
 
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
+    public void setFriends(List<Friend> friends) {
+        this.friends = friends;
     }
 
     public void setOnContactClickListener(OnContactClickListener onContactClickListener) {
@@ -75,7 +76,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     public static interface  OnContactClickListener {
-        void onContactClicked(int contactId, int position, Contact contact);
+        void onContactClicked(int contactId, int position, Friend friend);
     }
 
 }

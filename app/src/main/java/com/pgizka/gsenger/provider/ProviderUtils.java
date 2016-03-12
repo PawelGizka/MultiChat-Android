@@ -17,9 +17,9 @@ public class ProviderUtils {
         return context.getContentResolver().insert(uri, contentValues);
     }
 
-    public Uri insertFriend(String userName, long addedDate, String status,
+    public Uri insertFriend(int serverId, String userName, long addedDate, String status,
                              long lastLoggedDate, String photoPath, String photoHash) {
-        ContentValues contentValues = ContentValueUtils.createFriend(userName, addedDate, status, lastLoggedDate, photoPath, photoHash);
+        ContentValues contentValues = ContentValueUtils.createFriend(serverId, userName, addedDate, status, lastLoggedDate, photoPath, photoHash);
         Uri uri = GSengerContract.Friends.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }

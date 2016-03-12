@@ -71,7 +71,7 @@ public class TestProvider {
 
     @Test
     public void testFriends() throws Exception {
-        Uri uri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri uri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
 
         uri = GSengerContract.Friends.buildFriendUri(uri.getLastPathSegment());
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
@@ -96,7 +96,7 @@ public class TestProvider {
     @Test
     public void testToFriends() throws Exception {
         Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
-        Uri friendUri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
 
         String friendId = friendUri.getLastPathSegment();
         String commonTypeId = commonTypeUri.getLastPathSegment();
@@ -151,7 +151,7 @@ public class TestProvider {
 
     @Test
     public void testFriendHasChat() throws Exception {
-        Uri friendUri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
         Uri chatUri = providerUtils.insertChat(GSengerContract.Chats.CHAT_TYPE_CONVERSATION, "someChat", 123);
 
         String friendId = friendUri.getLastPathSegment();
@@ -220,7 +220,7 @@ public class TestProvider {
     @Test
     public void testCommonTypeJoinToFriends() throws Exception {
         Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
-        Uri friendUri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
         Uri toFriendsUri = providerUtils.insertToFriend(friendUri.getLastPathSegment(), commonTypeUri.getLastPathSegment(), 12345, 0);
 
         Cursor cursor = context.getContentResolver().query(toFriendsUri, null, null, null, null);
@@ -239,7 +239,7 @@ public class TestProvider {
 
     @Test
     public void testFriendsJoinChats() throws Exception {
-        Uri friendUri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
         Uri chatUri = providerUtils.insertChat(GSengerContract.Chats.CHAT_TYPE_CONVERSATION, "someChat", 123);
 
         String friendId = friendUri.getLastPathSegment();
@@ -272,7 +272,7 @@ public class TestProvider {
 
     @Test
     public void testChatsJoinFriends() throws Exception {
-        Uri friendUri = providerUtils.insertFriend("pawel", 123, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
         Uri chatUri = providerUtils.insertChat(GSengerContract.Chats.CHAT_TYPE_CONVERSATION, "someChat", 123);
 
         String friendId = friendUri.getLastPathSegment();
@@ -290,7 +290,7 @@ public class TestProvider {
         assertEquals("someChat", cursor.getString(cursor.getColumnIndex(GSengerContract.Chats.CHAT_NAME)));
 
         //insert another friend
-        friendUri = providerUtils.insertFriend("pawe2l", 12345, "status2", 0, "photoPath", "photoHash");
+        friendUri = providerUtils.insertFriend(1, "pawe2l", 12345, "status2", 0, "photoPath", "photoHash");
 
         friendId = friendUri.getLastPathSegment();
         chatId = chatUri.getLastPathSegment();
@@ -340,16 +340,16 @@ public class TestProvider {
         Uri chatUri = providerUtils.insertChat(GSengerContract.Chats.CHAT_TYPE_GROUP, "someChat", 123);
         String chatId = chatUri.getLastPathSegment();
 
-        Uri friendUri = providerUtils.insertFriend("pawel", 0, "status", 0, "photoPath", "photoHash");
+        Uri friendUri = providerUtils.insertFriend(0, "pawel", 0, "status", 0, "photoPath", "photoHash");
         String friendId = friendUri.getLastPathSegment();
 
-        Uri friendUri2 = providerUtils.insertFriend("asia", 0, "status", 0, "photoPath", "photoHash");
+        Uri friendUri2 = providerUtils.insertFriend(1, "asia", 0, "status", 0, "photoPath", "photoHash");
         String friendId2 = friendUri2.getLastPathSegment();
 
-        Uri friendUri3 = providerUtils.insertFriend("marcin", 0, "status", 0, "photoPath", "photoHash");
+        Uri friendUri3 = providerUtils.insertFriend(2, "marcin", 0, "status", 0, "photoPath", "photoHash");
         String friendId3 = friendUri3.getLastPathSegment();
 
-        Uri friendUri4 = providerUtils.insertFriend("sochaj", 0, "status", 0, "photoPath", "photoHash");
+        Uri friendUri4 = providerUtils.insertFriend(3, "sochaj", 0, "status", 0, "photoPath", "photoHash");
         String friendId4 = friendUri4.getLastPathSegment();
 
         providerUtils.insertFriendHasChat(friendId, chatId);

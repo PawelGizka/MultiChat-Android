@@ -11,7 +11,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     private static final String TAG = GSengerDatabase.class.getSimpleName();
 
     public static final String DATABASE_NAME = "gsenger.db";
-    public static final int CUR_DATABASE_VERSION = 2;
+    public static final int CUR_DATABASE_VERSION = 3;
 
     private final Context context;
 
@@ -67,7 +67,6 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 " ORDER BY " + COMMON_TYPES + "." + CommonTypes._ID + " DESC " +
                 " LIMIT 1)";
 
-        //this subquery is correlated, so do not try to use it as standalone
         String CHAT_CONVERSATION = COMMON_TYPES +
                 " LEFT OUTER JOIN " + MESSAGES +
                     " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
@@ -141,7 +140,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + Tables.COMMON_TYPES + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + CommonTypesColumns.COMMON_TYPE_SERVER_ID + " TEXT,"
+                + CommonTypesColumns.COMMON_TYPE_SERVER_ID + " INTEGER,"
                 + CommonTypesColumns.TYPE + " TEXT NOT NULL,"
                 + CommonTypesColumns.SEND_DATE + " INTEGER NOT NULL,"
                 + CommonTypesColumns.SENT + " INTEGER NOT NULL,"
@@ -151,7 +150,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + Tables.FRIENDS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + FriendsColumns.FRIEND_SERVER_ID + " TEXT,"
+                + FriendsColumns.FRIEND_SERVER_ID + " INTEGER,"
                 + FriendsColumns.USER_NAME + " TEXT NOT NULL,"
                 + FriendsColumns.ADDED_DATE + " INTEGER NOT NULL,"
                 + FriendsColumns.LAST_LOGGED_DATE + " INTEGER,"
@@ -168,7 +167,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + Tables.CHATS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + ChatsColumns.CHAT_SERVER_ID + " TEXT,"
+                + ChatsColumns.CHAT_SERVER_ID + " INTEGER,"
                 + ChatsColumns.STARTED_DATE + " INTEGER,"
                 + ChatsColumns.CHAT_NAME + " TEXT,"
                 + ChatsColumns.TYPE + " TEXT NOT NULL,"

@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.mainView.contacts;
+package com.pgizka.gsenger.mainView.friends;
 
 
 import android.os.Bundle;
@@ -13,26 +13,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
-import com.pgizka.gsenger.mainView.chats.ChatsView;
+import com.pgizka.gsenger.provider.pojos.Friend;
 
-public class ContactsFragment extends Fragment implements ContactsView<ContactsModel>{
+public class FriendsFragment extends Fragment implements FriendsContract.View<FriendsModel> {
 
-    private ContactsPresenter presenter;
+    private FriendsContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
 
-    private ContactsAdapter contactsAdapter;
+    private FriendsAdapter friendsAdapter;
 
-    public ContactsFragment() {
+    public FriendsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contactsAdapter = new ContactsAdapter();
+        friendsAdapter = new FriendsAdapter();
     }
 
     @Override
@@ -45,12 +44,12 @@ public class ContactsFragment extends Fragment implements ContactsView<ContactsM
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(contactsAdapter);
+        recyclerView.setAdapter(friendsAdapter);
 
-        contactsAdapter.setOnContactClickListener(new ContactsAdapter.OnContactClickListener() {
+        friendsAdapter.setOnContactClickListener(new FriendsAdapter.OnContactClickListener() {
             @Override
-            public void onContactClicked(int contactId, int position, Contact contact) {
-                presenter.contactClicked(contactId, position, contact);
+            public void onContactClicked(int contactId, int position, Friend friend) {
+                presenter.friendClicked(contactId, position, friend);
             }
         });
 
@@ -63,19 +62,19 @@ public class ContactsFragment extends Fragment implements ContactsView<ContactsM
     }
 
     @Override
-    public void setPresenter(ContactsPresenter presenter) {
+    public void setPresenter(FriendsContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void displayContactsList(ContactsModel model) {
-        boolean noContacts = model.getContacts().size() == 0;
+    public void displayContactsList(FriendsModel model) {
+        boolean noContacts = model.getFriends().size() == 0;
         if(noContacts) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
-            contactsAdapter.setContacts(model.getContacts());
-            contactsAdapter.notifyDataSetChanged();
+            friendsAdapter.setFriends(model.getFriends());
+            friendsAdapter.notifyDataSetChanged();
         }
     }
 

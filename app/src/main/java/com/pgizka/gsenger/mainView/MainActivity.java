@@ -9,27 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.iid.InstanceID;
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.dagger2.SimpleComponent;
-import com.pgizka.gsenger.dagger2.TestDependency;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenterImpl;
-import com.pgizka.gsenger.mainView.contacts.ContactsFragment;
-import com.pgizka.gsenger.mainView.contacts.ContactsPresenterImpl;
-import com.pgizka.gsenger.welcome.WelcomeActivity;
-
-import javax.inject.Inject;
+import com.pgizka.gsenger.mainView.friends.FriendsFragment;
+import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String CONTACTS_FRAGMENT_TAG = "contactsFragmentTag";
     private static final String CONTACTS_PRESENTER_TAG = "contactsPresenterTag";
 
-    TestDependency testDependency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        SimpleComponent simpleComponent = GSengerApplication.getSimpleComponent();
-        testDependency = simpleComponent.wgetTestDependency();
-
-        Toast.makeText(this, testDependency.getString(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -120,20 +101,20 @@ public class MainActivity extends AppCompatActivity {
 
                 return chatsFragment;
             } else {
-                ContactsFragment contactsFragment = (ContactsFragment) fragmentManager.findFragmentByTag(CONTACTS_FRAGMENT_TAG);
-                if(contactsFragment == null) {
-                    contactsFragment = new ContactsFragment();
+                FriendsFragment friendsFragment = (FriendsFragment) fragmentManager.findFragmentByTag(CONTACTS_FRAGMENT_TAG);
+                if(friendsFragment == null) {
+                    friendsFragment = new FriendsFragment();
                 }
 
-                ContactsPresenterImpl contactsPresenter = (ContactsPresenterImpl) fragmentManager.findFragmentByTag(CONTACTS_PRESENTER_TAG);
+                FriendsPresenter contactsPresenter = (FriendsPresenter) fragmentManager.findFragmentByTag(CONTACTS_PRESENTER_TAG);
                 if(contactsPresenter == null) {
-                    contactsPresenter = new ContactsPresenterImpl();
+                    contactsPresenter = new FriendsPresenter();
                     fragmentManager.beginTransaction().add(contactsPresenter, CONTACTS_PRESENTER_TAG).commit();
-                    contactsPresenter.setContactsView(contactsFragment);
+                    contactsPresenter.setContactsView(friendsFragment);
                 }
-                contactsFragment.setPresenter(contactsPresenter);
+                friendsFragment.setPresenter(contactsPresenter);
 
-                return contactsFragment;
+                return friendsFragment;
             }
         }
 

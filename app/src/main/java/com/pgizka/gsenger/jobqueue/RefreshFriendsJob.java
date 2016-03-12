@@ -7,6 +7,7 @@ import com.pgizka.gsenger.dagger2.TestDependency;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsRequestDTO;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsResponseDTO;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsRetrofit;
+import com.pgizka.gsenger.util.ContactsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import retrofit2.Response;
 
 public class RefreshFriendsJob extends Job {
+
 
 
     public RefreshFriendsJob() {
@@ -28,28 +30,27 @@ public class RefreshFriendsJob extends Job {
     @Override
     public void onRun() throws Throwable {
 
-        List<String> phoneNumbers = listAllContacts();
+        List<String> phoneNumbers = ContactsUtil.listAllContactsPhoneNumbers(null);
         RefreshFriendsRequestDTO friendsRequestDTO = prepareRequest(phoneNumbers);
 
         Response<RefreshFriendsResponseDTO> response =
                 RefreshFriendsRetrofit.getRefreshFriendsInterface().register(friendsRequestDTO).execute();
 
         if (response.isSuccess()) {
-
+            processResponse(response.body());
         } else {
             throw new Exception();
         }
 
     }
 
-    private List<String> listAllContacts() {
-
-        return new ArrayList<>();
-    }
-
     private RefreshFriendsRequestDTO prepareRequest(List<String> phoneNumbers) {
 
         return new RefreshFriendsRequestDTO();
+    }
+
+    private void processResponse(RefreshFriendsResponseDTO responseDTO) {
+
     }
 
 

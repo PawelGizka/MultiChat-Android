@@ -16,8 +16,9 @@ public class ContentValueUtils {
     }
 
     public static ContentValues createFriend(
-            String userName, long addedDate, String status, long lastLoggedDate, String photoPath, String photoHash) {
+            int serverId, String userName, long addedDate, String status, long lastLoggedDate, String photoPath, String photoHash) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.Friends.FRIEND_SERVER_ID, serverId);
         contentValues.put(GSengerContract.Friends.USER_NAME, userName);
         contentValues.put(GSengerContract.Friends.ADDED_DATE, addedDate);
         contentValues.put(GSengerContract.Friends.STATUS, status);

@@ -2,7 +2,8 @@ package com.pgizka.gsenger.provider.pojos;
 
 public class Friend {
 
-    private int id;
+    private transient int id;
+
     private int serverId;
     private String userName;
     private long addedDate;

@@ -83,7 +83,7 @@ public class TestDB extends AndroidTestCase{
     }
 
     private long insertNewFriend(){
-        ContentValues contentValues = ContentValueUtils.createFriend("pawel", 123, "status", 12345, "photoPath", "photoHash");
+        ContentValues contentValues = ContentValueUtils.createFriend(0, "pawel", 123, "status", 12345, "photoPath", "photoHash");
 
         long id = database.insert(GSengerDatabase.Tables.FRIENDS, null, contentValues);
         assertNotSame(-1, id);

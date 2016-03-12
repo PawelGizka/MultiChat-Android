@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.mainView.contacts;
+package com.pgizka.gsenger.mainView.friends;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,18 +10,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.pojos.Friend;
 
-public class ContactsPresenterImpl extends Fragment implements ContactsPresenter, LoaderManager.LoaderCallbacks<Cursor> {
+public class FriendsPresenter extends Fragment implements FriendsContract.Presenter, LoaderManager.LoaderCallbacks<Cursor> {
 
-    ContactsView<ContactsModel> contactsView;
-    AppCompatActivity activity;
-    ContactsModel contactsModel;
+    private FriendsContract.View<FriendsModel> contactsView;
+    private AppCompatActivity activity;
+    private FriendsModel friendsModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (AppCompatActivity) getActivity();
-        contactsModel = new ContactsModel();
+        friendsModel = new FriendsModel();
     }
 
     @Override
@@ -31,15 +32,9 @@ public class ContactsPresenterImpl extends Fragment implements ContactsPresenter
         loaderManager.initLoader(0, null, this);
     }
 
-    public void setContactsView(ContactsView<ContactsModel> contactsView) {
+    public void setContactsView(FriendsContract.View<FriendsModel> contactsView) {
         this.contactsView = contactsView;
     }
-
-    @Override
-    public void contactClicked(int contactId, int position, Contact contact) {
-
-    }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -50,9 +45,9 @@ public class ContactsPresenterImpl extends Fragment implements ContactsPresenter
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        boolean successfullyReadData = contactsModel.readDataFromCursor(data);
+        boolean successfullyReadData = friendsModel.readDataFromCursor(data);
         if(successfullyReadData) {
-            contactsView.displayContactsList(contactsModel);
+            contactsView.displayContactsList(friendsModel);
         } else {
             contactsView.displayErrorMessage(buildErrorReadingDataAlert());
         }
@@ -67,6 +62,11 @@ public class ContactsPresenterImpl extends Fragment implements ContactsPresenter
 
     @Override
     public void onLoaderReset(Loader loader) {
+
+    }
+
+    @Override
+    public void friendClicked(int contactId, int position, Friend friend) {
 
     }
 }
