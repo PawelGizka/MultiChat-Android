@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.pgizka.gsenger.mainView.contacts.ContactsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contacts_empty_text_view"
+        android:text="You havent got any contacts"
+        android:gravity="center"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contacts_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+</FrameLayout>

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">GSenger</string>
+    <string name="google_app_id">1048796346746</string>
+
+    <!-- Titles of activities and fragments -->
+    <string name="title_activity_welcome">Sign in</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- Strings related to registration -->
+    <string name="registration_prompt_email">Email</string>
+    <string name="registration_prompt_password">Password</string>
+    <string name="registration_prompt_phone_number">Phone number</string>
+    <string name="registration_prompt_user_name">User name</string>
+    <string name="registration_action_sign_in">Sign in or register</string>
+    <string name="registration_action_sign_in_short">Sign in</string>
+    <string name="registration_error_invalid_email">This email address is invalid</string>
+    <string name="registration_error_invalid_password">This password is too short</string>
+    <string name="registration_error_incorrect_password">This password is incorrect</string>
+    <string name="registration_error_field_required">This field is required</string>
+    <string name="registration_permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="registration_error_user_already_exist">User with given email already exist</string>
+    <string name="registration_successfully_registered">User has been successfully registered</string>
+
+    <!-- Strings related to connection problems -->
+    <string name="connection_failed">Cannot connect to server</string>
+    <string name="connection_unexpected_error">Unexpected error occur during connection to server</string>
+
+
+    <!-- Common String -->
+    <string name="success">Success!</string>
+    <string name="failure">Failure</string>
+    <string name="ok">Ok</string>
+
+
+</resources>
