@@ -13,8 +13,6 @@ public interface ChatsContract {
 
         void displayErrorMessage(AlertDialog alertDialog);
 
-        void setPresenter(Presenter presenter);
-
     }
 
     interface Presenter {

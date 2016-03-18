@@ -23,6 +23,7 @@ public class ChatsPresenterImpl extends Fragment implements ChatsContract.Presen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        chatsView = (ChatsContract.View<ChatsToDisplayModel>) getTargetFragment();
         activity = chatsView.getHoldingActivity();
         chatsToDisplayModel = new ChatsToDisplayModel();
     }
@@ -32,10 +33,6 @@ public class ChatsPresenterImpl extends Fragment implements ChatsContract.Presen
         super.onActivityCreated(savedInstanceState);
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
-    }
-
-    public void setChatsView(ChatsContract.View chatsView) {
-        this.chatsView = chatsView;
     }
 
     @Override

@@ -40,6 +40,8 @@ public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsT
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
+        presenter = (ChatsContract.Presenter) getTargetFragment();
+
         emptyTextView = (TextView) view.findViewById(R.id.chats_empty_text_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.chats_recycler_view);
 
@@ -55,11 +57,6 @@ public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsT
         });
 
         return view;
-    }
-
-    @Override
-    public void setPresenter(ChatsContract.Presenter presenter){
-        this.presenter = presenter;
     }
 
     @Override

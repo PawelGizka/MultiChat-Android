@@ -41,6 +41,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
+        presenter = (FriendsContract.Presenter) getTargetFragment();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.contacts_recycler_view);
         emptyTextView = (TextView) view.findViewById(R.id.contacts_empty_text_view);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.contacts_swipe_to_refresh);
@@ -69,11 +71,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
     @Override
     public AppCompatActivity getHoldingActivity() {
         return (AppCompatActivity) getActivity();
-    }
-
-    @Override
-    public void setPresenter(FriendsContract.Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override

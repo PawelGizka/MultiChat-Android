@@ -35,12 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
 
-    private static final String CHATS_FRAGMENT_TAG = "chatsFragmentTag";
     private static final String CHATS_PRESENTER_TAG = "chatsPresenterTag";
-
-    private static final String CONTACTS_FRAGMENT_TAG = "contactsFragmentTag";
     private static final String CONTACTS_PRESENTER_TAG = "contactsPresenterTag";
 
+    private ChatsFragment chatsFragment;
+    private FriendsFragment friendsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if(position == 0) {
-                ChatsFragment chatsFragment = (ChatsFragment) fragmentManager.findFragmentByTag(CHATS_FRAGMENT_TAG);
                 if(chatsFragment == null) {
                     chatsFragment = new ChatsFragment();
                 }
@@ -143,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
                 if(chatsPresenter == null) {
                     chatsPresenter = new ChatsPresenterImpl();
                     fragmentManager.beginTransaction().add(chatsPresenter, CHATS_PRESENTER_TAG).commit();
-                    chatsPresenter.setChatsView(chatsFragment);
                 }
-                chatsFragment.setPresenter(chatsPresenter);
+
+                chatsFragment.setTargetFragment(chatsPresenter, 0);
+                chatsPresenter.setTargetFragment(chatsFragment, 0);
 
                 return chatsFragment;
             } else {
-                FriendsFragment friendsFragment = (FriendsFragment) fragmentManager.findFragmentByTag(CONTACTS_FRAGMENT_TAG);
                 if(friendsFragment == null) {
                     friendsFragment = new FriendsFragment();
                 }
@@ -158,9 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 if(contactsPresenter == null) {
                     contactsPresenter = new FriendsPresenter();
                     fragmentManager.beginTransaction().add(contactsPresenter, CONTACTS_PRESENTER_TAG).commit();
-                    contactsPresenter.setContactsView(friendsFragment);
                 }
-                friendsFragment.setPresenter(contactsPresenter);
+                friendsFragment.setTargetFragment(contactsPresenter, 0);
+                contactsPresenter.setTargetFragment(friendsFragment, 0);
 
                 return friendsFragment;
             }

@@ -37,6 +37,7 @@ public class FriendsPresenter extends Fragment implements FriendsContract.Presen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        contactsView = (FriendsContract.View<FriendsModel>) getTargetFragment();
         GSengerApplication.getApplicationComponent().inject(this);
         eventBus.register(this);
         activity = (AppCompatActivity) getActivity();
@@ -54,10 +55,6 @@ public class FriendsPresenter extends Fragment implements FriendsContract.Presen
         super.onActivityCreated(savedInstanceState);
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
-    }
-
-    public void setContactsView(FriendsContract.View<FriendsModel> contactsView) {
-        this.contactsView = contactsView;
     }
 
     @Override

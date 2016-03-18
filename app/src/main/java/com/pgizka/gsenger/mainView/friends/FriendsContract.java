@@ -18,8 +18,6 @@ public interface FriendsContract {
 
         AppCompatActivity getHoldingActivity();
 
-        void setPresenter(Presenter presenter);
-
         void displayContactsList(Model model);
 
         void displayErrorMessage(AlertDialog alertDialog);
