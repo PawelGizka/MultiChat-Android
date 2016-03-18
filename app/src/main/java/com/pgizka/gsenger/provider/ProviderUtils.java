@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.pgizka.gsenger.provider.pojos.CommonType;
 import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Media;
 import com.pgizka.gsenger.provider.pojos.Message;
 
 public class ProviderUtils {
@@ -73,6 +74,12 @@ public class ProviderUtils {
     public Uri insertMedia(String commonTypeId, String type, String fileName,
                             String description, String path) {
         ContentValues contentValues = ContentValueUtils.createMedia(commonTypeId, type, fileName, description, path);
+        Uri uri = GSengerContract.Medias.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
+    public Uri insertMedia(Media media) {
+        ContentValues contentValues = ContentValueUtils.createMedia(media);
         Uri uri = GSengerContract.Medias.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }

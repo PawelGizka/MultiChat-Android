@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.pgizka.gsenger.provider.pojos.CommonType;
 import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Media;
 import com.pgizka.gsenger.provider.pojos.Message;
 
 public class ContentValueUtils {
@@ -100,6 +101,16 @@ public class ContentValueUtils {
         contentValues.put(GSengerContract.Medias.FILE_NAME, fileName);
         contentValues.put(GSengerContract.Medias.DESCRIPTION, description);
         contentValues.put(GSengerContract.Medias.PATH, path);
+        return contentValues;
+    }
+
+    public static ContentValues createMedia(Media media) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.Medias.COMMON_TYPE_ID, media.getId());
+        contentValues.put(GSengerContract.Medias.TYPE, media.getMediaType());
+        contentValues.put(GSengerContract.Medias.FILE_NAME, media.getFileName());
+        contentValues.put(GSengerContract.Medias.DESCRIPTION, media.getDescription());
+        contentValues.put(GSengerContract.Medias.PATH, media.getPath());
         return contentValues;
     }
 
