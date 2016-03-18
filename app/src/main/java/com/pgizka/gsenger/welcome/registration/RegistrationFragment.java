@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -39,10 +40,13 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
     private ProgressDialog progressDialog;
 
+    private UserAccountManager userAccountManager;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        userAccountManager = new UserAccountManager(getActivity());
     }
 
     @Override
@@ -75,7 +79,10 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
     @Override
     public boolean shouldDisplay(Context context) {
-        return !UserAccountManager.isUserRegistered(context);
+        if (userAccountManager == null) {
+            userAccountManager = GSengerApplication.getApplicationComponent().userAccountManager();
+        }
+        return !userAccountManager.isUserRegistered();
     }
 
     private void onLoginButtonClicked() {
@@ -85,7 +92,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         int phoneNumber = Integer.parseInt(phoneNumberEditText.getText().toString());
         String token = GCMUTil.getRegistrationToken(getContext());
 
-        new RegistrationTask(getContext(), email, userName, password, phoneNumber, token)
+        new RegistrationTask(email, userName, password, phoneNumber, token)
                 .execute();
 
         loginButton.setEnabled(false);

@@ -14,9 +14,9 @@ import com.pgizka.gsenger.provider.GSengerContract;
 
 public class ChatsPresenterImpl extends Fragment implements ChatsPresenter, LoaderManager.LoaderCallbacks<Cursor> {
 
-    ChatsView<ChatsToDisplayModel> chatsView;
-    AppCompatActivity activity;
-    ChatsToDisplayModel chatsToDisplayModel;
+    private ChatsView<ChatsToDisplayModel> chatsView;
+    private AppCompatActivity activity;
+    private ChatsToDisplayModel chatsToDisplayModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,19 +50,8 @@ public class ChatsPresenterImpl extends Fragment implements ChatsPresenter, Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        boolean successfullyReadDate = chatsToDisplayModel.readDataFromCursor(data);
-        if(successfullyReadDate) {
-            chatsView.displayChatsList(chatsToDisplayModel);
-        } else {
-            chatsView.displayErrorMessage(buildErrorReadingDataAlert());
-        }
-    }
-
-    private AlertDialog buildErrorReadingDataAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Error while reading data")
-                .setNeutralButton("Ok", null);
-        return builder.create();
+        chatsToDisplayModel.readDataFromCursor(data);
+        chatsView.displayChatsList(chatsToDisplayModel);
     }
 
     @Override

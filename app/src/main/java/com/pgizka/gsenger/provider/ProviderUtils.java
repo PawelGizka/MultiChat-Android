@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
+import com.pgizka.gsenger.provider.pojos.CommonType;
+import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Message;
+
 public class ProviderUtils {
     Context context;
 
@@ -11,8 +15,14 @@ public class ProviderUtils {
         this.context = context;
     }
 
-    public Uri insertCommonType(String type, long sendDate, int sent, String senderId, String chatId) {
-        ContentValues contentValues = ContentValueUtils.createCommonType(type, sendDate, sent, senderId, chatId);
+    public Uri insertCommonType(String type, long sendDate, int state, String senderId, String chatId) {
+        ContentValues contentValues = ContentValueUtils.createCommonType(type, sendDate, state, senderId, chatId);
+        Uri uri = GSengerContract.CommonTypes.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
+    public Uri insertCommonType(CommonType commonType) {
+        ContentValues contentValues = ContentValueUtils.createCommonType(commonType);
         Uri uri = GSengerContract.CommonTypes.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }
@@ -20,6 +30,12 @@ public class ProviderUtils {
     public Uri insertFriend(int serverId, String userName, long addedDate, String status,
                              long lastLoggedDate, String photoPath, String photoHash) {
         ContentValues contentValues = ContentValueUtils.createFriend(serverId, userName, addedDate, status, lastLoggedDate, photoPath, photoHash);
+        Uri uri = GSengerContract.Friends.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
+    public Uri insertFriend(Friend friend) {
+        ContentValues contentValues = ContentValueUtils.createFriend(friend);
         Uri uri = GSengerContract.Friends.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }
@@ -44,6 +60,12 @@ public class ProviderUtils {
 
     public Uri insertMessage(String commonTypeId, String text) {
         ContentValues contentValues = ContentValueUtils.createMessage(commonTypeId, text);
+        Uri uri = GSengerContract.Messages.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
+    public Uri insertMessage(Message message) {
+        ContentValues contentValues = ContentValueUtils.createMessage(message);
         Uri uri = GSengerContract.Messages.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }

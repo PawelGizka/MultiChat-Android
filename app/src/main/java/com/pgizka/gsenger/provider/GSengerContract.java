@@ -22,7 +22,7 @@ public class GSengerContract {
 
         String SEND_DATE = "send_date";
 
-        String SENT = "sent";
+        String STATE = "state";
         /** Indicates who sent this item. If null it means that this is from owner of phone **/
         String SENDER_ID = "sender_id";
 
@@ -173,6 +173,19 @@ public class GSengerContract {
 
         public static final String COMMON_TYPE_MESSAGE = "message";
         public static final String COMMON_TYPE_MEDIA = "media";
+
+        public enum State {
+            WAITING_TO_SEND(0),
+            SENDING(1),
+            CANNOT_SEND(2),
+            SENT(3);
+
+            public int code;
+
+            State(int code) {
+                this.code = code;
+            }
+        }
 
         public static final boolean isValidCommonType(String type) {
             return COMMON_TYPE_MESSAGE.equals(type) || COMMON_TYPE_MEDIA.equals(type);

@@ -11,7 +11,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     private static final String TAG = GSengerDatabase.class.getSimpleName();
 
     public static final String DATABASE_NAME = "gsenger.db";
-    public static final int CUR_DATABASE_VERSION = 3;
+    public static final int CUR_DATABASE_VERSION = 4;
 
     private final Context context;
 
@@ -87,6 +87,20 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                     " AND " + TO_FRIENDS + "." + ToFriends.TO_FRIEND_ID +
                     " = " + SELECT_LAST_TO_FRIEND_SUBQUERY;
 
+        String MESSAGE_JOIN_COMMON_TYPE = COMMON_TYPES +
+                " INNER JOIN " + MESSAGES +
+                " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
+                " = " + "'" + CommonTypes.COMMON_TYPE_MESSAGE + "'" +
+                " AND " + COMMON_TYPES + "." + CommonTypes._ID +
+                " = " + MESSAGES + "." + Messages.COMMON_TYPE_ID;
+
+        String MEDIA_JOIN_COMMON_TYPE = COMMON_TYPES +
+                " LEFT OUTER JOIN " + MEDIAS +
+                " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
+                " = " + "'" + CommonTypes.COMMON_TYPE_MEDIA + "'" +
+                " AND " + COMMON_TYPES + "." + CommonTypes._ID +
+                " = " + MEDIAS + "." + Medias.COMMON_TYPE_ID;
+
         String CHATS_TO_DISPLAY = CHATS +
                 " LEFT OUTER JOIN " + FRIEND_HAS_CHAT +
                     " ON " + CHATS + "." + Chats.TYPE +
@@ -143,7 +157,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 + CommonTypesColumns.COMMON_TYPE_SERVER_ID + " INTEGER,"
                 + CommonTypesColumns.TYPE + " TEXT NOT NULL,"
                 + CommonTypesColumns.SEND_DATE + " INTEGER NOT NULL,"
-                + CommonTypesColumns.SENT + " INTEGER NOT NULL,"
+                + CommonTypesColumns.STATE + " INTEGER NOT NULL,"
                 + CommonTypesColumns.SENDER_ID + " INTEGER " + References.SENDER_ID + ","
                 + CommonTypesColumns.CHAT_ID + " INTEGER " + References.CHAT_ID + ","
                 + "UNIQUE (" + CommonTypesColumns.COMMON_TYPE_SERVER_ID + ") ON CONFLICT REPLACE)");

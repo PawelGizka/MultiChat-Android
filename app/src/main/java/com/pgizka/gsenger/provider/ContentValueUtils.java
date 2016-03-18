@@ -2,16 +2,30 @@ package com.pgizka.gsenger.provider;
 
 import android.content.ContentValues;
 
+import com.pgizka.gsenger.provider.pojos.CommonType;
+import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Message;
+
 public class ContentValueUtils {
 
     public static ContentValues createCommonType(
-            String type, long sendDate, int sent, String senderId, String chatId) {
+            String type, long sendDate, int state, String senderId, String chatId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.CommonTypes.TYPE, type);
         contentValues.put(GSengerContract.CommonTypes.SEND_DATE, sendDate);
-        contentValues.put(GSengerContract.CommonTypes.SENT, sent);
+        contentValues.put(GSengerContract.CommonTypes.STATE, state);
         contentValues.put(GSengerContract.CommonTypes.SENDER_ID, senderId);
         contentValues.put(GSengerContract.CommonTypes.CHAT_ID, chatId);
+        return contentValues;
+    }
+
+    public static ContentValues createCommonType(CommonType commonType) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.CommonTypes.TYPE, commonType.getType());
+        contentValues.put(GSengerContract.CommonTypes.SEND_DATE, commonType.getSendDate());
+        contentValues.put(GSengerContract.CommonTypes.STATE, commonType.getState());
+        contentValues.put(GSengerContract.CommonTypes.SENDER_ID, commonType.getServerId());
+        contentValues.put(GSengerContract.CommonTypes.CHAT_ID, commonType.getChatId());
         return contentValues;
     }
 
@@ -25,6 +39,18 @@ public class ContentValueUtils {
         contentValues.put(GSengerContract.Friends.LAST_LOGGED_DATE, lastLoggedDate);
         contentValues.put(GSengerContract.Friends.PHOTO, photoPath);
         contentValues.put(GSengerContract.Friends.PHOTO_HASH, photoHash);
+        return contentValues;
+    }
+
+    public static ContentValues createFriend(Friend friend) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.Friends.FRIEND_SERVER_ID, friend.getServerId());
+        contentValues.put(GSengerContract.Friends.USER_NAME, friend.getUserName());
+        contentValues.put(GSengerContract.Friends.ADDED_DATE, friend.getAddedDate());
+        contentValues.put(GSengerContract.Friends.STATUS, friend.getStatus());
+        contentValues.put(GSengerContract.Friends.LAST_LOGGED_DATE, friend.getLastLoggedDate());
+        contentValues.put(GSengerContract.Friends.PHOTO, friend.getPhotoPath());
+        contentValues.put(GSengerContract.Friends.PHOTO_HASH, friend.getPhotoHash());
         return contentValues;
     }
 
@@ -56,6 +82,13 @@ public class ContentValueUtils {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.Messages.COMMON_TYPE_ID, commonTypeId);
         contentValues.put(GSengerContract.Messages.TEXT, text);
+        return contentValues;
+    }
+
+    public static ContentValues createMessage(Message message) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.Messages.COMMON_TYPE_ID, message.getId());
+        contentValues.put(GSengerContract.Messages.TEXT, message.getText());
         return contentValues;
     }
 

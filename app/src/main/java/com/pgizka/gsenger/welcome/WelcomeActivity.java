@@ -36,6 +36,7 @@ public class WelcomeActivity extends AppCompatActivity  {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
 
         // Wire up the fragment

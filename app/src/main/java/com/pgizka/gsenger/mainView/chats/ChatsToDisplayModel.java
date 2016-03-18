@@ -11,18 +11,16 @@ public class ChatsToDisplayModel {
 
     List<ChatToDisplay> chatToDisplays;
 
-    public boolean readDataFromCursor(Cursor cursor){
+    public void readDataFromCursor(Cursor cursor){
         chatToDisplays = new ArrayList<>();
 
         if(!cursor.moveToFirst()){
-            return true;
+            return;
         }
 
         do {
             chatToDisplays.add(makeChat(cursor));
         } while (cursor.moveToNext());
-
-        return true;
     }
 
     private ChatToDisplay makeChat(Cursor cursor) {

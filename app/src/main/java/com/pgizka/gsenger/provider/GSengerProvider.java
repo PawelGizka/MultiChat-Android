@@ -173,22 +173,22 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case MESSAGES: {
-                queryBuilder.setTables(Tables.MESSAGES);
+                queryBuilder.setTables(Tables.MESSAGE_JOIN_COMMON_TYPE);
                 break;
             }
             case MESSAGE: {
-                queryBuilder.setTables(Tables.MESSAGES);
+                queryBuilder.setTables(Tables.MESSAGE_JOIN_COMMON_TYPE);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
                         Tables.MESSAGES + "." + GSengerContract.Messages.COMMON_TYPE_ID + " = " + id);
                 break;
             }
             case MEDIAS: {
-                queryBuilder.setTables(Tables.MEDIAS);
+                queryBuilder.setTables(Tables.MEDIA_JOIN_COMMON_TYPE);
                 break;
             }
             case MEDIA: {
-                queryBuilder.setTables(Tables.MEDIAS);
+                queryBuilder.setTables(Tables.MEDIA_JOIN_COMMON_TYPE);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
                         Tables.MEDIAS + "." + GSengerContract.Medias.COMMON_TYPE_ID + " = " + id);

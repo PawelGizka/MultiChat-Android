@@ -3,6 +3,7 @@ package com.pgizka.gsenger.mainView.friends;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private FriendsAdapter friendsAdapter;
 
@@ -41,6 +43,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
 
         recyclerView = (RecyclerView) view.findViewById(R.id.contacts_recycler_view);
         emptyTextView = (TextView) view.findViewById(R.id.contacts_empty_text_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.contacts_swipe_to_refresh);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -50,6 +53,13 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
             @Override
             public void onContactClicked(int contactId, int position, Friend friend) {
                 presenter.friendClicked(contactId, position, friend);
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.refreshFriends();
             }
         });
 
@@ -81,5 +91,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
     @Override
     public void displayErrorMessage(AlertDialog alertDialog) {
         alertDialog.show();
+    }
+
+    @Override
+    public void dismissRefreshing() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

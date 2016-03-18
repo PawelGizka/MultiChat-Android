@@ -10,6 +10,8 @@ public interface FriendsContract {
     interface Presenter {
 
         void friendClicked(int contactId, int position, Friend friend);
+
+        void refreshFriends();
     }
 
     interface View<Model> {
@@ -21,6 +23,8 @@ public interface FriendsContract {
         void displayContactsList(Model model);
 
         void displayErrorMessage(AlertDialog alertDialog);
+
+        void dismissRefreshing();
 
     }
 

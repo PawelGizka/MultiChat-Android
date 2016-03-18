@@ -5,23 +5,31 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.io.ResultCode;
-import com.pgizka.gsenger.io.UserRegistrationI;
+import com.pgizka.gsenger.api.ResultCode;
+import com.pgizka.gsenger.api.UserRestService;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
+import retrofit2.Call;
 import retrofit2.Response;
 
 public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     static final String TAG = RegistrationTask.class.getSimpleName();
 
-    //@Inject
-    private UserRegistrationI userRegistrationI;
+    @Inject
+    UserRestService userRestService;
 
-    private Context context;
+    @Inject
+    EventBus eventBus;
+
+    @Inject
+    UserAccountManager userAccountManager;
 
     private String email;
     private String userName;
@@ -29,8 +37,9 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     private int phoneNumber;
     private String gcmToken;
 
-    public RegistrationTask(Context context, String email, String userName, String password, int phoneNumber, String gcmToken) {
-        this.context = context;
+    public RegistrationTask(String email, String userName, String password, int phoneNumber, String gcmToken) {
+        GSengerApplication.getApplicationComponent().inject(this);
+
         this.email = email;
         this.userName = userName;
         this.password = password;
@@ -40,14 +49,12 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        UserRegistrationRequestDTO requestDTO = createRequest();
+        UserRegistrationRequest requestDTO = createRequest();
 
-//        Retrofit retrofit = RetrofitFactory.getInstance();
-//        UserRegistrationI userRegistrationI = retrofit.create(UserRegistrationI.class);
-
-        UserRegistrationResponseDTO responseDTO = null;
+        UserRegistrationResponse responseDTO = null;
         try {
-            Response<UserRegistrationResponseDTO> response = userRegistrationI.register(requestDTO).execute();
+            Call<UserRegistrationResponse> call = userRestService.register(requestDTO);
+            Response<UserRegistrationResponse> response = call.execute();
             if (response.isSuccess()) {
                 responseDTO = response.body();
             } else {
@@ -61,8 +68,8 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    private UserRegistrationRequestDTO createRequest() {
-        UserRegistrationRequestDTO requestDTO = new UserRegistrationRequestDTO();
+    private UserRegistrationRequest createRequest() {
+        UserRegistrationRequest requestDTO = new UserRegistrationRequest();
         requestDTO.setEmail(email);
         requestDTO.setPassword(password);
         requestDTO.setUserName(userName);
@@ -72,7 +79,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
         return requestDTO;
     }
 
-    private void processResponse(UserRegistrationResponseDTO responseDTO) {
+    private void processResponse(UserRegistrationResponse responseDTO) {
 
         RegistrationEvent registrationEvent = new RegistrationEvent();
         if (responseDTO == null) {
@@ -83,7 +90,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
             int resultCode = responseDTO.getResultCode();
             if (resultCode == ResultCode.OK.code) {
                 registrationEvent.setSuccess(true);
-                UserAccountManager.setUserRegistered(context, responseDTO.getUserId());
+                userAccountManager.setUserRegistered(responseDTO.getUserId());
             } else if (resultCode == ResultCode.USER_ALREADY_EXIST.code) {
                 registrationEvent.setSuccess(false);
                 registrationEvent.setMessage(R.string.registration_error_user_already_exist);
@@ -93,7 +100,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        EventBus.getDefault().post(registrationEvent);
+        eventBus.post(registrationEvent);
     }
 
 

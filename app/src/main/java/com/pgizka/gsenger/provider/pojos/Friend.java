@@ -89,4 +89,23 @@ public class Friend {
     public void setPhotoHash(String photoHash) {
         this.photoHash = photoHash;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Friend friend = (Friend) o;
+
+        if (id != friend.id) return false;
+        if (serverId != friend.serverId) return false;
+        if (addedDate != friend.addedDate) return false;
+        if (lastLoggedDate != friend.lastLoggedDate) return false;
+        if (userName != null ? !userName.equals(friend.userName) : friend.userName != null)
+            return false;
+        if (status != null ? !status.equals(friend.status) : friend.status != null) return false;
+        if (photoPath != null ? !photoPath.equals(friend.photoPath) : friend.photoPath != null)
+            return false;
+        return !(photoHash != null ? !photoHash.equals(friend.photoHash) : friend.photoHash != null);
+    }
 }
