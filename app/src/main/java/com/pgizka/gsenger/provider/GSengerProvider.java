@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -306,11 +305,19 @@ public class GSengerProvider extends ContentProvider {
                 //do nothing
                 break;
             }
-            case COMMON_TYPE:
-            case FRIEND:
-            case CHAT: {
+            case COMMON_TYPE: {
                 String commonTypeId = uri.getLastPathSegment();
-                whereClause = BaseColumns._ID + " = " + commonTypeId;
+                whereClause = GSengerContract.CommonTypes._ID + " = " + commonTypeId;
+                break;
+            }
+            case FRIEND: {
+                String friendId = uri.getLastPathSegment();
+                whereClause = GSengerContract.Friends._ID + " = " + friendId;
+                break;
+            }
+            case CHAT: {
+                String chatId = uri.getLastPathSegment();
+                whereClause = GSengerContract.Chats._ID + " = " + chatId;
                 break;
             }
             case TO_FRIEND: {

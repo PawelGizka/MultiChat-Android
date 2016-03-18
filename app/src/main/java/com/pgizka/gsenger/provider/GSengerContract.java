@@ -16,6 +16,8 @@ public class GSengerContract {
 
     interface CommonTypesColumns{
 
+        String _ID = "common_type_id";
+
         String COMMON_TYPE_SERVER_ID = "common_type_server_id";
 
         String TYPE = "message_type";
@@ -31,6 +33,8 @@ public class GSengerContract {
     }
 
     interface FriendsColumns{
+
+        String _ID = "friend_id";
 
         String FRIEND_SERVER_ID = "friend_server_id";
 
@@ -49,11 +53,9 @@ public class GSengerContract {
     }
 
     interface ToFriendsColumns{
-        /** Foreign key mapping to Friends table, if 0 it means that
-         * this is to owner of phone
-         */
+
         String TO_FRIEND_ID = "to_friend_id";
-        /** Foreign key mapping to CommonType tabel*/
+
         String COMMON_TYPE_ID = "common_type_id";
 
         String DELIVERED_DATE = "delivered_date";
@@ -63,6 +65,8 @@ public class GSengerContract {
     }
 
     interface ChatsColumns{
+
+        String _ID = "chat_id";
 
         String CHAT_SERVER_ID = "chat_server_id";
 
@@ -169,7 +173,7 @@ public class GSengerContract {
         }
     }
 
-    public static class CommonTypes implements CommonTypesColumns, BaseColumns {
+    public static class CommonTypes implements CommonTypesColumns {
 
         public static final String COMMON_TYPE_MESSAGE = "message";
         public static final String COMMON_TYPE_MEDIA = "media";
@@ -208,7 +212,7 @@ public class GSengerContract {
 
     }
 
-    public static class Friends implements FriendsColumns, BaseColumns {
+    public static class Friends implements FriendsColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_FRIENDS).build();
@@ -245,7 +249,7 @@ public class GSengerContract {
 
     }
 
-    public static class Chats implements ChatsColumns, BaseColumns {
+    public static class Chats implements ChatsColumns {
 
         public static final String CHAT_TYPE_CONVERSATION = "conversation";
         public static final String CHAT_TYPE_GROUP = "group";

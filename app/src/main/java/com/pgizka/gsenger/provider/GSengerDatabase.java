@@ -11,7 +11,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     private static final String TAG = GSengerDatabase.class.getSimpleName();
 
     public static final String DATABASE_NAME = "gsenger.db";
-    public static final int CUR_DATABASE_VERSION = 4;
+    public static final int CUR_DATABASE_VERSION = 5;
 
     private final Context context;
 
@@ -153,7 +153,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + Tables.COMMON_TYPES + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CommonTypesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + CommonTypesColumns.COMMON_TYPE_SERVER_ID + " INTEGER,"
                 + CommonTypesColumns.TYPE + " TEXT NOT NULL,"
                 + CommonTypesColumns.SEND_DATE + " INTEGER NOT NULL,"
@@ -163,7 +163,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 + "UNIQUE (" + CommonTypesColumns.COMMON_TYPE_SERVER_ID + ") ON CONFLICT REPLACE)");
 
         db.execSQL("CREATE TABLE " + Tables.FRIENDS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + FriendsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + FriendsColumns.FRIEND_SERVER_ID + " INTEGER,"
                 + FriendsColumns.USER_NAME + " TEXT NOT NULL,"
                 + FriendsColumns.ADDED_DATE + " INTEGER NOT NULL,"
@@ -180,7 +180,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 + ToFriendsColumns.VIEWED_DATE + " INTEGER" + ")");
 
         db.execSQL("CREATE TABLE " + Tables.CHATS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ChatsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ChatsColumns.CHAT_SERVER_ID + " INTEGER,"
                 + ChatsColumns.STARTED_DATE + " INTEGER,"
                 + ChatsColumns.CHAT_NAME + " TEXT,"
