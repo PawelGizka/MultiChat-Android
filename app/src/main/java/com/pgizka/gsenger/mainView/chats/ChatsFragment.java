@@ -15,9 +15,10 @@ import android.widget.TextView;
 import com.pgizka.gsenger.R;
 
 
-public class ChatsFragment extends Fragment implements ChatsView<ChatsToDisplayModel> {
+public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsToDisplayModel> {
 
-    private ChatsPresenter presenter;
+
+    private ChatsContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
@@ -57,7 +58,7 @@ public class ChatsFragment extends Fragment implements ChatsView<ChatsToDisplayM
     }
 
     @Override
-    public void setPresenter(ChatsPresenter presenter){
+    public void setPresenter(ChatsContract.Presenter presenter){
         this.presenter = presenter;
     }
 

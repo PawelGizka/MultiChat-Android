@@ -2,14 +2,43 @@ package com.pgizka.gsenger.mainView.chats;
 
 import android.database.Cursor;
 
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.pojos.Media;
+import com.pgizka.gsenger.provider.pojos.Message;
+import com.pgizka.gsenger.provider.repositories.ChatRepository;
+import com.pgizka.gsenger.provider.repositories.FriendRepository;
+import com.pgizka.gsenger.provider.repositories.MediaRepository;
+import com.pgizka.gsenger.provider.repositories.MessageRepository;
+import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ChatsToDisplayModel {
 
-    List<ChatToDisplay> chatToDisplays;
+    private List<ChatToDisplay> chatToDisplays;
+
+    @Inject
+    ChatRepository chatRepository;
+
+    @Inject
+    FriendRepository friendRepository;
+
+    @Inject
+    MessageRepository messageRepository;
+
+    @Inject
+    MediaRepository mediaRepository;
+
+    @Inject
+    ToFriendRepository toFriendRepository;
+
+    public ChatsToDisplayModel() {
+        GSengerApplication.getApplicationComponent().inject(this);
+    }
 
     public void readDataFromCursor(Cursor cursor){
         chatToDisplays = new ArrayList<>();
@@ -26,21 +55,19 @@ public class ChatsToDisplayModel {
     private ChatToDisplay makeChat(Cursor cursor) {
         ChatToDisplay chatToDisplay = new ChatToDisplay();
 
-        chatToDisplay.setChatId(cursor.getInt(cursor.getColumnIndex(GSengerContract.Chats._ID)));
-        chatToDisplay.setChatStartedData(cursor.getLong(cursor.getColumnIndex(GSengerContract.Chats.STARTED_DATE)));
-        chatToDisplay.setChatName(cursor.getString(cursor.getColumnIndex(GSengerContract.Chats.CHAT_NAME)));
-        chatToDisplay.setChatType(cursor.getString(cursor.getColumnIndex(GSengerContract.Chats.TYPE)));
-        chatToDisplay.setFriendId(cursor.getLong(cursor.getColumnIndex(GSengerContract.Friends._ID)));
-        chatToDisplay.setFriendUserName(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.USER_NAME)));
-        chatToDisplay.setFriendPhotoPath(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.PHOTO)));
-        chatToDisplay.setCommonTypeType(cursor.getString(cursor.getColumnIndex(GSengerContract.CommonTypes.TYPE)));
-        chatToDisplay.setCommonTypeSendDate(cursor.getLong(cursor.getColumnIndex(GSengerContract.CommonTypes.SEND_DATE)));
-        chatToDisplay.setMessageText(cursor.getString(cursor.getColumnIndex(GSengerContract.Messages.TEXT)));
-        chatToDisplay.setMediaType(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.TYPE)));
-        chatToDisplay.setMediaFileName(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.FILE_NAME)));
-        chatToDisplay.setMediaDescription(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.DESCRIPTION)));
-        chatToDisplay.setToFriendDeliveredDate(cursor.getLong(cursor.getColumnIndex(GSengerContract.ToFriends.DELIVERED_DATE)));
-        chatToDisplay.setToFriendViewedDate(cursor.getLong(cursor.getColumnIndex(GSengerContract.ToFriends.VIEWED_DATE)));
+        chatToDisplay.setChat(chatRepository.buildChat(cursor));
+        chatToDisplay.setFriend(friendRepository.buildFriend(cursor));
+
+        Message message = messageRepository.buildMessage(cursor);
+        Media media = mediaRepository.buildMedia(cursor);
+
+        if (message != null) {
+            chatToDisplay.setCommonType(message);
+        } else {
+            chatToDisplay.setCommonType(media);
+        }
+
+        chatToDisplay.setToFriend(toFriendRepository.buildToFriend(cursor));
 
         return chatToDisplay;
     }

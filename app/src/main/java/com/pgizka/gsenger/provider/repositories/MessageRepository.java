@@ -53,8 +53,12 @@ public class MessageRepository {
 
     public Message buildMessage(Cursor cursor) {
         Message message = new Message();
-        commonTypeRepository.buildCommonType(message, cursor);
-        message.setText(cursor.getString(cursor.getColumnIndex(GSengerContract.Messages.TEXT)));
+        try {
+            commonTypeRepository.buildCommonType(message, cursor);
+            message.setText(cursor.getString(cursor.getColumnIndex(GSengerContract.Messages.TEXT)));
+        } catch (Exception e) {
+            message = null;
+        }
 
         return message;
     }

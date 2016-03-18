@@ -7,8 +7,15 @@ import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.di.DependencyInjector;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.provider.ProviderUtils;
+import com.pgizka.gsenger.provider.repositories.ChatRepository;
+import com.pgizka.gsenger.provider.repositories.CommonTypeRepository;
+import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
 import com.pgizka.gsenger.provider.repositories.FriendRepository;
+import com.pgizka.gsenger.provider.repositories.MediaRepository;
+import com.pgizka.gsenger.provider.repositories.MessageRepository;
+import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -31,12 +38,6 @@ public class ApplicationModule {
     @Singleton
     public ProviderUtils providesProviderUtils() {
         return new ProviderUtils(application);
-    }
-
-    @Provides
-    @Singleton
-    public FriendRepository providesFriendsRepository(ProviderUtils providerUtils) {
-        return new FriendRepository(application, providerUtils);
     }
 
     @Provides
@@ -75,6 +76,48 @@ public class ApplicationModule {
     @Singleton
     public ContactsUtil providesContactsUtil() {
         return new ContactsUtil(application);
+    }
+
+    @Provides
+    @Singleton
+    public FriendRepository providesFriendsRepository(ProviderUtils providerUtils) {
+        return new FriendRepository(application, providerUtils);
+    }
+
+    @Provides
+    @Singleton
+    public ChatRepository providesChatRepository(ProviderUtils providerUtils) {
+        return new ChatRepository(application, providerUtils);
+    }
+
+    @Provides
+    @Singleton
+    public CommonTypeRepository providesCommonTypeRepository(ProviderUtils providerUtils) {
+        return new CommonTypeRepository(application, providerUtils);
+    }
+
+    @Provides
+    @Singleton
+    public MediaRepository providesMediaRepository(ProviderUtils providerUtils, CommonTypeRepository commonTypeRepository) {
+        return new MediaRepository(application, providerUtils, commonTypeRepository);
+    }
+
+    @Provides
+    @Singleton
+    public MessageRepository providesMessageRepository(ProviderUtils providerUtils, CommonTypeRepository commonTypeRepository) {
+        return new MessageRepository(application, providerUtils, commonTypeRepository);
+    }
+
+    @Provides
+    @Singleton
+    public ToFriendRepository providesToFriendRepository(ProviderUtils providerUtils) {
+        return new ToFriendRepository(application, providerUtils);
+    }
+
+    @Provides
+    @Singleton
+    public FriendHasChatRepository providesFriendHasChatRepository(ProviderUtils providerUtils) {
+        return new FriendHasChatRepository(application, providerUtils);
     }
 
 }

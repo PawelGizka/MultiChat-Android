@@ -308,9 +308,9 @@ public class GSengerContract {
 
     public static class Medias implements MediasColumns {
 
-        public static final String MEDIA_TYPE_PHOTO = "photo";
-        public static final String MEDIA_TYPE_VIDEO = "video";
-        public static final String MEDIA_TYPE_FILE = "file";
+        public static final int MEDIA_TYPE_PHOTO = 0;
+        public static final int MEDIA_TYPE_VIDEO = 1;
+        public static final int MEDIA_TYPE_FILE = 2;
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MEDIAS).build();

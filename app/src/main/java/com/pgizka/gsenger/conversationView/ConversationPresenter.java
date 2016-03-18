@@ -7,14 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.mainView.chats.ChatToDisplay;
-import com.pgizka.gsenger.mainView.chats.ChatsToDisplayModel;
-import com.pgizka.gsenger.mainView.chats.ChatsView;
 import com.pgizka.gsenger.provider.GSengerContract;
-import com.pgizka.gsenger.provider.pojos.Friend;
 import com.pgizka.gsenger.provider.repositories.FriendRepository;
 
 import javax.inject.Inject;

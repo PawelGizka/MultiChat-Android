@@ -9,6 +9,11 @@ import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.pojos.Chat;
+import com.pgizka.gsenger.provider.pojos.CommonType;
+import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Media;
+import com.pgizka.gsenger.provider.pojos.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,6 +53,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
         final ChatToDisplay chatToDisplay = chatToDisplays.get(position);
+
+        Chat chat = chatToDisplay.getChat();
+        Friend friend = chatToDisplay.getFriend();
+        CommonType commonType = chatToDisplay.getCommonType();
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,29 +67,30 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             }
         });
 
-        if(chatToDisplay.getChatType().equals(GSengerContract.Chats.CHAT_TYPE_CONVERSATION)) {
-            holder.chatNameTextView.setText(chatToDisplay.getFriendUserName());
+        if(chat.getType().equals(GSengerContract.Chats.CHAT_TYPE_CONVERSATION)) {
+            holder.chatNameTextView.setText(friend.getUserName());
         } else {
-            holder.chatNameTextView.setText(chatToDisplay.getChatName());
+            holder.chatNameTextView.setText(chat.getChatName());
+
         }
 
-        if(chatToDisplay.getCommonTypeType().equals(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE)) {
-            holder.descriptionTextView.setText(chatToDisplay.getMessageText());
+        if(commonType instanceof Message) {
+            Message message = (Message) commonType;
+            holder.descriptionTextView.setText(message.getText());
         } else {
-            if(chatToDisplay.getMediaType().equals(GSengerContract.Medias.MEDIA_TYPE_FILE)) {
+            Media media = (Media) commonType;
+            if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_FILE) {
                 holder.descriptionTextView.setText("File");
-            } else if(chatToDisplay.getMediaType().equals(GSengerContract.Medias.MEDIA_TYPE_PHOTO)) {
+            } else if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_PHOTO) {
                 holder.descriptionTextView.setText("Photo");
-            } else if(chatToDisplay.getMediaType().equals(GSengerContract.Medias.MEDIA_TYPE_VIDEO)) {
+            } else if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_VIDEO) {
                 holder.descriptionTextView.setText("Video");
             }
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String date = simpleDateFormat.format(new Date(chatToDisplay.getCommonTypeSendDate()));
+        String date = simpleDateFormat.format(new Date(commonType.getSendDate()));
         holder.dateTextView.setText(date);
-
-
     }
 
 

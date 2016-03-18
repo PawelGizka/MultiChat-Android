@@ -1,5 +1,7 @@
 package com.pgizka.gsenger.provider.pojos;
 
+import com.pgizka.gsenger.provider.GSengerContract;
+
 public class Media extends CommonType {
 
     private int mediaType;
@@ -8,6 +10,7 @@ public class Media extends CommonType {
     private String path;
 
     public Media() {
+        super(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA);
     }
 
     public int getMediaType() {

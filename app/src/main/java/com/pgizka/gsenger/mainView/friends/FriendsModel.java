@@ -26,7 +26,7 @@ public class FriendsModel {
         }
 
         do {
-            friends.add(friendRepository.makeFriend(cursor));
+            friends.add(friendRepository.buildFriend(cursor));
         } while (cursor.moveToNext());
 
 

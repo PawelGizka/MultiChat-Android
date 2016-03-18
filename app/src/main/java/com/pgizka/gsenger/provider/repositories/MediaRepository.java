@@ -54,10 +54,14 @@ public class MediaRepository {
         Media media = new Media();
         commonTypeRepository.buildCommonType(media, cursor);
 
-        media.setMediaType(cursor.getInt(cursor.getColumnIndex(GSengerContract.Medias.TYPE)));
-        media.setDescription(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.DESCRIPTION)));
-        media.setFileName(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.FILE_NAME)));
-        media.setPath(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.PATH)));
+        try {
+            media.setMediaType(cursor.getInt(cursor.getColumnIndex(GSengerContract.Medias.TYPE)));
+            media.setDescription(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.DESCRIPTION)));
+            media.setFileName(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.FILE_NAME)));
+            media.setPath(cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.PATH)));
+        } catch (Exception e) {
+            media = null;
+        }
 
         return media;
     }

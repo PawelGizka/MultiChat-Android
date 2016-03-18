@@ -1,7 +1,6 @@
 package com.pgizka.gsenger.provider.repositories;
 
 
-import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,8 +10,6 @@ import com.pgizka.gsenger.provider.ContentValueUtils;
 import com.pgizka.gsenger.provider.GSengerContract;
 import com.pgizka.gsenger.provider.ProviderUtils;
 import com.pgizka.gsenger.provider.pojos.Friend;
-
-import javax.inject.Inject;
 
 public class FriendRepository {
 
@@ -57,7 +54,7 @@ public class FriendRepository {
 
         Friend friend = null;
         if (cursor.moveToFirst()) {
-            friend = makeFriend(cursor);
+            friend = buildFriend(cursor);
         }
 
         return friend;
@@ -69,7 +66,7 @@ public class FriendRepository {
         context.getContentResolver().delete(uri, null, null);
     }
 
-    public Friend makeFriend(Cursor cursor) {
+    public Friend buildFriend(Cursor cursor) {
 
         Friend contact = new Friend();
         contact.setUserName(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.USER_NAME)));

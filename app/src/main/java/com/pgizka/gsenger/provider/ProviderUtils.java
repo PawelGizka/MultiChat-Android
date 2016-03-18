@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
+import com.pgizka.gsenger.provider.pojos.Chat;
 import com.pgizka.gsenger.provider.pojos.CommonType;
 import com.pgizka.gsenger.provider.pojos.Friend;
 import com.pgizka.gsenger.provider.pojos.Media;
 import com.pgizka.gsenger.provider.pojos.Message;
+import com.pgizka.gsenger.provider.pojos.ToFriend;
 
 public class ProviderUtils {
     Context context;
@@ -47,8 +49,20 @@ public class ProviderUtils {
         return context.getContentResolver().insert(uri, contentValues);
     }
 
+    public Uri insertToFriend(ToFriend toFriend) {
+        ContentValues contentValues = ContentValueUtils.createToFriend(toFriend);
+        Uri uri = GSengerContract.ToFriends.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
     public Uri insertChat(String type, String name, long startedDate) {
         ContentValues contentValues = ContentValueUtils.createChat(type, name, startedDate);
+        Uri uri = GSengerContract.Chats.CONTENT_URI;
+        return context.getContentResolver().insert(uri, contentValues);
+    }
+
+    public Uri insertChat(Chat chat) {
+        ContentValues contentValues = ContentValueUtils.createChat(chat);
         Uri uri = GSengerContract.Chats.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }

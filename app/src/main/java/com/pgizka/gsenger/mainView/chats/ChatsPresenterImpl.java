@@ -12,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.pgizka.gsenger.provider.GSengerContract;
 
-public class ChatsPresenterImpl extends Fragment implements ChatsPresenter, LoaderManager.LoaderCallbacks<Cursor> {
+public class ChatsPresenterImpl extends Fragment implements ChatsContract.Presenter, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ChatsView<ChatsToDisplayModel> chatsView;
+
+    private ChatsContract.View<ChatsToDisplayModel> chatsView;
+
     private AppCompatActivity activity;
     private ChatsToDisplayModel chatsToDisplayModel;
 
@@ -32,7 +34,7 @@ public class ChatsPresenterImpl extends Fragment implements ChatsPresenter, Load
         loaderManager.initLoader(0, null, this);
     }
 
-    public void setChatsView(ChatsView chatsView) {
+    public void setChatsView(ChatsContract.View chatsView) {
         this.chatsView = chatsView;
     }
 

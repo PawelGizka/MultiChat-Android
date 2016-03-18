@@ -4,9 +4,16 @@ import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
+import com.pgizka.gsenger.mainView.chats.ChatsToDisplayModel;
 import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
 import com.pgizka.gsenger.provider.ProviderUtils;
+import com.pgizka.gsenger.provider.repositories.ChatRepository;
+import com.pgizka.gsenger.provider.repositories.CommonTypeRepository;
+import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
 import com.pgizka.gsenger.provider.repositories.FriendRepository;
+import com.pgizka.gsenger.provider.repositories.MediaRepository;
+import com.pgizka.gsenger.provider.repositories.MessageRepository;
+import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
@@ -27,6 +34,18 @@ public interface ApplicationComponent {
 
     FriendRepository friendRepository();
 
+    MessageRepository messageRepository();
+
+    CommonTypeRepository commonTypeRepository();
+
+    MediaRepository mediaRepository();
+
+    ToFriendRepository toFriendRepository();
+
+    FriendHasChatRepository friendHasChatRepository();
+
+    ChatRepository chatRepository();
+
     EventBus eventBus();
 
     JobManager jobManager();
@@ -46,5 +65,7 @@ public interface ApplicationComponent {
     void inject(RegistrationTask registrationTask);
 
     void inject(FriendsPresenter friendsPresenter);
+
+    void inject(ChatsToDisplayModel chatsToDisplayModel);
 
 }

@@ -13,10 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.dagger2.ApplicationComponent;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenterImpl;
 import com.pgizka.gsenger.mainView.friends.FriendsFragment;
 import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
+import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.pojos.Chat;
+import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.pojos.Message;
+import com.pgizka.gsenger.provider.pojos.ToFriend;
+import com.pgizka.gsenger.provider.repositories.ChatRepository;
+import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
+import com.pgizka.gsenger.provider.repositories.FriendRepository;
+import com.pgizka.gsenger.provider.repositories.MessageRepository;
+import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +59,42 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+//        createChat();
+    }
+
+    private void createChat() {
+        ApplicationComponent applicationComponent = GSengerApplication.getApplicationComponent();
+        FriendRepository friendRepository = applicationComponent.friendRepository();
+        MessageRepository messageRepository = applicationComponent.messageRepository();
+        ToFriendRepository toFriendRepository = applicationComponent.toFriendRepository();
+        ChatRepository chatRepository = applicationComponent.chatRepository();
+        FriendHasChatRepository friendHasChatRepository = applicationComponent.friendHasChatRepository();
+
+        Friend friend = new Friend();
+        friend.setUserName("pawel");
+        friend.setServerId(123);
+        friend.setAddedDate(131231);
+        friend.setStatus("haha");
+        friendRepository.insertFriend(friend);
+
+        Chat chat = new Chat();
+        chat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
+        chat.setStartedDate(12312);
+        chatRepository.insertChat(chat);
+
+        friendHasChatRepository.insertFriendHasChat(friend.getId(), chat.getId());
+
+        Message message = new Message();
+        message.setText("hello motherfuckers!!!");
+        message.setChatId(chat.getId());
+        message.setSendDate(System.currentTimeMillis());
+        message.setState(GSengerContract.CommonTypes.State.WAITING_TO_SEND.code);
+        messageRepository.insertMessage(message);
+
+        ToFriend toFriend = new ToFriend();
+        toFriend.setCommonTypeId(message.getId());
+        toFriend.setToFriendId(friend.getId());
+        toFriendRepository.insertToFriend(toFriend);
     }
 
 

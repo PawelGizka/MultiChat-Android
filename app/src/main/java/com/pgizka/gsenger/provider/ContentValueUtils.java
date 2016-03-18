@@ -2,10 +2,12 @@ package com.pgizka.gsenger.provider;
 
 import android.content.ContentValues;
 
+import com.pgizka.gsenger.provider.pojos.Chat;
 import com.pgizka.gsenger.provider.pojos.CommonType;
 import com.pgizka.gsenger.provider.pojos.Friend;
 import com.pgizka.gsenger.provider.pojos.Media;
 import com.pgizka.gsenger.provider.pojos.Message;
+import com.pgizka.gsenger.provider.pojos.ToFriend;
 
 public class ContentValueUtils {
 
@@ -64,11 +66,29 @@ public class ContentValueUtils {
         return contentValues;
     }
 
+    public static ContentValues createToFriend(ToFriend toFriend){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.ToFriends.TO_FRIEND_ID, toFriend.getToFriendId());
+        contentValues.put(GSengerContract.ToFriends.COMMON_TYPE_ID, toFriend.getCommonTypeId());
+        contentValues.put(GSengerContract.ToFriends.DELIVERED_DATE, toFriend.getDelivered());
+        contentValues.put(GSengerContract.ToFriends.VIEWED_DATE, toFriend.getViewed());
+        return contentValues;
+    }
+
     public static ContentValues createChat(String type, String name, long startedDate) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.Chats.TYPE, type);
         contentValues.put(GSengerContract.Chats.CHAT_NAME, name);
         contentValues.put(GSengerContract.Chats.STARTED_DATE, startedDate);
+        return contentValues;
+    }
+
+    public static ContentValues createChat(Chat chat) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GSengerContract.Chats.CHAT_SERVER_ID, chat.getServerId());
+        contentValues.put(GSengerContract.Chats.TYPE, chat.getType());
+        contentValues.put(GSengerContract.Chats.CHAT_NAME, chat.getChatName());
+        contentValues.put(GSengerContract.Chats.STARTED_DATE, chat.getStartedDate());
         return contentValues;
     }
 

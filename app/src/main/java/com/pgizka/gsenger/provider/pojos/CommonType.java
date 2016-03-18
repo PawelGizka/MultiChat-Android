@@ -10,7 +10,8 @@ public abstract class CommonType {
     private int senderId;
     private int chatId;
 
-    public CommonType() {
+    public CommonType(String type) {
+        this.type = type;
     }
 
     public int getId() {
