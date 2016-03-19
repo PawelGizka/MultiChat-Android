@@ -21,11 +21,11 @@ public class ContactsUtil {
         List<String> phoneNumbers = new ArrayList<>();
 
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER};
+        String[] projection = new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER};
 
         Cursor contacts = context.getContentResolver().query(uri, projection, null, null, null);
 
-        int indexName = contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+        int indexName = contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
         if (contacts.moveToFirst()) {
             do {

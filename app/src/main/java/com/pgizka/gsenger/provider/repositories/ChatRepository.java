@@ -46,6 +46,21 @@ public class ChatRepository {
         return chat;
     }
 
+    public Chat getConversationChatByFriendId(int friendId) {
+        Uri uri = GSengerContract.Friends.buildFriendWithChatsUri(String.valueOf(friendId));
+        String selection = GSengerContract.Chats.TYPE + "=?";
+        String[] args = new String[]{GSengerContract.Chats.CHAT_TYPE_CONVERSATION};
+
+        Cursor cursor = context.getContentResolver().query(uri, null, selection, args, null);
+
+        Chat chat = null;
+        if (cursor.moveToFirst()) {
+            chat = buildChat(cursor);
+        }
+
+        return chat;
+    }
+
     public Chat buildChat(Cursor cursor) {
         Chat chat = new Chat();
 

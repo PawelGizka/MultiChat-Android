@@ -8,8 +8,12 @@ import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.provider.GSengerContract;
 import com.pgizka.gsenger.provider.GSengerDatabase;
+import com.pgizka.gsenger.provider.pojos.Chat;
 import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.repositories.ChatRepository;
+import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
 import com.pgizka.gsenger.provider.repositories.FriendRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
 
@@ -27,6 +31,12 @@ public class RefreshFriendsJob extends BaseJob {
 
     @Inject
     transient FriendRepository friendRepository;
+
+    @Inject
+    transient ChatRepository chatRepository;
+
+    @Inject
+    transient FriendHasChatRepository friendHasChatRepository;
 
     @Inject
     transient UserRestService userRestService;
@@ -90,6 +100,14 @@ public class RefreshFriendsJob extends BaseJob {
                 checkUserPhotoActuality(foundFriend, localFriend);
                 foundFriend.setId(localFriend.getId());
                 friendRepository.updateFriend(foundFriend);
+
+                Chat currentChat = chatRepository.getConversationChatByFriendId(foundFriend.getId());
+                if (currentChat == null) {
+                    currentChat = new Chat();
+                    currentChat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
+                    chatRepository.insertChat(currentChat);
+                    friendHasChatRepository.insertFriendHasChat(foundFriend.getId(), currentChat.getId());
+                }
             } else {
                 friendRepository.insertFriend(foundFriend);
             }
