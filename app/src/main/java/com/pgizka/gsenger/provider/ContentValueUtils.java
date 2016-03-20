@@ -12,9 +12,10 @@ import com.pgizka.gsenger.provider.pojos.ToFriend;
 public class ContentValueUtils {
 
     public static ContentValues createCommonType(
-            String type, long sendDate, int state, String senderId, String chatId) {
+            String type, boolean outgoing, long sendDate, int state, String senderId, String chatId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.CommonTypes.TYPE, type);
+        contentValues.put(GSengerContract.CommonTypes.OUTGOING, outgoing ? 1 : 0);
         contentValues.put(GSengerContract.CommonTypes.SEND_DATE, sendDate);
         contentValues.put(GSengerContract.CommonTypes.STATE, state);
         contentValues.put(GSengerContract.CommonTypes.SENDER_ID, senderId);
@@ -25,6 +26,7 @@ public class ContentValueUtils {
     public static ContentValues createCommonType(CommonType commonType) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.CommonTypes.TYPE, commonType.getType());
+        contentValues.put(GSengerContract.CommonTypes.OUTGOING, commonType.isOutgoing() ? 1 : 0);
         contentValues.put(GSengerContract.CommonTypes.SEND_DATE, commonType.getSendDate());
         contentValues.put(GSengerContract.CommonTypes.STATE, commonType.getState());
         contentValues.put(GSengerContract.CommonTypes.SENDER_ID, commonType.getServerId());
@@ -114,7 +116,7 @@ public class ContentValueUtils {
     }
 
     public static ContentValues createMedia(
-            String commonTypeId, String type, String fileName, String description, String path) {
+            String commonTypeId, int type, String fileName, String description, String path) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.Medias.COMMON_TYPE_ID, commonTypeId);
         contentValues.put(GSengerContract.Medias.TYPE, type);

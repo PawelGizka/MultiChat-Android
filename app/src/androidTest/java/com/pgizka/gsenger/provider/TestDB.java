@@ -3,6 +3,7 @@ package com.pgizka.gsenger.provider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 import android.test.AndroidTestCase;
 
 import com.pgizka.gsenger.provider.GSengerContract;
@@ -48,7 +49,7 @@ public class TestDB extends AndroidTestCase{
     }
 
     private long insertNewCommonType(String type){
-        ContentValues contentValues = ContentValueUtils.createCommonType(type, 123, 0, "0", "0");
+        ContentValues contentValues = ContentValueUtils.createCommonType(type, true, 123, 0, "0", "0");
 
         long id = database.insert(GSengerDatabase.Tables.COMMON_TYPES, null, contentValues);
         assertNotSame(-1, id);
@@ -60,7 +61,7 @@ public class TestDB extends AndroidTestCase{
         contentValues.put(GSengerContract.CommonTypes.TYPE, GSengerContract.CommonTypes.COMMON_TYPE_MEDIA);
         int numberOfRows = database.update(
                 GSengerDatabase.Tables.COMMON_TYPES, contentValues,
-                GSengerContract.CommonTypes._ID + "=?", new String[]{Long.toString(id)});
+                BaseColumns._ID + "=?", new String[]{Long.toString(id)});
         assertEquals(1, numberOfRows);
     }
 
@@ -94,7 +95,7 @@ public class TestDB extends AndroidTestCase{
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.Friends.USER_NAME, "maciek");
         int rowsAffected = database.update(GSengerDatabase.Tables.FRIENDS, contentValues,
-                GSengerContract.Friends._ID + "=?", new String[]{Long.toString(id)});
+                BaseColumns._ID + "=?", new String[]{Long.toString(id)});
 
         assertEquals(1, rowsAffected);
     }
@@ -163,7 +164,7 @@ public class TestDB extends AndroidTestCase{
     public void testMedias() throws Throwable {
         long commonTypeId = insertNewCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA);
 
-        String type = GSengerContract.Medias.MEDIA_TYPE_PHOTO;
+        int type = GSengerContract.Medias.MEDIA_TYPE_PHOTO;
         String description = "some description";
         String fileName = "some file name";
         String path = "path";
@@ -175,7 +176,7 @@ public class TestDB extends AndroidTestCase{
         Cursor cursor = database.rawQuery("SELECT * FROM " + GSengerDatabase.Tables.MEDIAS, null);
         assertTrue(cursor.moveToFirst());
 
-        String returnedType = cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.TYPE));
+        int returnedType = cursor.getInt(cursor.getColumnIndex(GSengerContract.Medias.TYPE));
         String returnedDescription = cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.DESCRIPTION));
         String returnedFileName = cursor.getString(cursor.getColumnIndex(GSengerContract.Medias.FILE_NAME));
 

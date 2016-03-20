@@ -18,8 +18,8 @@ public class ProviderUtils {
         this.context = context;
     }
 
-    public Uri insertCommonType(String type, long sendDate, int state, String senderId, String chatId) {
-        ContentValues contentValues = ContentValueUtils.createCommonType(type, sendDate, state, senderId, chatId);
+    public Uri insertCommonType(String type, boolean outgoing, long sendDate, int state, String senderId, String chatId) {
+        ContentValues contentValues = ContentValueUtils.createCommonType(type, outgoing, sendDate, state, senderId, chatId);
         Uri uri = GSengerContract.CommonTypes.CONTENT_URI;
         return context.getContentResolver().insert(uri, contentValues);
     }
@@ -85,7 +85,7 @@ public class ProviderUtils {
         return context.getContentResolver().insert(uri, contentValues);
     }
 
-    public Uri insertMedia(String commonTypeId, String type, String fileName,
+    public Uri insertMedia(String commonTypeId, int type, String fileName,
                             String description, String path) {
         ContentValues contentValues = ContentValueUtils.createMedia(commonTypeId, type, fileName, description, path);
         Uri uri = GSengerContract.Medias.CONTENT_URI;

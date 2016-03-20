@@ -48,7 +48,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if(onContactClickListener != null) {
-                    onContactClickListener.onContactClicked(0, position, friend);
+                    onContactClickListener.onContactClicked(position, friend);
                 }
             }
         });
@@ -76,7 +76,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     public static interface  OnContactClickListener {
-        void onContactClicked(int contactId, int position, Friend friend);
+        void onContactClicked(int position, Friend friend);
     }
 
 }

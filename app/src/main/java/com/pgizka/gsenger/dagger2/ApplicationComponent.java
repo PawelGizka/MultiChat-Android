@@ -3,6 +3,8 @@ package com.pgizka.gsenger.dagger2;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.api.UserRestService;
+import com.pgizka.gsenger.conversationView.ConversationModel;
+import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
 import com.pgizka.gsenger.mainView.chats.ChatsToDisplayModel;
 import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
@@ -67,5 +69,9 @@ public interface ApplicationComponent {
     void inject(FriendsPresenter friendsPresenter);
 
     void inject(ChatsToDisplayModel chatsToDisplayModel);
+
+    void inject(ConversationPresenter conversationPresenter);
+
+    void inject(ConversationModel conversationModel);
 
 }

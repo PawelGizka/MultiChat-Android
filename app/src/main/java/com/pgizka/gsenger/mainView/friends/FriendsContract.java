@@ -9,7 +9,7 @@ public interface FriendsContract {
 
     interface Presenter {
 
-        void friendClicked(int contactId, int position, Friend friend);
+        void friendClicked(int position, Friend friend);
 
         void refreshFriends();
     }

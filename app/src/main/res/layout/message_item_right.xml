@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:orientation="vertical"
+    android:paddingBottom="5dp" >
+	
+    <include
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/message_header"
+ 		android:layout_centerHorizontal="true" />
+    
+    <RelativeLayout
+        android:id="@+id/inner_realtive_layout"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/header"
+        android:gravity="right" >
+
+        <ImageView
+        android:id="@+id/message_background_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/root_layout"
+        android:layout_alignEnd="@+id/root_layout"
+        android:layout_alignLeft="@+id/root_layout"
+        android:layout_alignRight="@+id/root_layout"
+        android:layout_alignStart="@+id/root_layout"
+        android:layout_alignTop="@+id/root_layout"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/message_buble_right" />
+
+        <LinearLayout
+            android:id="@+id/root_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="17dp" >
+
+            <TextView
+                android:id="@+id/message_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Small Text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12dp" />
+
+            <ProgressBar
+                android:id="@+id/message_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content" />
+            
+            <LinearLayout
+            android:id="@+id/file_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/message_file_name_text"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/message_file_path_text"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Small Text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+            <FrameLayout
+            android:id="@+id/message_image_frame_layout"
+            android:layout_width="150dp"
+            android:layout_height="150dp" >
+
+            <ImageView
+                android:id="@+id/message_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/alert_light_frame" />
+
+            <ImageView
+                android:id="@+id/message_video_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/play_video_image"
+                android:scaleType="fitXY" />
+
+        </FrameLayout>
+
+            <TextView
+                android:id="@+id/message_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

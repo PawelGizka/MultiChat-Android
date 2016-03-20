@@ -53,8 +53,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
 
         friendsAdapter.setOnContactClickListener(new FriendsAdapter.OnContactClickListener() {
             @Override
-            public void onContactClicked(int contactId, int position, Friend friend) {
-                presenter.friendClicked(contactId, position, friend);
+            public void onContactClicked(int position, Friend friend) {
+                presenter.friendClicked(position, friend);
             }
         });
 

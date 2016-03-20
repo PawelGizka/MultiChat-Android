@@ -36,7 +36,9 @@ public class ConversationFragment extends Fragment implements ConversationContra
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+        View view = inflater.inflate(R.layout.fragment_conversation, container, false);
+
+        presenter = (ConversationContract.Presenter) getTargetFragment();
 
         emptyTextView = (TextView) view.findViewById(R.id.conversation_empty_text_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.conversation_recycler_view);

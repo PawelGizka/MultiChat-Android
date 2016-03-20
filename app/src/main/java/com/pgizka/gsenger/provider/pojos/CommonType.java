@@ -5,6 +5,7 @@ public abstract class CommonType {
     private int id;
     private int serverId;
     private String type;
+    private boolean outgoing;
     private long sendDate;
     private int state;
     private int senderId;
@@ -36,6 +37,14 @@ public abstract class CommonType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isOutgoing() {
+        return outgoing;
+    }
+
+    public void setOutgoing(boolean outgoing) {
+        this.outgoing = outgoing;
     }
 
     public long getSendDate() {

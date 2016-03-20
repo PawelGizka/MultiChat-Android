@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.GSengerContract;
 import com.pgizka.gsenger.provider.pojos.Chat;
 import com.pgizka.gsenger.provider.pojos.Friend;
@@ -52,6 +53,10 @@ public class ConversationPresenter extends Fragment implements ConversationContr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GSengerApplication.getApplicationComponent().inject(this);
+
+        view = (ConversationContract.View) getTargetFragment();
+
         activity = view.getHoldingActivity();
         conversationModel = new ConversationModel();
 
@@ -77,7 +82,7 @@ public class ConversationPresenter extends Fragment implements ConversationContr
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = GSengerContract.Chats.buildChatConversationUri(String.valueOf(chatId));
+        Uri uri = GSengerContract.Chats.buildChatConversationUri(String.valueOf(chat.getId()));
         CursorLoader cursorLoader = new CursorLoader(activity, uri, null, null, null, null);
         return cursorLoader;
     }

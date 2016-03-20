@@ -5,9 +5,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
+import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.provider.ContentValueUtils;
 import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.GSengerDatabase;
 import com.pgizka.gsenger.provider.ProviderUtils;
 import com.pgizka.gsenger.provider.pojos.Friend;
 
@@ -36,14 +39,14 @@ public class FriendRepository {
     }
 
     public Friend getFriendById(int id) {
-        String selection = GSengerContract.Friends._ID + "=?";
+        String selection = GSengerDatabase.Tables.FRIENDS + "." + BaseColumns._ID + "=?";
         String [] selectionArgs = new String[]{Integer.toString(id)};
 
         return getFriendBy(selection, selectionArgs);
     }
 
     public Friend getFriendByServerId(int serverId) {
-        String selection = GSengerContract.Friends.FRIEND_SERVER_ID + "=?";
+        String selection = GSengerDatabase.Tables.FRIENDS + "." + GSengerContract.Friends.FRIEND_SERVER_ID + "=?";
         String [] selectionArgs = new String[]{Integer.toString(serverId)};
 
         return getFriendBy(selection, selectionArgs);
@@ -69,6 +72,7 @@ public class FriendRepository {
     public Friend buildFriend(Cursor cursor) {
 
         Friend contact = new Friend();
+        contact.setId(cursor.getInt(cursor.getColumnIndex(GSengerContract.Friends._ID)));
         contact.setUserName(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.USER_NAME)));
         contact.setStatus(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.STATUS)));
         contact.setPhotoPath(cursor.getString(cursor.getColumnIndex(GSengerContract.Friends.PHOTO)));

@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.pgizka.gsenger.provider.ContentValueUtils;
 import com.pgizka.gsenger.provider.GSengerContract;
+import com.pgizka.gsenger.provider.GSengerDatabase;
 import com.pgizka.gsenger.provider.ProviderUtils;
 import com.pgizka.gsenger.provider.pojos.Chat;
 import com.pgizka.gsenger.provider.pojos.Media;
@@ -48,7 +49,7 @@ public class ChatRepository {
 
     public Chat getConversationChatByFriendId(int friendId) {
         Uri uri = GSengerContract.Friends.buildFriendWithChatsUri(String.valueOf(friendId));
-        String selection = GSengerContract.Chats.TYPE + "=?";
+        String selection = GSengerDatabase.Tables.CHATS + "." + GSengerContract.Chats.TYPE + "=?";
         String[] args = new String[]{GSengerContract.Chats.CHAT_TYPE_CONVERSATION};
 
         Cursor cursor = context.getContentResolver().query(uri, null, selection, args, null);

@@ -1,4 +1,5 @@
 package com.pgizka.gsenger.mainView.friends;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
+import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsFinishedEvent;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
@@ -87,8 +89,10 @@ public class FriendsPresenter extends Fragment implements FriendsContract.Presen
     }
 
     @Override
-    public void friendClicked(int contactId, int position, Friend friend) {
-
+    public void friendClicked(int position, Friend friend) {
+        Intent intent = new Intent(activity, ConversationActivity.class);
+        intent.putExtra(ConversationActivity.FRIEND_ID_ARGUMENT, friend.getId());
+        startActivity(intent);
     }
 
     @Override

@@ -70,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
         FriendHasChatRepository friendHasChatRepository = applicationComponent.friendHasChatRepository();
 
         Friend friend = new Friend();
-        friend.setUserName("pawel");
-        friend.setServerId(123);
+        friend.setUserName("asia");
+        friend.setServerId(1243);
         friend.setAddedDate(131231);
         friend.setStatus("haha");
         friendRepository.insertFriend(friend);
 
         Chat chat = new Chat();
+        chat.setServerId(12);
         chat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
         chat.setStartedDate(12312);
         chatRepository.insertChat(chat);
@@ -84,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
         friendHasChatRepository.insertFriendHasChat(friend.getId(), chat.getId());
 
         Message message = new Message();
-        message.setText("hello motherfuckers!!!");
+        message.setText("hello !!!");
         message.setChatId(chat.getId());
+        message.setOutgoing(true);
         message.setSendDate(System.currentTimeMillis());
         message.setState(GSengerContract.CommonTypes.State.WAITING_TO_SEND.code);
         messageRepository.insertMessage(message);

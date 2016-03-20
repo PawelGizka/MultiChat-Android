@@ -100,7 +100,8 @@ public class RefreshFriendsJob extends BaseJob {
                 checkUserPhotoActuality(foundFriend, localFriend);
                 foundFriend.setId(localFriend.getId());
                 friendRepository.updateFriend(foundFriend);
-
+            } else {
+                friendRepository.insertFriend(foundFriend);
                 Chat currentChat = chatRepository.getConversationChatByFriendId(foundFriend.getId());
                 if (currentChat == null) {
                     currentChat = new Chat();
@@ -108,8 +109,6 @@ public class RefreshFriendsJob extends BaseJob {
                     chatRepository.insertChat(currentChat);
                     friendHasChatRepository.insertFriendHasChat(foundFriend.getId(), currentChat.getId());
                 }
-            } else {
-                friendRepository.insertFriend(foundFriend);
             }
         }
     }

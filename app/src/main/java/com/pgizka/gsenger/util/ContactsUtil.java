@@ -33,6 +33,8 @@ public class ContactsUtil {
             } while (contacts.moveToNext());
         }
 
+        contacts.close();
+
         return phoneNumbers;
     }
 

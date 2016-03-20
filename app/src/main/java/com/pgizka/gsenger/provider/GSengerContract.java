@@ -22,6 +22,11 @@ public class GSengerContract {
 
         String TYPE = "message_type";
 
+        /**
+         * Indicates whether it was sent from this phone or not.
+         */
+        String OUTGOING = "outgoing";
+
         String SEND_DATE = "send_date";
 
         String STATE = "state";

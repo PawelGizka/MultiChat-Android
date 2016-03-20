@@ -35,7 +35,7 @@ public class TestProvider {
 
     @Test
     public void testCommonType() throws Exception{
-        Uri uri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
+        Uri uri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, true, 123, 0, "0", "0");
 
         uri = GSengerContract.CommonTypes.buildCommonTypeUri(uri.getLastPathSegment());
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
@@ -81,7 +81,7 @@ public class TestProvider {
 
     @Test
     public void testToFriends() throws Exception {
-        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
+        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, true, 123, 0, "0", "0");
         Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
 
         String friendId = friendUri.getLastPathSegment();
@@ -157,7 +157,7 @@ public class TestProvider {
 
     @Test
     public void testMessages() throws Exception {
-        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
+        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, true, 123, 0, "0", "0");
 
         String commTypeId = commonTypeUri.getLastPathSegment();
         Uri messageUri = providerUtils.insertMessage(commTypeId, "message");
@@ -181,7 +181,7 @@ public class TestProvider {
 
     @Test
     public void testMedias() throws Exception {
-        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA, 123, 0, "0", "0");
+        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA, true, 123, 0, "0", "0");
 
         String commTypeId = commonTypeUri.getLastPathSegment();
         Uri mediasUri = providerUtils.insertMedia(commTypeId, GSengerContract.Medias.MEDIA_TYPE_FILE, "fileName", "description", "path");
@@ -205,7 +205,7 @@ public class TestProvider {
 
     @Test
     public void testCommonTypeJoinToFriends() throws Exception {
-        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, "0", "0");
+        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, true, 123, 0, "0", "0");
         Uri friendUri = providerUtils.insertFriend(0, "pawel", 123, "status", 0, "photoPath", "photoHash");
         Uri toFriendsUri = providerUtils.insertToFriend(friendUri.getLastPathSegment(), commonTypeUri.getLastPathSegment(), 12345, 0);
 
@@ -343,10 +343,10 @@ public class TestProvider {
         providerUtils.insertFriendHasChat(friendId3, chatId);
         providerUtils.insertFriendHasChat(friendId4, chatId);
 
-        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, 123, 0, friendId, chatId);
+        Uri commonTypeUri = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MESSAGE, true, 123, 0, friendId, chatId);
         String commonTypeId = commonTypeUri.getLastPathSegment();
 
-        Uri commonTypeUri2 = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA, 123, 0, friendId, chatId);
+        Uri commonTypeUri2 = providerUtils.insertCommonType(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA, true, 123, 0, friendId, chatId);
         String commonTypeId2 = commonTypeUri2.getLastPathSegment();
 
         providerUtils.insertToFriend(friendId2, commonTypeId, 123, 0);
