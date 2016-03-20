@@ -39,7 +39,7 @@ public class FriendRepository {
     }
 
     public Friend getFriendById(int id) {
-        String selection = GSengerDatabase.Tables.FRIENDS + "." + BaseColumns._ID + "=?";
+        String selection = GSengerDatabase.Tables.FRIENDS + "." + GSengerContract.Friends._ID + "=?";
         String [] selectionArgs = new String[]{Integer.toString(id)};
 
         return getFriendBy(selection, selectionArgs);

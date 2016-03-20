@@ -7,15 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.pgizka.gsenger.provider.GSengerDatabase.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class GSengerProvider extends ContentProvider {
     private static final String TAG = GSengerProvider.class.getSimpleName();
@@ -52,67 +49,45 @@ public class GSengerProvider extends ContentProvider {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-        List<String> myProjection = new ArrayList<>();
-        myProjection.add("*");
-
-        if (projection != null) {
-            for (String element : projection) {
-                myProjection.add(element);
-            }
-        }
-
-        final String COMMON_TYPE_PROJECTION = Tables.COMMON_TYPES + "." + BaseColumns._ID + " AS " + GSengerContract.CommonTypes._ID;
-        final String FRIEND_PROJECTION = Tables.FRIENDS + "." + BaseColumns._ID + " AS " + GSengerContract.Friends._ID;
-        final String CHAT_PROJECTION = Tables.CHATS + "." + BaseColumns._ID + " AS " + GSengerContract.Chats._ID;
-
         switch (matchingUriEnum){
 
             case COMMON_TYPES: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.COMMON_TYPES);
                 break;
             }
             case COMMON_TYPE: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.COMMON_TYPES);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.COMMON_TYPES + "." + BaseColumns._ID + " = " + id);
+                        Tables.COMMON_TYPES + "." + GSengerContract.CommonTypes._ID + " = " + id);
                 break;
             }
             case COMMON_TYPE_WITH_FRIENDS: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.COMMON_TYPES_JOIN_FRIENDS);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.COMMON_TYPES + "." + BaseColumns._ID + " = " + id);
+                        Tables.COMMON_TYPES + "." + GSengerContract.CommonTypes._ID + " = " + id);
                 break;
             }
             case FRIENDS: {
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.FRIENDS);
                 break;
             }
             case FRIEND: {
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.FRIENDS);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.FRIENDS + "." + BaseColumns._ID + " = " + id);
+                        Tables.FRIENDS + "." + GSengerContract.Friends._ID + " = " + id);
                 break;
             }
             case FRIEND_WITH_CHATS: {
-                myProjection.add(FRIEND_PROJECTION);
-                myProjection.add(CHAT_PROJECTION);
                 queryBuilder.setTables(Tables.FRIENDS_JOIN_CHATS);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.FRIENDS + "." + BaseColumns._ID + " = " + id);
+                        Tables.FRIENDS + "." + GSengerContract.Friends._ID + " = " + id);
                 break;
             }
             case FRIEND_WITH_CHAT: {
-                myProjection.add(FRIEND_PROJECTION);
-                myProjection.add(CHAT_PROJECTION);
                 queryBuilder.setTables(Tables.FRIENDS_JOIN_CHATS);
                 String friendId = uri.getPathSegments().get(1);
                 String chatId = uri.getPathSegments().get(2);
@@ -139,30 +114,24 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case CHATS: {
-                myProjection.add(CHAT_PROJECTION);
                 queryBuilder.setTables(Tables.CHATS);
                 break;
             }
             case CHAT: {
-                myProjection.add(CHAT_PROJECTION);
                 queryBuilder.setTables(Tables.CHATS);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.CHATS + "." + BaseColumns._ID + " = " + id);
+                        Tables.CHATS + "." + GSengerContract.Chats._ID + " = " + id);
                 break;
             }
             case CHAT_WITH_FRIENDS: {
-                myProjection.add(CHAT_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.CHATS_JOIN_FRIENDS);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
-                        Tables.CHATS + "." + BaseColumns._ID + " = " + id);
+                        Tables.CHATS + "." + GSengerContract.Chats._ID + " = " + id);
                 break;
             }
             case CHAT_CONVERSATION: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.CHAT_CONVERSATION);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
@@ -170,9 +139,6 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case CHAT_GROUP: {
-                myProjection.add(CHAT_PROJECTION);
-                myProjection.add(COMMON_TYPE_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.CHAT_CONVERSATION);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
@@ -180,21 +146,14 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case CHATS_TO_DISPLAY: {
-                myProjection.add(CHAT_PROJECTION);
-                myProjection.add(COMMON_TYPE_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.CHATS_TO_DISPLAY);
                 break;
             }
             case FRIENDS_HAVE_CHATS: {
-                myProjection.add(CHAT_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.FRIEND_HAS_CHAT);
                 break;
             }
             case FRIEND_HAS_CHATS: {
-                myProjection.add(CHAT_PROJECTION);
-                myProjection.add(FRIEND_PROJECTION);
                 queryBuilder.setTables(Tables.FRIEND_HAS_CHAT);
                 String friendId = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
@@ -213,12 +172,10 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case MESSAGES: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.MESSAGE_JOIN_COMMON_TYPE);
                 break;
             }
             case MESSAGE: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.MESSAGE_JOIN_COMMON_TYPE);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
@@ -226,12 +183,10 @@ public class GSengerProvider extends ContentProvider {
                 break;
             }
             case MEDIAS: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.MEDIA_JOIN_COMMON_TYPE);
                 break;
             }
             case MEDIA: {
-                myProjection.add(COMMON_TYPE_PROJECTION);
                 queryBuilder.setTables(Tables.MEDIA_JOIN_COMMON_TYPE);
                 String id = uri.getLastPathSegment();
                 queryBuilder.appendWhere(
@@ -242,10 +197,6 @@ public class GSengerProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
         }
-
-        projection = new String[myProjection.size()];
-
-        myProjection.toArray(projection);
 
         Cursor cursor =  queryBuilder.query(database.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 
@@ -356,17 +307,17 @@ public class GSengerProvider extends ContentProvider {
             }
             case COMMON_TYPE: {
                 String commonTypeId = uri.getLastPathSegment();
-                whereClause = BaseColumns._ID + " = " + commonTypeId;
+                whereClause = GSengerContract.CommonTypes._ID + " = " + commonTypeId;
                 break;
             }
             case FRIEND: {
                 String friendId = uri.getLastPathSegment();
-                whereClause = BaseColumns._ID + " = " + friendId;
+                whereClause = GSengerContract.Friends._ID + " = " + friendId;
                 break;
             }
             case CHAT: {
                 String chatId = uri.getLastPathSegment();
-                whereClause = BaseColumns._ID + " = " + chatId;
+                whereClause = GSengerContract.Chats._ID + " = " + chatId;
                 break;
             }
             case TO_FRIEND: {

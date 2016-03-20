@@ -61,7 +61,7 @@ public class TestDB extends AndroidTestCase{
         contentValues.put(GSengerContract.CommonTypes.TYPE, GSengerContract.CommonTypes.COMMON_TYPE_MEDIA);
         int numberOfRows = database.update(
                 GSengerDatabase.Tables.COMMON_TYPES, contentValues,
-                BaseColumns._ID + "=?", new String[]{Long.toString(id)});
+                GSengerContract.CommonTypes._ID + "=?", new String[]{Long.toString(id)});
         assertEquals(1, numberOfRows);
     }
 
@@ -95,7 +95,7 @@ public class TestDB extends AndroidTestCase{
         ContentValues contentValues = new ContentValues();
         contentValues.put(GSengerContract.Friends.USER_NAME, "maciek");
         int rowsAffected = database.update(GSengerDatabase.Tables.FRIENDS, contentValues,
-                BaseColumns._ID + "=?", new String[]{Long.toString(id)});
+                GSengerContract.Friends._ID + "=?", new String[]{Long.toString(id)});
 
         assertEquals(1, rowsAffected);
     }

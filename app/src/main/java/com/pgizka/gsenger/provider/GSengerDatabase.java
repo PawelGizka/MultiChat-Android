@@ -12,7 +12,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     private static final String TAG = GSengerDatabase.class.getSimpleName();
 
     public static final String DATABASE_NAME = "gsenger.db";
-    public static final int CUR_DATABASE_VERSION = 7;
+    public static final int CUR_DATABASE_VERSION = 8;
 
     private final Context context;
 
@@ -27,33 +27,33 @@ public class GSengerDatabase extends SQLiteOpenHelper {
 
         String COMMON_TYPES_JOIN_FRIENDS = COMMON_TYPES +
                 " INNER JOIN " + TO_FRIENDS +
-                    " ON " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " ON " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + TO_FRIENDS + "." + ToFriends.COMMON_TYPE_ID +
                 " INNER JOIN " + FRIENDS +
                     " ON " + TO_FRIENDS + "." + ToFriends.TO_FRIEND_ID +
-                    " = " + FRIENDS + "." + BaseColumns._ID;
+                    " = " + FRIENDS + "." + Friends._ID;
 
         String FRIENDS_JOIN_CHATS = FRIENDS +
                 " INNER JOIN " + FRIEND_HAS_CHAT +
-                    " ON " + FRIENDS + "." + BaseColumns._ID +
+                    " ON " + FRIENDS + "." + Friends._ID +
                     " = " + FRIEND_HAS_CHAT + "." + FriendHasChats.FRIEND_ID +
                 " INNER JOIN " + CHATS +
                     " ON " + FRIEND_HAS_CHAT + "." + FriendHasChats.CHAT_ID +
-                    " = " + CHATS + "." + BaseColumns._ID;
+                    " = " + CHATS + "." + Chats._ID;
 
         String CHATS_JOIN_FRIENDS = CHATS +
                 " INNER JOIN " + FRIEND_HAS_CHAT +
-                    " ON " + CHATS + "." + BaseColumns._ID +
+                    " ON " + CHATS + "." + Chats._ID +
                     " = " + FRIEND_HAS_CHAT + "." + FriendHasChats.CHAT_ID +
                 " INNER JOIN " + FRIENDS +
                     " ON " + FRIEND_HAS_CHAT + "." + FriendHasChats.FRIEND_ID +
-                    " = " + FRIENDS + "." + BaseColumns._ID;
+                    " = " + FRIENDS + "." + Friends._ID;
 
         //this subquery is correlated, so do not try to use it as standalone
         String SELECT_LAST_TO_FRIEND_SUBQUERY =
                 "(SELECT " + TO_FRIENDS + "." + ToFriends.TO_FRIEND_ID +
                 " FROM " + TO_FRIENDS +
-                " WHERE " + COMMON_TYPES + "." + BaseColumns._ID +
+                " WHERE " + COMMON_TYPES + "." + CommonTypes._ID +
                 " = " + TO_FRIENDS + "." + ToFriends.COMMON_TYPE_ID  +
                 " ORDER BY " + TO_FRIENDS + "." + ToFriends.VIEWED_DATE + ", " +
                 TO_FRIENDS + "." + ToFriends.DELIVERED_DATE +
@@ -61,29 +61,29 @@ public class GSengerDatabase extends SQLiteOpenHelper {
 
         //this subquery is correlated, so do not try to use it as standalone
         String SELECT_LAST_COMMON_TYPE_SUBQUERY =
-                "(SELECT " + COMMON_TYPES + "." + BaseColumns._ID +
+                "(SELECT " + COMMON_TYPES + "." + CommonTypes._ID +
                 " FROM " + COMMON_TYPES +
-                " WHERE " + CHATS + "." + BaseColumns._ID +
+                " WHERE " + CHATS + "." + Chats._ID +
                 " = " + COMMON_TYPES + "." + CommonTypes.CHAT_ID  +
-                " ORDER BY " + COMMON_TYPES + "." + BaseColumns._ID + " DESC " +
+                " ORDER BY " + COMMON_TYPES + "." + CommonTypes._ID + " DESC " +
                 " LIMIT 1)";
 
         String CHAT_CONVERSATION = COMMON_TYPES +
                 " LEFT OUTER JOIN " + MESSAGES +
                     " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                     " = " + "'" + CommonTypes.COMMON_TYPE_MESSAGE + "'" +
-                    " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + MESSAGES + "." + Messages.COMMON_TYPE_ID +
                 " LEFT OUTER JOIN " + MEDIAS +
                     " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                     " = " + "'" + CommonTypes.COMMON_TYPE_MEDIA + "'" +
-                    " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + MEDIAS + "." + Medias.COMMON_TYPE_ID +
                 " LEFT OUTER JOIN " + FRIENDS +
                     " ON " + COMMON_TYPES + "." + CommonTypes.SENDER_ID +
-                    " = " + FRIENDS + "." + BaseColumns._ID +
+                    " = " + FRIENDS + "." + Friends._ID +
                 " LEFT OUTER JOIN " + TO_FRIENDS +
-                    " ON " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " ON " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + TO_FRIENDS + "." + ToFriends.COMMON_TYPE_ID +
                     " AND " + TO_FRIENDS + "." + ToFriends.TO_FRIEND_ID +
                     " = " + SELECT_LAST_TO_FRIEND_SUBQUERY;
@@ -92,44 +92,44 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 " INNER JOIN " + MESSAGES +
                 " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                 " = " + "'" + CommonTypes.COMMON_TYPE_MESSAGE + "'" +
-                " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                 " = " + MESSAGES + "." + Messages.COMMON_TYPE_ID;
 
         String MEDIA_JOIN_COMMON_TYPE = COMMON_TYPES +
                 " LEFT OUTER JOIN " + MEDIAS +
                 " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                 " = " + "'" + CommonTypes.COMMON_TYPE_MEDIA + "'" +
-                " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                 " = " + MEDIAS + "." + Medias.COMMON_TYPE_ID;
 
         String CHATS_TO_DISPLAY = CHATS +
                 " LEFT OUTER JOIN " + FRIEND_HAS_CHAT +
                     " ON " + CHATS + "." + Chats.TYPE +
                     " = " + "'" + Chats.CHAT_TYPE_CONVERSATION + "'" +
-                    " AND " + CHATS + "." + BaseColumns._ID +
+                    " AND " + CHATS + "." + Chats._ID +
                     " = " + FRIEND_HAS_CHAT + "." + FriendHasChats.CHAT_ID +
                 " LEFT OUTER JOIN " + FRIENDS +
                     " ON " + CHATS + "." + Chats.TYPE +
                     " = " + "'" + Chats.CHAT_TYPE_CONVERSATION + "'" +
                     " AND " + FRIEND_HAS_CHAT + "." + FriendHasChats.FRIEND_ID +
-                    " = " + FRIENDS + "." + BaseColumns._ID +
+                    " = " + FRIENDS + "." + Friends._ID +
                 " INNER JOIN " + COMMON_TYPES +
-                    " ON " + CHATS + "." + BaseColumns._ID +
+                    " ON " + CHATS + "." + Chats._ID +
                     " = " + COMMON_TYPES + "." + CommonTypes.CHAT_ID +
-                    " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + SELECT_LAST_COMMON_TYPE_SUBQUERY +
                 " LEFT OUTER JOIN " + MESSAGES +
                     " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                     " = " + "'" + CommonTypes.COMMON_TYPE_MESSAGE + "'" +
-                    " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + MESSAGES + "." + Messages.COMMON_TYPE_ID +
                 " LEFT OUTER JOIN " + MEDIAS +
                     " ON " + COMMON_TYPES + "." + CommonTypes.TYPE +
                     " = " + "'" + CommonTypes.COMMON_TYPE_MEDIA + "'" +
-                    " AND " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " AND " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + MEDIAS + "." + Medias.COMMON_TYPE_ID +
                 " LEFT OUTER JOIN " + TO_FRIENDS +
-                    " ON " + COMMON_TYPES + "." + BaseColumns._ID +
+                    " ON " + COMMON_TYPES + "." + CommonTypes._ID +
                     " = " + TO_FRIENDS + "." + ToFriends.COMMON_TYPE_ID +
                     " AND " + TO_FRIENDS + "." + ToFriends.TO_FRIEND_ID +
                     " = " + SELECT_LAST_TO_FRIEND_SUBQUERY;
@@ -154,7 +154,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + Tables.COMMON_TYPES + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CommonTypesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + CommonTypesColumns.COMMON_TYPE_SERVER_ID + " INTEGER,"
                 + CommonTypesColumns.TYPE + " TEXT NOT NULL,"
                 + CommonTypesColumns.OUTGOING + " INTEGER NOT NULL, "
@@ -165,7 +165,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 + "UNIQUE (" + CommonTypesColumns.COMMON_TYPE_SERVER_ID + ") ON CONFLICT REPLACE)");
 
         db.execSQL("CREATE TABLE " + Tables.FRIENDS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + FriendsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + FriendsColumns.FRIEND_SERVER_ID + " INTEGER,"
                 + FriendsColumns.USER_NAME + " TEXT NOT NULL,"
                 + FriendsColumns.ADDED_DATE + " INTEGER NOT NULL,"
@@ -182,7 +182,7 @@ public class GSengerDatabase extends SQLiteOpenHelper {
                 + ToFriendsColumns.VIEWED_DATE + " INTEGER" + ")");
 
         db.execSQL("CREATE TABLE " + Tables.CHATS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ChatsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + ChatsColumns.CHAT_SERVER_ID + " INTEGER,"
                 + ChatsColumns.STARTED_DATE + " INTEGER,"
                 + ChatsColumns.CHAT_NAME + " TEXT,"

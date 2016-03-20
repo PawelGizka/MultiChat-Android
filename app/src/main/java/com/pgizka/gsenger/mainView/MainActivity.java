@@ -70,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
         FriendHasChatRepository friendHasChatRepository = applicationComponent.friendHasChatRepository();
 
         Friend friend = new Friend();
-        friend.setUserName("asia");
-        friend.setServerId(1243);
+        friend.setUserName("pawel");
+        friend.setServerId(124);
         friend.setAddedDate(131231);
         friend.setStatus("haha");
         friendRepository.insertFriend(friend);
 
         Chat chat = new Chat();
-        chat.setServerId(12);
+        chat.setServerId(13);
         chat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
         chat.setStartedDate(12312);
         chatRepository.insertChat(chat);
