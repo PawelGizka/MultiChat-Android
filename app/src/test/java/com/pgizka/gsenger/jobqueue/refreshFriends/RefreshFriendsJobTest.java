@@ -7,12 +7,7 @@ import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.pojos.Friend;
-import com.pgizka.gsenger.provider.repositories.FriendRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
-import com.pgizka.gsenger.welcome.registration.RegistrationTask;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationRequest;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.Before;
@@ -25,8 +20,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

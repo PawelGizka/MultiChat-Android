@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.pojos.CommonType;
+import com.pgizka.gsenger.provider.realm.Message;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     private static final int VIEW_TYPE_LEFT = 0;
     private static final int VIEW_TYPE_RIGHT = 1;
 
-    private List<ConversationItem> conversationItems;
+    private List<Message> messages;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
@@ -60,7 +60,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
-        final ConversationItem conversationItem = conversationItems.get(position);
+
 
         /*holder.progressBar.setVisibility(View.GONE);
         holder.fileNameText.setVisibility(View.GONE);
@@ -75,8 +75,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public int getItemCount() {
-        if(conversationItems != null) {
-            return conversationItems.size();
+        if(messages != null) {
+            return messages.size();
         } else {
             return 0;
         }
@@ -84,18 +84,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public int getItemViewType(int position) {
-        ConversationItem conversationItem = conversationItems.get(position);
-        CommonType commonType = conversationItem.getCommonType();
-        if (commonType.isOutgoing()) {
+        Message message = messages.get(position);
+        if (message.isOutgoing()) {
             return VIEW_TYPE_LEFT;
         } else {
             return VIEW_TYPE_RIGHT;
         }
     }
 
-    public void setConversationItems(List<ConversationItem> conversationItems) {
-        this.conversationItems = conversationItems;
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
-
-
 }

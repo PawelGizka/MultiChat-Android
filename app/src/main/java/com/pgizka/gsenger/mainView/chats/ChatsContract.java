@@ -3,13 +3,17 @@ package com.pgizka.gsenger.mainView.chats;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.pgizka.gsenger.provider.realm.Chat;
+
+import java.util.List;
+
 public interface ChatsContract {
 
-    interface View<Model> {
+    interface View {
 
         AppCompatActivity getHoldingActivity();
 
-        void displayChatsList(Model model);
+        void displayChatsList(List<Chat> chats);
 
         void displayErrorMessage(AlertDialog alertDialog);
 
@@ -17,7 +21,11 @@ public interface ChatsContract {
 
     interface Presenter {
 
-        void chatClicked(int chatId, int position, ChatToDisplay chatToDisplay);
+        void onCreate(View view);
+
+        void onStart();
+
+        void chatClicked(Chat chat);
 
     }
 

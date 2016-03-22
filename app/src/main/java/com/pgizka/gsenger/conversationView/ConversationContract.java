@@ -2,6 +2,8 @@ package com.pgizka.gsenger.conversationView;
 
 import android.support.v7.app.AppCompatActivity;
 
+import com.pgizka.gsenger.provider.realm.Message;
+
 import java.util.List;
 
 public interface ConversationContract {
@@ -10,7 +12,7 @@ public interface ConversationContract {
 
         AppCompatActivity getHoldingActivity();
 
-        void displayConversationItems(List<ConversationItem> conversationItems);
+        void displayConversationItems(List<Message> conversationItems);
 
         void displayErrorMessage(String message);
 

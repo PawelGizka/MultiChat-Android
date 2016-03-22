@@ -1,33 +1,27 @@
 package com.pgizka.gsenger.conversationView;
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.GSengerContract;
-import com.pgizka.gsenger.provider.pojos.Chat;
-import com.pgizka.gsenger.provider.pojos.Friend;
-import com.pgizka.gsenger.provider.pojos.Message;
-import com.pgizka.gsenger.provider.pojos.ToFriend;
-import com.pgizka.gsenger.provider.repositories.ChatRepository;
-import com.pgizka.gsenger.provider.repositories.FriendRepository;
-import com.pgizka.gsenger.provider.repositories.MessageRepository;
-import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
+import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.realm.Message;
 
 import javax.inject.Inject;
 
-public class ConversationPresenter extends Fragment implements ConversationContract.Presenter, LoaderManager.LoaderCallbacks<Cursor> {
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
-    private ConversationContract.View view;
+public class ConversationPresenter extends Fragment implements ConversationContract.Presenter {
+
+    private ConversationContract.View conversationView;
     private AppCompatActivity activity;
-    private ConversationModel conversationModel;
+    private Realm realm;
 
     private int chatId;
     private int friendId;
@@ -35,17 +29,7 @@ public class ConversationPresenter extends Fragment implements ConversationContr
     private Friend friend;
     private Chat chat;
 
-    @Inject
-    FriendRepository friendRepository;
-
-    @Inject
-    ChatRepository chatRepository;
-
-    @Inject
-    MessageRepository messageRepository;
-
-    @Inject
-    ToFriendRepository toFriendRepository;
+    private RealmResults<Message> messages;
 
     @Inject
     JobManager jobManager;
@@ -54,52 +38,50 @@ public class ConversationPresenter extends Fragment implements ConversationContr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GSengerApplication.getApplicationComponent().inject(this);
+        realm = Realm.getDefaultInstance();
 
-        view = (ConversationContract.View) getTargetFragment();
+        conversationView = (ConversationContract.View) getTargetFragment();
 
-        activity = view.getHoldingActivity();
-        conversationModel = new ConversationModel();
+        activity = conversationView.getHoldingActivity();
 
         Bundle arguments = getArguments();
         chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
         friendId = arguments.getInt(ConversationActivity.FRIEND_ID_ARGUMENT, -1);
-
-        friend = friendRepository.getFriendById(friendId);
-
-        if (chatId == -1) {
-            chat = chatRepository.getConversationChatByFriendId(friendId);
-        } else {
-            chat = chatRepository.getChatById(chatId);
-        }
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(0, null, this);
-    }
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = GSengerContract.Chats.buildChatConversationUri(String.valueOf(chat.getId()));
-        CursorLoader cursorLoader = new CursorLoader(activity, uri, null, null, null, null);
-        return cursorLoader;
-    }
+        friend = realm.where(Friend.class)
+                .equalTo("id", friendId)
+                .findFirst();
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        conversationModel.readDataFromCursor(data);
-        view.displayConversationItems(conversationModel.getConversationItems());
-    }
+        chat = realm.where(Chat.class)
+                .equalTo("friends.id", friendId)
+                .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
+                .findFirst();
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+        messages = realm.where(Message.class)
+                .equalTo("chat.id", chat.getId())
+                .findAll();
 
+        conversationView.displayConversationItems(messages);
+
+        messages.addChangeListener(new RealmChangeListener() {
+            @Override
+            public void onChange() {
+                messages = realm.where(Message.class)
+                        .equalTo("chat.id", chat.getId())
+                        .findAll();
+                conversationView.displayConversationItems(messages);
+            }
+        });
     }
 
     @Override
     public void sendMessage(String text) {
+        /*
         Message message = new Message();
         message.setText(text);
         message.setChatId(chat.getId());
@@ -115,7 +97,7 @@ public class ConversationPresenter extends Fragment implements ConversationContr
         if (chat.getStartedDate() == 0) {
             chat.setStartedDate(System.currentTimeMillis());
             chatRepository.updateChat(chat);
-        }
+        }*/
 
 //        jobManager.addJob(new SendMessageJob(message.getId()));
     }

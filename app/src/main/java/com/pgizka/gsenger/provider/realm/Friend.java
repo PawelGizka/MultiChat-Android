@@ -1,8 +1,13 @@
-package com.pgizka.gsenger.provider.pojos;
+package com.pgizka.gsenger.provider.realm;
 
-public class Friend {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    private transient int id;
+public class Friend extends RealmObject {
+
+    @PrimaryKey
+    private int id;
 
     private int serverId;
     private String userName;
@@ -12,18 +17,11 @@ public class Friend {
     private String photoPath;
     private String photoHash;
 
-    public Friend() {
-    }
+    private RealmList<TextMessage> sentTextMessages;
+    private RealmList<Receiver> receivers;
+    private RealmList<Chat> chats;
 
-    public Friend(int id, int serverId, String userName, long addedDate, long lastLoggedDate, String status, String photoPath, String photoHash) {
-        this.id = id;
-        this.serverId = serverId;
-        this.userName = userName;
-        this.addedDate = addedDate;
-        this.lastLoggedDate = lastLoggedDate;
-        this.status = status;
-        this.photoPath = photoPath;
-        this.photoHash = photoHash;
+    public Friend() {
     }
 
     public int getId() {
@@ -90,22 +88,27 @@ public class Friend {
         this.photoHash = photoHash;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public RealmList<TextMessage> getSentTextMessages() {
+        return sentTextMessages;
+    }
 
-        Friend friend = (Friend) o;
+    public void setSentTextMessages(RealmList<TextMessage> sentTextMessages) {
+        this.sentTextMessages = sentTextMessages;
+    }
 
-        if (id != friend.id) return false;
-        if (serverId != friend.serverId) return false;
-        if (addedDate != friend.addedDate) return false;
-        if (lastLoggedDate != friend.lastLoggedDate) return false;
-        if (userName != null ? !userName.equals(friend.userName) : friend.userName != null)
-            return false;
-        if (status != null ? !status.equals(friend.status) : friend.status != null) return false;
-        if (photoPath != null ? !photoPath.equals(friend.photoPath) : friend.photoPath != null)
-            return false;
-        return !(photoHash != null ? !photoHash.equals(friend.photoHash) : friend.photoHash != null);
+    public RealmList<Receiver> getReceivers() {
+        return receivers;
+    }
+
+    public void setReceivers(RealmList<Receiver> receivers) {
+        this.receivers = receivers;
+    }
+
+    public RealmList<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(RealmList<Chat> chats) {
+        this.chats = chats;
     }
 }

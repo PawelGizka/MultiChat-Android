@@ -2,14 +2,10 @@ package com.pgizka.gsenger.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
-import com.pgizka.gsenger.provider.GSengerDatabase;
-import com.pgizka.gsenger.util.UserAccountManager;
 
 public class BootStrapActivity extends AppCompatActivity {
     static final String TAG = BootStrapActivity.class.getSimpleName();

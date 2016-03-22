@@ -2,7 +2,7 @@ package com.pgizka.gsenger.jobqueue.refreshFriends;
 
 
 import com.pgizka.gsenger.api.BaseResponse;
-import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.realm.Friend;
 
 import java.util.List;
 

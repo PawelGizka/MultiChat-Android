@@ -29,7 +29,7 @@ public class TestCommand extends GCMCommand {
         final GcmTest finalGcmTest = gcmTest;
         h.post(new Runnable() {
             public void run() {
-                Toast.makeText(context, "Message from: " + finalGcmTest.getFrom() + " message :" + finalGcmTest.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "TextMessage from: " + finalGcmTest.getFrom() + " message :" + finalGcmTest.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

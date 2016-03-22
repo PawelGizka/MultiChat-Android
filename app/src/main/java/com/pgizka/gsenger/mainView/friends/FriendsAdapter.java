@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.provider.realm.Friend;
 
 import java.util.List;
 

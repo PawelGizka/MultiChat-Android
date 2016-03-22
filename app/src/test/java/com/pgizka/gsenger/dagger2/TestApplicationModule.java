@@ -1,11 +1,7 @@
 package com.pgizka.gsenger.dagger2;
 
 
-import android.content.Context;
-
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.provider.ProviderUtils;
-import com.pgizka.gsenger.provider.repositories.FriendRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 

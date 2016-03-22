@@ -1,16 +1,26 @@
-package com.pgizka.gsenger.provider.pojos;
+package com.pgizka.gsenger.provider.realm;
 
-import com.pgizka.gsenger.provider.GSengerContract;
+import io.realm.RealmObject;
 
-public class Media extends CommonType {
+public class MediaMessage extends RealmObject {
 
     private int mediaType;
     private String description;
     private String fileName;
     private String path;
 
-    public Media() {
-        super(GSengerContract.CommonTypes.COMMON_TYPE_MEDIA);
+    public MediaMessage() {}
+
+    public enum Type {
+        PHOTO(0),
+        VIDEO(1),
+        FILE(2);
+
+        public int code;
+
+        Type(int code) {
+            this.code = code;
+        }
     }
 
     public int getMediaType() {

@@ -13,12 +13,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.provider.realm.Chat;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 
-public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsToDisplayModel> {
+public class ChatsFragment extends Fragment implements ChatsContract.View {
 
-
-    private ChatsContract.Presenter presenter;
+    @Inject
+    ChatsContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
@@ -32,15 +38,15 @@ public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsT
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GSengerApplication.getApplicationComponent().inject(this);
         chatsAdapter = new ChatsAdapter();
+        presenter.onCreate(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-
-        presenter = (ChatsContract.Presenter) getTargetFragment();
 
         emptyTextView = (TextView) view.findViewById(R.id.chats_empty_text_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.chats_recycler_view);
@@ -51,12 +57,18 @@ public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsT
 
         chatsAdapter.setOnChatClickListener(new ChatsAdapter.OnChatClickListener() {
             @Override
-            public void onChatClicked(int chatId, int position, ChatToDisplay chatToDisplay) {
-                presenter.chatClicked(chatId, position, chatToDisplay);
+            public void onChatClicked(Chat chat) {
+                presenter.chatClicked(chat);
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.onStart();
     }
 
     @Override
@@ -65,13 +77,13 @@ public class ChatsFragment extends Fragment implements ChatsContract.View<ChatsT
     }
 
     @Override
-    public void displayChatsList(ChatsToDisplayModel model) {
-        boolean noChats = model.getChatToDisplays().size() == 0;
+    public void displayChatsList(List<Chat> chats) {
+        boolean noChats = chats.size() == 0;
         if(noChats) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
-            chatsAdapter.setChatToDisplays(model.getChatToDisplays());
+            chatsAdapter.setChatToDisplays(chats);
             chatsAdapter.notifyDataSetChanged();
         }
     }

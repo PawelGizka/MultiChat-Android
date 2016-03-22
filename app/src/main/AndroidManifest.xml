@@ -25,12 +25,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <provider
-            android:name=".provider.GSengerProvider"
-            android:authorities="com.pgizka.gsenger"
-            android:enabled="true"
-            android:exported="false">
-        </provider>
 
         <activity
             android:name=".mainView.MainActivity"

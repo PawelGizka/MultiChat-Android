@@ -14,17 +14,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.pojos.Friend;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.provider.realm.Friend;
 
-public class FriendsFragment extends Fragment implements FriendsContract.View<FriendsModel> {
+import java.util.List;
 
-    private FriendsContract.Presenter presenter;
+import javax.inject.Inject;
+
+public class FriendsFragment extends Fragment implements FriendsContract.View {
+
+    @Inject
+    FriendsContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private FriendsAdapter friendsAdapter;
+
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -33,15 +40,21 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GSengerApplication.getApplicationComponent().inject(this);
         friendsAdapter = new FriendsAdapter();
+        presenter.onCreate(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
-
-        presenter = (FriendsContract.Presenter) getTargetFragment();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.contacts_recycler_view);
         emptyTextView = (TextView) view.findViewById(R.id.contacts_empty_text_view);
@@ -69,18 +82,24 @@ public class FriendsFragment extends Fragment implements FriendsContract.View<Fr
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        presenter.onStart();
+    }
+
+    @Override
     public AppCompatActivity getHoldingActivity() {
         return (AppCompatActivity) getActivity();
     }
 
     @Override
-    public void displayContactsList(FriendsModel model) {
-        boolean noContacts = model.getFriends().size() == 0;
+    public void displayContactsList(List<Friend> friends) {
+        boolean noContacts = friends.size() == 0;
         if(noContacts) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
-            friendsAdapter.setFriends(model.getFriends());
+            friendsAdapter.setFriends(friends);
             friendsAdapter.notifyDataSetChanged();
         }
     }

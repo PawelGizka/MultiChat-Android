@@ -13,30 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.dagger2.ApplicationComponent;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
-import com.pgizka.gsenger.mainView.chats.ChatsPresenterImpl;
+import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
 import com.pgizka.gsenger.mainView.friends.FriendsFragment;
-import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
-import com.pgizka.gsenger.provider.GSengerContract;
-import com.pgizka.gsenger.provider.pojos.Chat;
-import com.pgizka.gsenger.provider.pojos.Friend;
-import com.pgizka.gsenger.provider.pojos.Message;
-import com.pgizka.gsenger.provider.pojos.ToFriend;
-import com.pgizka.gsenger.provider.repositories.ChatRepository;
-import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
-import com.pgizka.gsenger.provider.repositories.FriendRepository;
-import com.pgizka.gsenger.provider.repositories.MessageRepository;
-import com.pgizka.gsenger.provider.repositories.ToFriendRepository;
+import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.realm.Receiver;
+import com.pgizka.gsenger.provider.realm.TextMessage;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
-
-    private static final String CHATS_PRESENTER_TAG = "chatsPresenterTag";
-    private static final String CONTACTS_PRESENTER_TAG = "contactsPresenterTag";
 
     private ChatsFragment chatsFragment;
     private FriendsFragment friendsFragment;
@@ -62,40 +54,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        ApplicationComponent applicationComponent = GSengerApplication.getApplicationComponent();
-        FriendRepository friendRepository = applicationComponent.friendRepository();
-        MessageRepository messageRepository = applicationComponent.messageRepository();
-        ToFriendRepository toFriendRepository = applicationComponent.toFriendRepository();
-        ChatRepository chatRepository = applicationComponent.chatRepository();
-        FriendHasChatRepository friendHasChatRepository = applicationComponent.friendHasChatRepository();
-
         Friend friend = new Friend();
-        friend.setUserName("pawel");
-        friend.setServerId(124);
-        friend.setAddedDate(131231);
-        friend.setStatus("haha");
-        friendRepository.insertFriend(friend);
+        friend.setId(0);
+        friend.setServerId(123);
+        friend.setUserName("Pawel");
+        friend.setStatus("my super status");
 
         Chat chat = new Chat();
-        chat.setServerId(13);
-        chat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
-        chat.setStartedDate(12312);
-        chatRepository.insertChat(chat);
+        chat.setId(0);
+        chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
 
-        friendHasChatRepository.insertFriendHasChat(friend.getId(), chat.getId());
+        TextMessage textMessage = new TextMessage();
+        textMessage.setText("hello everyone");
 
         Message message = new Message();
-        message.setText("hello !!!");
-        message.setChatId(chat.getId());
+        message.setId(0);
+        message.setType(Message.Type.TEXT_MESSAGE.code);
         message.setOutgoing(true);
-        message.setSendDate(System.currentTimeMillis());
-        message.setState(GSengerContract.CommonTypes.State.WAITING_TO_SEND.code);
-        messageRepository.insertMessage(message);
 
-        ToFriend toFriend = new ToFriend();
-        toFriend.setCommonTypeId(message.getId());
-        toFriend.setToFriendId(friend.getId());
-        toFriendRepository.insertToFriend(toFriend);
+        Receiver receiver = new Receiver();
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        friend = realm.copyToRealm(friend);
+        chat = realm.copyToRealm(chat);
+        chat.setFriends(new RealmList<>(friend));
+        friend.setChats(new RealmList<Chat>(chat));
+        textMessage = realm.copyToRealm(textMessage);
+        message = realm.copyToRealm(message);
+        message.setTextMessage(textMessage);
+        message.setChat(chat);
+        chat.setMessages(new RealmList<Message>(message));
+        receiver = realm.copyToRealm(receiver);
+        receiver.setMessage(message);
+        receiver.setFriend(friend);
+        realm.commitTransaction();
     }
 
 
@@ -139,28 +132,11 @@ public class MainActivity extends AppCompatActivity {
                     chatsFragment = new ChatsFragment();
                 }
 
-                ChatsPresenterImpl chatsPresenter = (ChatsPresenterImpl) fragmentManager.findFragmentByTag(CHATS_PRESENTER_TAG);
-                if(chatsPresenter == null) {
-                    chatsPresenter = new ChatsPresenterImpl();
-                    fragmentManager.beginTransaction().add(chatsPresenter, CHATS_PRESENTER_TAG).commit();
-                }
-
-                chatsFragment.setTargetFragment(chatsPresenter, 0);
-                chatsPresenter.setTargetFragment(chatsFragment, 0);
-
                 return chatsFragment;
             } else {
                 if(friendsFragment == null) {
                     friendsFragment = new FriendsFragment();
                 }
-
-                FriendsPresenter contactsPresenter = (FriendsPresenter) fragmentManager.findFragmentByTag(CONTACTS_PRESENTER_TAG);
-                if(contactsPresenter == null) {
-                    contactsPresenter = new FriendsPresenter();
-                    fragmentManager.beginTransaction().add(contactsPresenter, CONTACTS_PRESENTER_TAG).commit();
-                }
-                friendsFragment.setTargetFragment(contactsPresenter, 0);
-                contactsPresenter.setTargetFragment(friendsFragment, 0);
 
                 return friendsFragment;
             }

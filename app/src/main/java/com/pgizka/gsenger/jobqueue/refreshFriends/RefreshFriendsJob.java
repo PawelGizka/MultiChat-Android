@@ -8,13 +8,7 @@ import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
-import com.pgizka.gsenger.provider.GSengerContract;
-import com.pgizka.gsenger.provider.GSengerDatabase;
-import com.pgizka.gsenger.provider.pojos.Chat;
-import com.pgizka.gsenger.provider.pojos.Friend;
-import com.pgizka.gsenger.provider.repositories.ChatRepository;
-import com.pgizka.gsenger.provider.repositories.FriendHasChatRepository;
-import com.pgizka.gsenger.provider.repositories.FriendRepository;
+import com.pgizka.gsenger.provider.realm.Friend;
 import com.pgizka.gsenger.util.ContactsUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,20 +17,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class RefreshFriendsJob extends BaseJob {
     static final String TAG = RefreshFriendsJob.class.getSimpleName();
 
-    @Inject
-    transient FriendRepository friendRepository;
-
-    @Inject
-    transient ChatRepository chatRepository;
-
-    @Inject
-    transient FriendHasChatRepository friendHasChatRepository;
+    transient private Realm realm;
 
     @Inject
     transient UserRestService userRestService;
@@ -58,6 +46,7 @@ public class RefreshFriendsJob extends BaseJob {
     public void inject(ApplicationComponent applicationComponent) {
         super.inject(applicationComponent);
         applicationComponent.inject(this);
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -90,10 +79,12 @@ public class RefreshFriendsJob extends BaseJob {
     }
 
     private void processResponse(RefreshFriendsResponse responseDTO) {
-        List<Friend> foundFriends = responseDTO.getFriends();
+        /*List<Friend> foundFriends = responseDTO.getFriends();
 
         for (Friend foundFriend : foundFriends) {
-            Friend localFriend = friendRepository.getFriendByServerId(foundFriend.getServerId());
+            Friend localFriend = realm.where(Friend.class)
+                                    .equalTo("serverId", foundFriend.getServerId())
+                                    .findFirst();
 
             boolean friendExists = localFriend != null;
             if (friendExists) {
@@ -110,7 +101,7 @@ public class RefreshFriendsJob extends BaseJob {
                     friendHasChatRepository.insertFriendHasChat(foundFriend.getId(), currentChat.getId());
                 }
             }
-        }
+        }*/
     }
 
     private void checkUserPhotoActuality(Friend foundFriend, Friend localFriend) {

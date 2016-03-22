@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.mainView.chats.ChatToDisplay;
-import com.pgizka.gsenger.mainView.chats.ChatsAdapter;
+import com.pgizka.gsenger.provider.realm.Message;
 
 import java.util.List;
 
@@ -51,13 +50,13 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void displayConversationItems(List<ConversationItem> conversationItems) {
-        boolean noConversationItems = conversationItems.size() == 0;
+    public void displayConversationItems(List<Message> messages) {
+        boolean noConversationItems = messages.size() == 0;
         if(noConversationItems) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
-            conversationAdapter.setConversationItems(conversationItems);
+            conversationAdapter.setMessages(messages);
             conversationAdapter.notifyDataSetChanged();
         }
     }

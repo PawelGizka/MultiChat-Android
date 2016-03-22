@@ -8,12 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.GSengerContract;
-import com.pgizka.gsenger.provider.pojos.Chat;
-import com.pgizka.gsenger.provider.pojos.CommonType;
-import com.pgizka.gsenger.provider.pojos.Friend;
-import com.pgizka.gsenger.provider.pojos.Media;
-import com.pgizka.gsenger.provider.pojos.Message;
+import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.realm.MediaMessage;
+import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.realm.TextMessage;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
-    private List<ChatToDisplay> chatToDisplays;
+    private List<Chat> chats;
 
     private OnChatClickListener onChatClickListener;
 
@@ -52,59 +52,59 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
-        final ChatToDisplay chatToDisplay = chatToDisplays.get(position);
+        final Chat chat = chats.get(position);
 
-        Chat chat = chatToDisplay.getChat();
-        Friend friend = chatToDisplay.getFriend();
-        CommonType commonType = chatToDisplay.getCommonType();
+        Friend friend = chat.getFriends().first();
+        Message message = chat.getMessages().last();
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onChatClickListener != null) {
-                    onChatClickListener.onChatClicked(0, position, chatToDisplay);
+                    onChatClickListener.onChatClicked(chat);
                 }
             }
         });
 
-        if(chat.getType().equals(GSengerContract.Chats.CHAT_TYPE_CONVERSATION)) {
+        if(chat.getType() == Chat.Type.SINGLE_CONVERSATION.code) {
             holder.chatNameTextView.setText(friend.getUserName());
         } else {
             holder.chatNameTextView.setText(chat.getChatName());
 
         }
 
-        if(commonType instanceof Message) {
-            Message message = (Message) commonType;
-            holder.descriptionTextView.setText(message.getText());
+        if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
+            TextMessage textMessage = message.getTextMessage();
+            holder.descriptionTextView.setText(textMessage.getText());
         } else {
-            Media media = (Media) commonType;
-            if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_FILE) {
+            MediaMessage mediaMessage = message.getMediaMessage();
+            int type = mediaMessage.getMediaType();
+            if(type == MediaMessage.Type.FILE.code) {
                 holder.descriptionTextView.setText("File");
-            } else if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_PHOTO) {
+            } else if(type == MediaMessage.Type.PHOTO.code) {
                 holder.descriptionTextView.setText("Photo");
-            } else if(media.getMediaType() == GSengerContract.Medias.MEDIA_TYPE_VIDEO) {
+            } else if(type == MediaMessage.Type.VIDEO.code) {
                 holder.descriptionTextView.setText("Video");
             }
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String date = simpleDateFormat.format(new Date(commonType.getSendDate()));
+        String date = simpleDateFormat.format(new Date(message.getSendDate()));
         holder.dateTextView.setText(date);
     }
 
 
     @Override
     public int getItemCount() {
-        if(chatToDisplays != null) {
-            return chatToDisplays.size();
+        if(chats != null) {
+            return chats.size();
         } else {
             return 0;
         }
     }
 
-    public void setChatToDisplays(List<ChatToDisplay> chatToDisplays) {
-        this.chatToDisplays = chatToDisplays;
+    public void setChatToDisplays(List<Chat> chats) {
+        this.chats = chats;
     }
 
     public void setOnChatClickListener(OnChatClickListener onChatClickListener) {
@@ -112,7 +112,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     }
 
     public static interface OnChatClickListener {
-        void onChatClicked(int chatId, int position, ChatToDisplay chatToDisplay);
+        void onChatClicked(Chat chat);
     }
 
 }
