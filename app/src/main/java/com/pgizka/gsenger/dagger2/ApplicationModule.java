@@ -11,6 +11,7 @@ import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
 import com.pgizka.gsenger.mainView.friends.ContactsContract;
 import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
+import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -33,6 +34,12 @@ public class ApplicationModule {
     @Singleton
     public EventBus providesEventBus() {
         return EventBus.getDefault();
+    }
+
+    @Provides
+    @Singleton
+    public Repository providesRepository() {
+        return new Repository(application);
     }
 
     @Provides

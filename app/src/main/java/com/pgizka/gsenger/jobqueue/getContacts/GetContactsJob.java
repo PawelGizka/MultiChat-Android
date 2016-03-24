@@ -9,6 +9,7 @@ import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.ContactsUtil;
 
@@ -39,6 +40,9 @@ public class GetContactsJob extends BaseJob {
 
     @Inject
     transient ContactsUtil contactsUtil;
+
+    @Inject
+    transient Repository repository;
 
     public GetContactsJob() {
         super(new Params(1).requireNetwork().addTags("getContacts"));
@@ -92,18 +96,15 @@ public class GetContactsJob extends BaseJob {
             boolean contactExists = localContact != null;
             if (contactExists) {
                 checkUserPhotoActuality(foundContact, localContact);
-                foundContact.setId(localContact.getId());
 
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(foundContact);
-                realm.commitTransaction();
+                foundContact.setId(localContact.getId());
             } else {
-                //TODO set id to found Contact
-                foundContact.setId(2);
-                realm.beginTransaction();
-                realm.copyToRealm(foundContact);
-                realm.commitTransaction();
+                foundContact.setId(repository.getUserNextId());
             }
+
+            realm.beginTransaction();
+            realm.copyToRealmOrUpdate(foundContact);
+            realm.commitTransaction();
         }
     }
 
