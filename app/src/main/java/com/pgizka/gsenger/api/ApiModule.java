@@ -1,10 +1,16 @@
 package com.pgizka.gsenger.api;
 
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.RealmObject;
 import okhttp3.*;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -26,11 +32,26 @@ public class ApiModule {
     @Provides
     @Singleton
     public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+        Gson gson = new GsonBuilder()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return f.getDeclaringClass().equals(RealmObject.class);
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.100:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://192.168.1.102:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
+
         return retrofit;
     }
 

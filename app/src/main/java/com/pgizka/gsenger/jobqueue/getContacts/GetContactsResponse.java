@@ -8,13 +8,13 @@ import java.util.List;
 
 public class GetContactsResponse extends BaseResponse {
 
-    private List<User> users;
+    private List<User> contacts;
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getContacts() {
+        return contacts;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setContacts(List<User> contacts) {
+        this.contacts = contacts;
     }
 }

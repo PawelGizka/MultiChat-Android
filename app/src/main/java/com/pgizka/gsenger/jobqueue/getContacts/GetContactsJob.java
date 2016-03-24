@@ -8,6 +8,7 @@ import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.ContactsUtil;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -39,7 +41,7 @@ public class GetContactsJob extends BaseJob {
     transient ContactsUtil contactsUtil;
 
     public GetContactsJob() {
-        super(new Params(1).requireNetwork().addTags("refreshFriends"));
+        super(new Params(1).requireNetwork().addTags("getContacts"));
     }
 
     @Override
@@ -60,7 +62,7 @@ public class GetContactsJob extends BaseJob {
         List<String> phoneNumbers = contactsUtil.listAllContactsPhoneNumbers();
         GetContactsRequest friendsRequest = prepareRequest(phoneNumbers);
 
-        Call<GetContactsResponse> call = userRestService.refreshFriends(friendsRequest);
+        Call<GetContactsResponse> call = userRestService.getContacts(friendsRequest);
         Response<GetContactsResponse> response = call.execute();
 
         if (response.isSuccess()) {
@@ -78,30 +80,31 @@ public class GetContactsJob extends BaseJob {
         return getContactsRequest;
     }
 
-    private void processResponse(GetContactsResponse responseDTO) {
-        /*List<User> foundFriends = responseDTO.getUsers();
+    private void processResponse(GetContactsResponse response) {
+        Realm realm = Realm.getDefaultInstance();
+        List<User> foundContacts = response.getContacts();
 
-        for (User foundFriend : foundFriends) {
-            User localFriend = realm.where(User.class)
-                                    .equalTo("serverId", foundFriend.getServerId())
+        for (User foundContact : foundContacts) {
+            User localContact = realm.where(User.class)
+                                    .equalTo("serverId", foundContact.getServerId())
                                     .findFirst();
 
-            boolean friendExists = localFriend != null;
-            if (friendExists) {
-                checkUserPhotoActuality(foundFriend, localFriend);
-                foundFriend.setId(localFriend.getId());
-                friendRepository.updateFriend(foundFriend);
+            boolean contactExists = localContact != null;
+            if (contactExists) {
+                checkUserPhotoActuality(foundContact, localContact);
+                foundContact.setId(localContact.getId());
+
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(foundContact);
+                realm.commitTransaction();
             } else {
-                friendRepository.insertFriend(foundFriend);
-                Chat currentChat = chatRepository.getConversationChatByFriendId(foundFriend.getId());
-                if (currentChat == null) {
-                    currentChat = new Chat();
-                    currentChat.setType(GSengerContract.Chats.CHAT_TYPE_CONVERSATION);
-                    chatRepository.insertChat(currentChat);
-                    friendHasChatRepository.insertFriendHasChat(foundFriend.getId(), currentChat.getId());
-                }
+                //TODO set id to found Contact
+                foundContact.setId(2);
+                realm.beginTransaction();
+                realm.copyToRealm(foundContact);
+                realm.commitTransaction();
             }
-        }*/
+        }
     }
 
     private void checkUserPhotoActuality(User foundUser, User localUser) {

@@ -15,7 +15,7 @@ public interface UserRestService {
     @PUT("user/register/")
     Call<UserRegistrationResponse> register(@Body UserRegistrationRequest request);
 
-    @POST("user/getUsers")
-    Call<GetContactsResponse> refreshFriends(@Body GetContactsRequest getContactsRequest);
+    @POST("user/getContacts")
+    Call<GetContactsResponse> getContacts(@Body GetContactsRequest getContactsRequest);
 
 }

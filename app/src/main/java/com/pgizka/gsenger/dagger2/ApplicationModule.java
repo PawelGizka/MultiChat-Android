@@ -42,7 +42,6 @@ public class ApplicationModule {
                 .consumerKeepAlive(45)
                 .maxConsumerCount(3)
                 .minConsumerCount(1)
-//                .customLogger(L.getJobLogger())
                 .injector(new DependencyInjector() {
                     @Override
                     public void inject(Job job) {

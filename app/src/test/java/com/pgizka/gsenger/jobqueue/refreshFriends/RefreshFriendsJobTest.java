@@ -87,7 +87,7 @@ public class RefreshFriendsJobTest {
         getContactsResponse.setUsers(foundFriends);
 
         when(contactsUtil.listAllContactsPhoneNumbers()).thenReturn(phoneNumbers);
-        when(userRestService.refreshFriends(getContactsRequest)).thenReturn(TestUtils.createCall(getContactsResponse));
+        when(userRestService.getContacts(getContactsRequest)).thenReturn(TestUtils.createCall(getContactsResponse));
         when(friendRepository.getFriendByServerId(friend1ServerId)).thenReturn(friend1);
         when(friendRepository.getFriendByServerId(friend2ServerId)).thenReturn(null);
 
