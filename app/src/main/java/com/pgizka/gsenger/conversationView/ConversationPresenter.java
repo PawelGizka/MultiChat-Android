@@ -17,13 +17,12 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-public class ConversationPresenter extends Fragment implements ConversationContract.Presenter {
+public class ConversationPresenter implements ConversationContract.Presenter {
 
     private ConversationContract.View conversationView;
     private AppCompatActivity activity;
     private Realm realm;
 
-    private int chatId;
     private int friendId;
 
     private Friend friend;
@@ -35,38 +34,49 @@ public class ConversationPresenter extends Fragment implements ConversationContr
     JobManager jobManager;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(ConversationContract.View view, int friendId) {
         GSengerApplication.getApplicationComponent().inject(this);
+        conversationView = view;
         realm = Realm.getDefaultInstance();
-
-        conversationView = (ConversationContract.View) getTargetFragment();
-
+        this.friendId = friendId;
         activity = conversationView.getHoldingActivity();
-
-        Bundle arguments = getArguments();
-        chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
-        friendId = arguments.getInt(ConversationActivity.FRIEND_ID_ARGUMENT, -1);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public void onStart() {
         friend = realm.where(Friend.class)
                 .equalTo("id", friendId)
                 .findFirst();
 
+        getChat();
+
+        if (chat != null) {
+            getMessages();
+            conversationView.displayConversationItems(messages);
+        } else {
+            realm.where(Chat.class).findAll().addChangeListener(new RealmChangeListener() {
+                @Override
+                public void onChange() {
+                    getChat();
+                    if (chat != null) {
+                        getMessages();
+                    }
+                }
+            });
+        }
+    }
+
+    private void getChat() {
         chat = realm.where(Chat.class)
                 .equalTo("friends.id", friendId)
                 .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
                 .findFirst();
+    }
 
+    private void getMessages() {
         messages = realm.where(Message.class)
                 .equalTo("chat.id", chat.getId())
                 .findAll();
-
-        conversationView.displayConversationItems(messages);
 
         messages.addChangeListener(new RealmChangeListener() {
             @Override
@@ -81,24 +91,6 @@ public class ConversationPresenter extends Fragment implements ConversationContr
 
     @Override
     public void sendMessage(String text) {
-        /*
-        Message message = new Message();
-        message.setText(text);
-        message.setChatId(chat.getId());
-        message.setSendDate(System.currentTimeMillis());
-        message.setState(GSengerContract.CommonTypes.State.WAITING_TO_SEND.code);
-        messageRepository.insertMessage(message);
 
-        ToFriend toFriend = new ToFriend();
-        toFriend.setCommonTypeId(message.getId());
-        toFriend.setToFriendId(friend.getId());
-        toFriendRepository.insertToFriend(toFriend);
-
-        if (chat.getStartedDate() == 0) {
-            chat.setStartedDate(System.currentTimeMillis());
-            chatRepository.updateChat(chat);
-        }*/
-
-//        jobManager.addJob(new SendMessageJob(message.getId()));
     }
 }

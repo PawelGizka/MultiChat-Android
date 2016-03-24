@@ -4,6 +4,8 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.di.DependencyInjector;
+import com.pgizka.gsenger.conversationView.ConversationContract;
+import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
@@ -75,6 +77,12 @@ public class ApplicationModule {
     @Singleton
     public ChatsContract.Presenter providesChatsPresenter() {
         return new ChatsPresenter();
+    }
+
+    @Provides
+    @Singleton
+    public ConversationContract.Presenter providesConversationPresenter() {
+        return new ConversationPresenter();
     }
 
 }

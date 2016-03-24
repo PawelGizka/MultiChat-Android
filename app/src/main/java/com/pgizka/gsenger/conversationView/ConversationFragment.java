@@ -13,13 +13,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.realm.Message;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ConversationFragment extends Fragment implements ConversationContract.View {
 
-    private ConversationContract.Presenter presenter;
+    @Inject
+    ConversationContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
@@ -29,15 +33,17 @@ public class ConversationFragment extends Fragment implements ConversationContra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GSengerApplication.getApplicationComponent().inject(this);
         conversationAdapter = new ConversationAdapter();
+        Bundle arguments = getArguments();
+        int friendId = arguments.getInt(ConversationActivity.FRIEND_ID_ARGUMENT);
+        presenter.onCreate(this, friendId);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conversation, container, false);
-
-        presenter = (ConversationContract.Presenter) getTargetFragment();
 
         emptyTextView = (TextView) view.findViewById(R.id.conversation_empty_text_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.conversation_recycler_view);
@@ -47,6 +53,12 @@ public class ConversationFragment extends Fragment implements ConversationContra
         recyclerView.setAdapter(conversationAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.onStart();
     }
 
     @Override

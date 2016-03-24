@@ -3,6 +3,7 @@ package com.pgizka.gsenger.dagger2;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.api.UserRestService;
+import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.realm.Realm;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -55,5 +57,7 @@ public interface ApplicationComponent {
     void inject(FriendsFragment friendsFragment);
 
     void inject(ChatsFragment chatsFragment);
+
+    void inject(ConversationFragment conversationFragment);
 
 }
