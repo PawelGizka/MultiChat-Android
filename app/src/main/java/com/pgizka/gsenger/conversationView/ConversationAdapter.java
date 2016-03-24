@@ -4,12 +4,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.TextMessage;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         public ImageView image;
         public ImageView videoImage;
         public TextView messageText;
+        public FrameLayout imageFrameLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -40,6 +45,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             this.image = (ImageView) view.findViewById(R.id.message_image_view);
             this.videoImage = (ImageView) view.findViewById(R.id.message_video_image_view);
             this.messageText = (TextView) view.findViewById(R.id.message_text_view);
+            this.imageFrameLayout = (FrameLayout) view.findViewById(R.id.message_image_frame_layout);
         }
     }
 
@@ -60,15 +66,31 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
+        Message message = messages.get(position);
 
-
-        /*holder.progressBar.setVisibility(View.GONE);
+        holder.progressBar.setVisibility(View.GONE);
         holder.fileNameText.setVisibility(View.GONE);
         holder.filePathText.setVisibility(View.GONE);
         holder.image.setVisibility(View.GONE);
-        holder.videoImage.setVisibility(View.GONE);*/
+        holder.videoImage.setVisibility(View.GONE);
+        holder.image.setVisibility(View.GONE);
+        holder.imageFrameLayout.setVisibility(View.GONE);
 
+        if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
+            TextMessage textMessage = message.getTextMessage();
+            holder.messageText.setText(textMessage.getText());
+        } else {
+            MediaMessage mediaMessage = message.getMediaMessage();
+        }
 
+        User sender = message.getSender();
+
+        boolean outgoing = sender.getId() == 0;
+        if (outgoing) {
+            holder.infoText.setText("Me:");
+        } else {
+            holder.infoText.setText(sender.getUserName());
+        }
 
     }
 

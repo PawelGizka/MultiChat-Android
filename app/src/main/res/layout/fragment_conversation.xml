@@ -1,4 +1,4 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,9 +17,29 @@
         android:id="@+id/conversation_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/conversation_main_edit_text"
         android:scrollbars="vertical"
         >
-
     </android.support.v7.widget.RecyclerView>
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/conversation_main_edit_text"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/conversation_send_message_floating_button"
+        android:layout_alignTop="@+id/conversation_send_message_floating_button"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/conversation_send_message_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_send"
+        android:layout_margin="16dp"
+        />
+
+</RelativeLayout>

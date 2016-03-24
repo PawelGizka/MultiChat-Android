@@ -3,6 +3,7 @@ package com.pgizka.gsenger.conversationView;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
@@ -27,6 +29,8 @@ public class ConversationFragment extends Fragment implements ConversationContra
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
+    private EditText messageText;
+    private FloatingActionButton sendButton;
 
     private ConversationAdapter conversationAdapter;
 
@@ -47,10 +51,19 @@ public class ConversationFragment extends Fragment implements ConversationContra
 
         emptyTextView = (TextView) view.findViewById(R.id.conversation_empty_text_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.conversation_recycler_view);
+        messageText = (EditText) view.findViewById(R.id.conversation_main_edit_text);
+        sendButton = (FloatingActionButton) view.findViewById(R.id.conversation_send_message_floating_button);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(conversationAdapter);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.sendMessage(messageText.getText().toString());
+            }
+        });
 
         return view;
     }
