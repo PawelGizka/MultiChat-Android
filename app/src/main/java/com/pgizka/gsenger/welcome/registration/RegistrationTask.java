@@ -64,7 +64,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
-        processResponse(responseDTO);
+        processResponse(responseDTO, requestDTO);
         return null;
     }
 
@@ -79,7 +79,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
         return requestDTO;
     }
 
-    private void processResponse(UserRegistrationResponse responseDTO) {
+    private void processResponse(UserRegistrationResponse responseDTO, UserRegistrationRequest registrationRequest) {
 
         RegistrationEvent registrationEvent = new RegistrationEvent();
         if (responseDTO == null) {
@@ -90,7 +90,7 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
             int resultCode = responseDTO.getResultCode();
             if (resultCode == ResultCode.OK.code) {
                 registrationEvent.setSuccess(true);
-                userAccountManager.setUserRegistered(responseDTO.getUserId());
+                userAccountManager.setUserRegistered(registrationRequest, responseDTO);
             } else if (resultCode == ResultCode.USER_ALREADY_EXIST.code) {
                 registrationEvent.setSuccess(false);
                 registrationEvent.setMessage(R.string.registration_error_user_already_exist);

@@ -85,7 +85,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.isOutgoing()) {
+        boolean isOutgoing = message.getSender().getId() == 0;
+        if (isOutgoing) {
             return VIEW_TYPE_LEFT;
         } else {
             return VIEW_TYPE_RIGHT;

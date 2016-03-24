@@ -10,7 +10,6 @@ public class Message extends RealmObject {
     private int id;
     private int serverId;
     private int type;
-    private boolean outgoing;
     private long sendDate;
     private int state;
 
@@ -71,14 +70,6 @@ public class Message extends RealmObject {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public boolean isOutgoing() {
-        return outgoing;
-    }
-
-    public void setOutgoing(boolean outgoing) {
-        this.outgoing = outgoing;
     }
 
     public long getSendDate() {

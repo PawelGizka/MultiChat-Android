@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createChat() {
         User user = new User();
-        user.setId(0);
+        user.setId(1);
         user.setServerId(123);
         user.setUserName("Pawel");
         user.setStatus("my super status");
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         Message message = new Message();
         message.setId(0);
         message.setType(Message.Type.TEXT_MESSAGE.code);
-        message.setOutgoing(true);
 
         Receiver receiver = new Receiver();
 
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         message = realm.copyToRealm(message);
         message.setTextMessage(textMessage);
         message.setChat(chat);
+        message.setSender(user);
         chat.setMessages(new RealmList<Message>(message));
         receiver = realm.copyToRealm(receiver);
         receiver.setMessage(message);

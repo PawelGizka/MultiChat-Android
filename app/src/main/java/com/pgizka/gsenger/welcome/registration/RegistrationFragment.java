@@ -81,7 +81,11 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     public boolean shouldDisplay(Context context) {
         if (userAccountManager == null) {
             userAccountManager = GSengerApplication.getApplicationComponent().userAccountManager();
-            userAccountManager.setUserRegistered(12);
+            UserRegistrationRequest request = new UserRegistrationRequest();
+            request.setUserName("jam jest");
+            UserRegistrationResponse response = new UserRegistrationResponse();
+            response.setUserId(123);
+//            userAccountManager.setUserRegistered(request, response);
         }
         return !userAccountManager.isUserRegistered();
     }

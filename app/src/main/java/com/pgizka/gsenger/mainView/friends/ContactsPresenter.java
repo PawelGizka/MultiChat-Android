@@ -50,16 +50,23 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Override
     public void onStart() {
-        users = realm.where(User.class).findAll();
+        getUsers();
         contactsView.displayContactsList(users);
 
         users.addChangeListener(new RealmChangeListener() {
             @Override
             public void onChange() {
-                users = realm.where(User.class).findAll();
+                getUsers();
                 contactsView.displayContactsList(users);
             }
         });
+    }
+
+    private void getUsers() {
+        //get all users except owner of this phone
+        users = realm.where(User.class)
+                .notEqualTo("id", 0) //owner id = 0
+                .findAll();
     }
 
     @Override
