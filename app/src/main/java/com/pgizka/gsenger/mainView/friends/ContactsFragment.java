@@ -15,25 +15,25 @@ import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class FriendsFragment extends Fragment implements FriendsContract.View {
+public class ContactsFragment extends Fragment implements ContactsContract.View {
 
     @Inject
-    FriendsContract.Presenter presenter;
+    ContactsContract.Presenter presenter;
 
     private RecyclerView recyclerView;
     private TextView emptyTextView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private FriendsAdapter friendsAdapter;
+    private ContactsAdapter contactsAdapter;
 
 
-    public FriendsFragment() {
+    public ContactsFragment() {
         // Required empty public constructor
     }
 
@@ -41,7 +41,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GSengerApplication.getApplicationComponent().inject(this);
-        friendsAdapter = new FriendsAdapter();
+        contactsAdapter = new ContactsAdapter();
         presenter.onCreate(this);
     }
 
@@ -62,12 +62,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(friendsAdapter);
+        recyclerView.setAdapter(contactsAdapter);
 
-        friendsAdapter.setOnContactClickListener(new FriendsAdapter.OnContactClickListener() {
+        contactsAdapter.setOnContactClickListener(new ContactsAdapter.OnContactClickListener() {
             @Override
-            public void onContactClicked(int position, Friend friend) {
-                presenter.friendClicked(position, friend);
+            public void onContactClicked(int position, User user) {
+                presenter.friendClicked(position, user);
             }
         });
 
@@ -93,14 +93,14 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     }
 
     @Override
-    public void displayContactsList(List<Friend> friends) {
-        boolean noContacts = friends.size() == 0;
+    public void displayContactsList(List<User> users) {
+        boolean noContacts = users.size() == 0;
         if(noContacts) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
-            friendsAdapter.setFriends(friends);
-            friendsAdapter.notifyDataSetChanged();
+            contactsAdapter.setUsers(users);
+            contactsAdapter.notifyDataSetChanged();
         }
     }
 

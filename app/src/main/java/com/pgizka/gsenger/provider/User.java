@@ -1,10 +1,10 @@
-package com.pgizka.gsenger.provider.realm;
+package com.pgizka.gsenger.provider;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Friend extends RealmObject {
+public class User extends RealmObject {
 
     @PrimaryKey
     private int id;
@@ -21,7 +21,7 @@ public class Friend extends RealmObject {
     private RealmList<Receiver> receivers;
     private RealmList<Chat> chats;
 
-    public Friend() {
+    public User() {
     }
 
     public int getId() {

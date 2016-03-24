@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.Message;
 
 import java.util.List;
 

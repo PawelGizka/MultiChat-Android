@@ -1,6 +1,6 @@
-package com.pgizka.gsenger.jobqueue.refreshFriends;
+package com.pgizka.gsenger.jobqueue.getContacts;
 
-public class RefreshFriendsFinishedEvent {
+public class GetContactsFinishedEvent {
 
     //required for testing
     @Override

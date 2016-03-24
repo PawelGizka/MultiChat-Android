@@ -15,7 +15,7 @@ public class GSengerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build());
 
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))

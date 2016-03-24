@@ -9,8 +9,8 @@ import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
-import com.pgizka.gsenger.mainView.friends.FriendsContract;
-import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
+import com.pgizka.gsenger.mainView.friends.ContactsContract;
+import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -69,8 +69,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public FriendsContract.Presenter providesFriendsPresenter() {
-        return new FriendsPresenter();
+    public ContactsContract.Presenter providesFriendsPresenter() {
+        return new ContactsPresenter();
     }
 
     @Provides

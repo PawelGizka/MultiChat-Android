@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.Chat;
 
 import java.util.List;
 

@@ -5,12 +5,12 @@ import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
-import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
+import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
-import com.pgizka.gsenger.mainView.friends.FriendsContract;
-import com.pgizka.gsenger.mainView.friends.FriendsFragment;
-import com.pgizka.gsenger.mainView.friends.FriendsPresenter;
+import com.pgizka.gsenger.mainView.friends.ContactsContract;
+import com.pgizka.gsenger.mainView.friends.ContactsFragment;
+import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.realm.Realm;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -42,19 +41,19 @@ public interface ApplicationComponent {
 
     UserRestService userRestService();
 
-    FriendsContract.Presenter friendsPresenter();
+    ContactsContract.Presenter friendsPresenter();
 
     ChatsContract.Presenter chatsPresenter();
 
-    void inject(RefreshFriendsJob refreshFriendsJob);
+    void inject(GetContactsJob getContactsJob);
 
     void inject(RegistrationTask registrationTask);
 
-    void inject(FriendsPresenter friendsPresenter);
+    void inject(ContactsPresenter contactsPresenter);
 
     void inject(ConversationPresenter conversationPresenter);
 
-    void inject(FriendsFragment friendsFragment);
+    void inject(ContactsFragment contactsFragment);
 
     void inject(ChatsFragment chatsFragment);
 

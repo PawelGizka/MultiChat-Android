@@ -3,8 +3,8 @@ package com.pgizka.gsenger;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.pgizka.gsenger.provider.realm.Message;
-import com.pgizka.gsenger.provider.realm.TextMessage;
+import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.TextMessage;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

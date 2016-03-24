@@ -2,7 +2,7 @@ package com.pgizka.gsenger.conversationView;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.Message;
 
 import java.util.List;
 

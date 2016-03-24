@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.provider.realm;
+package com.pgizka.gsenger.provider;
 
 import io.realm.RealmObject;
 

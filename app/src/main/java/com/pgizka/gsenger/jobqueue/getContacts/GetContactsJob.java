@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.refreshFriends;
+package com.pgizka.gsenger.jobqueue.getContacts;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
-import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.ContactsUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,8 +21,8 @@ import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class RefreshFriendsJob extends BaseJob {
-    static final String TAG = RefreshFriendsJob.class.getSimpleName();
+public class GetContactsJob extends BaseJob {
+    static final String TAG = GetContactsJob.class.getSimpleName();
 
     transient private Realm realm;
 
@@ -38,7 +38,7 @@ public class RefreshFriendsJob extends BaseJob {
     @Inject
     transient ContactsUtil contactsUtil;
 
-    public RefreshFriendsJob() {
+    public GetContactsJob() {
         super(new Params(1).requireNetwork().addTags("refreshFriends"));
     }
 
@@ -56,12 +56,12 @@ public class RefreshFriendsJob extends BaseJob {
 
     @Override
     public void onRun() throws Throwable {
-        Log.i(TAG, "refreshing friends");
+        Log.i(TAG, "getting contacts");
         List<String> phoneNumbers = contactsUtil.listAllContactsPhoneNumbers();
-        RefreshFriendsRequest friendsRequest = prepareRequest(phoneNumbers);
+        GetContactsRequest friendsRequest = prepareRequest(phoneNumbers);
 
-        Call<RefreshFriendsResponse> call = userRestService.refreshFriends(friendsRequest);
-        Response<RefreshFriendsResponse> response = call.execute();
+        Call<GetContactsResponse> call = userRestService.refreshFriends(friendsRequest);
+        Response<GetContactsResponse> response = call.execute();
 
         if (response.isSuccess()) {
             Log.i(TAG, "response is success");
@@ -69,20 +69,20 @@ public class RefreshFriendsJob extends BaseJob {
         }
 
         Log.i(TAG, "posting end of job event");
-        eventBus.post(new RefreshFriendsFinishedEvent());
+        eventBus.post(new GetContactsFinishedEvent());
     }
 
-    private RefreshFriendsRequest prepareRequest(List<String> phoneNumbers) {
-        RefreshFriendsRequest refreshFriendsRequest = new RefreshFriendsRequest();
-        refreshFriendsRequest.setPhoneNumbers(phoneNumbers);
-        return refreshFriendsRequest;
+    private GetContactsRequest prepareRequest(List<String> phoneNumbers) {
+        GetContactsRequest getContactsRequest = new GetContactsRequest();
+        getContactsRequest.setPhoneNumbers(phoneNumbers);
+        return getContactsRequest;
     }
 
-    private void processResponse(RefreshFriendsResponse responseDTO) {
-        /*List<Friend> foundFriends = responseDTO.getFriends();
+    private void processResponse(GetContactsResponse responseDTO) {
+        /*List<User> foundFriends = responseDTO.getUsers();
 
-        for (Friend foundFriend : foundFriends) {
-            Friend localFriend = realm.where(Friend.class)
+        for (User foundFriend : foundFriends) {
+            User localFriend = realm.where(User.class)
                                     .equalTo("serverId", foundFriend.getServerId())
                                     .findFirst();
 
@@ -104,9 +104,9 @@ public class RefreshFriendsJob extends BaseJob {
         }*/
     }
 
-    private void checkUserPhotoActuality(Friend foundFriend, Friend localFriend) {
-        String remoteHash = foundFriend.getPhotoHash();
-        String localHash = localFriend.getPhotoHash();
+    private void checkUserPhotoActuality(User foundUser, User localUser) {
+        String remoteHash = foundUser.getPhotoHash();
+        String localHash = localUser.getPhotoHash();
 
         if ((remoteHash != null && localHash == null) ||
                 (remoteHash != null && localHash != null && !remoteHash.equals(localHash))) {
@@ -117,7 +117,7 @@ public class RefreshFriendsJob extends BaseJob {
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
         Log.i(TAG, "onShouldReRunOnThrowable");
-        eventBus.post(new RefreshFriendsFinishedEvent());
+        eventBus.post(new GetContactsFinishedEvent());
         return RetryConstraint.CANCEL;
     }
 

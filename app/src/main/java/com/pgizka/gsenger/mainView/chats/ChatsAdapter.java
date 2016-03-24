@@ -8,11 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.realm.Chat;
-import com.pgizka.gsenger.provider.realm.Friend;
-import com.pgizka.gsenger.provider.realm.MediaMessage;
-import com.pgizka.gsenger.provider.realm.Message;
-import com.pgizka.gsenger.provider.realm.TextMessage;
+import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.User;
+import com.pgizka.gsenger.provider.MediaMessage;
+import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.TextMessage;
 
 
 import java.text.SimpleDateFormat;
@@ -54,7 +54,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder,final int position) {
         final Chat chat = chats.get(position);
 
-        Friend friend = chat.getFriends().first();
+        User user = chat.getUsers().first();
         Message message = chat.getMessages().last();
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         });
 
         if(chat.getType() == Chat.Type.SINGLE_CONVERSATION.code) {
-            holder.chatNameTextView.setText(friend.getUserName());
+            holder.chatNameTextView.setText(user.getUserName());
         } else {
             holder.chatNameTextView.setText(chat.getChatName());
 

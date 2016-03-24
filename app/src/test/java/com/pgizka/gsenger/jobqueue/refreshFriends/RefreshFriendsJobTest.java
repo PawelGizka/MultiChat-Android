@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.refreshFriends;
+package com.pgizka.gsenger.jobqueue.getContacts;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -41,7 +41,7 @@ public class RefreshFriendsJobTest {
     @Mock
     GSengerApplication gSengerApplication;
 
-    private RefreshFriendsJob refreshFriendsJob;
+    private GetContactsJob getContactsJob;
 
     private ApplicationComponent applicationComponent;
 
@@ -57,7 +57,7 @@ public class RefreshFriendsJobTest {
         eventBus = applicationComponent.eventBus();
         contactsUtil = applicationComponent.contactsUtil();
 
-        refreshFriendsJob = new RefreshFriendsJob();
+        getContactsJob = new GetContactsJob();
     }
 
     @Test
@@ -67,8 +67,8 @@ public class RefreshFriendsJobTest {
         phoneNumbers.add("222");
         phoneNumbers.add("333");
 
-        RefreshFriendsRequest refreshFriendsRequest = new RefreshFriendsRequest();
-        refreshFriendsRequest.setPhoneNumbers(phoneNumbers);
+        GetContactsRequest getContactsRequest = new GetContactsRequest();
+        getContactsRequest.setPhoneNumbers(phoneNumbers);
 
         Friend friend1 = new Friend();
         int friend1ServerId = 0;
@@ -80,23 +80,23 @@ public class RefreshFriendsJobTest {
         int friend2ServerId = 1;
         friend2.setServerId(friend2ServerId);
 
-        RefreshFriendsResponse refreshFriendsResponse = new RefreshFriendsResponse();
+        GetContactsResponse getContactsResponse = new GetContactsResponse();
         List<Friend> foundFriends = new ArrayList<>();
         foundFriends.add(friend1);
         foundFriends.add(friend2);
-        refreshFriendsResponse.setFriends(foundFriends);
+        getContactsResponse.setUsers(foundFriends);
 
         when(contactsUtil.listAllContactsPhoneNumbers()).thenReturn(phoneNumbers);
-        when(userRestService.refreshFriends(refreshFriendsRequest)).thenReturn(TestUtils.createCall(refreshFriendsResponse));
+        when(userRestService.refreshFriends(getContactsRequest)).thenReturn(TestUtils.createCall(getContactsResponse));
         when(friendRepository.getFriendByServerId(friend1ServerId)).thenReturn(friend1);
         when(friendRepository.getFriendByServerId(friend2ServerId)).thenReturn(null);
 
-        refreshFriendsJob.inject(applicationComponent);
-        refreshFriendsJob.onRun();
+        getContactsJob.inject(applicationComponent);
+        getContactsJob.onRun();
 
         verify(friendRepository).updateFriend(friend1);
         verify(friendRepository).insertFriend(friend2);
-        verify(eventBus).post(new RefreshFriendsFinishedEvent());
+        verify(eventBus).post(new GetContactsFinishedEvent());
     }
 
 

@@ -3,11 +3,11 @@ package com.pgizka.gsenger.mainView.friends;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
-public interface FriendsContract {
+public interface ContactsContract {
 
     interface Presenter {
 
@@ -17,7 +17,7 @@ public interface FriendsContract {
 
         void onStart();
 
-        void friendClicked(int position, Friend friend);
+        void friendClicked(int position, User user);
 
         void refreshFriends();
     }
@@ -26,7 +26,7 @@ public interface FriendsContract {
 
         AppCompatActivity getHoldingActivity();
 
-        void displayContactsList(List<Friend> friends);
+        void displayContactsList(List<User> users);
 
         void displayErrorMessage(AlertDialog alertDialog);
 

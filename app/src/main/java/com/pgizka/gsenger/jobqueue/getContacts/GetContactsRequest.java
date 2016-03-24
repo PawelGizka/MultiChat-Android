@@ -1,12 +1,12 @@
-package com.pgizka.gsenger.jobqueue.refreshFriends;
+package com.pgizka.gsenger.jobqueue.getContacts;
 
 import java.util.List;
 
-public class RefreshFriendsRequest {
+public class GetContactsRequest {
 
     List<String> phoneNumbers;
 
-    public RefreshFriendsRequest() {
+    public GetContactsRequest() {
     }
 
     public List<String> getPhoneNumbers() {
@@ -22,7 +22,7 @@ public class RefreshFriendsRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RefreshFriendsRequest that = (RefreshFriendsRequest) o;
+        GetContactsRequest that = (GetContactsRequest) o;
 
         return that.getPhoneNumbers().containsAll(phoneNumbers);
     }

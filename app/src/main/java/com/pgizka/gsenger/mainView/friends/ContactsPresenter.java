@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsFinishedEvent;
-import com.pgizka.gsenger.jobqueue.refreshFriends.RefreshFriendsJob;
-import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.jobqueue.getContacts.GetContactsFinishedEvent;
+import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
+import com.pgizka.gsenger.provider.User;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -19,14 +19,14 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-public class FriendsPresenter implements FriendsContract.Presenter {
+public class ContactsPresenter implements ContactsContract.Presenter {
 
-    private FriendsContract.View contactsView;
+    private ContactsContract.View contactsView;
     private AppCompatActivity activity;
 
     private Realm realm;
 
-    private RealmResults<Friend> friends;
+    private RealmResults<User> users;
 
     @Inject
     JobManager jobManager;
@@ -35,7 +35,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     EventBus eventBus;
 
     @Override
-    public void onCreate(FriendsContract.View view) {
+    public void onCreate(ContactsContract.View view) {
         contactsView = view;
         GSengerApplication.getApplicationComponent().inject(this);
         realm = Realm.getDefaultInstance();
@@ -50,32 +50,32 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void onStart() {
-        friends = realm.where(Friend.class).findAll();
-        contactsView.displayContactsList(friends);
+        users = realm.where(User.class).findAll();
+        contactsView.displayContactsList(users);
 
-        friends.addChangeListener(new RealmChangeListener() {
+        users.addChangeListener(new RealmChangeListener() {
             @Override
             public void onChange() {
-                friends = realm.where(Friend.class).findAll();
-                contactsView.displayContactsList(friends);
+                users = realm.where(User.class).findAll();
+                contactsView.displayContactsList(users);
             }
         });
     }
 
     @Override
-    public void friendClicked(int position, Friend friend) {
+    public void friendClicked(int position, User user) {
         Intent intent = new Intent(activity, ConversationActivity.class);
-        intent.putExtra(ConversationActivity.FRIEND_ID_ARGUMENT, friend.getId());
+        intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, user.getId());
         activity.startActivity(intent);
     }
 
     @Override
     public void refreshFriends() {
-        jobManager.addJob(new RefreshFriendsJob());
+        jobManager.addJob(new GetContactsJob());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(RefreshFriendsFinishedEvent friendsFinishedEvent) {
+    public void onEventMainThread(GetContactsFinishedEvent friendsFinishedEvent) {
         contactsView.dismissRefreshing();
     }
 

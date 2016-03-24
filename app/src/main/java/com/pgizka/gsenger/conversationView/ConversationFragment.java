@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.Message;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
         GSengerApplication.getApplicationComponent().inject(this);
         conversationAdapter = new ConversationAdapter();
         Bundle arguments = getArguments();
-        int friendId = arguments.getInt(ConversationActivity.FRIEND_ID_ARGUMENT);
+        int friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT);
         presenter.onCreate(this, friendId);
     }
 

@@ -3,7 +3,7 @@ package com.pgizka.gsenger.mainView.chats;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.Chat;
 
 import java.util.List;
 

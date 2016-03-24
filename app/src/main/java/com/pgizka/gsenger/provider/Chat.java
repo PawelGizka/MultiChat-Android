@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.provider.realm;
+package com.pgizka.gsenger.provider;
 
 
 import io.realm.RealmList;
@@ -15,7 +15,7 @@ public class Chat extends RealmObject {
     private int type;
 
     private RealmList<Message> messages;
-    private RealmList<Friend> friends;
+    private RealmList<User> users;
 
     public Chat() {
     }
@@ -79,11 +79,11 @@ public class Chat extends RealmObject {
         this.messages = messages;
     }
 
-    public RealmList<Friend> getFriends() {
-        return friends;
+    public RealmList<User> getUsers() {
+        return users;
     }
 
-    public void setFriends(RealmList<Friend> friends) {
-        this.friends = friends;
+    public void setUsers(RealmList<User> users) {
+        this.users = users;
     }
 }

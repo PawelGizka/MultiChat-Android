@@ -14,13 +14,12 @@ import android.view.MenuItem;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
-import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
-import com.pgizka.gsenger.mainView.friends.FriendsFragment;
-import com.pgizka.gsenger.provider.realm.Chat;
-import com.pgizka.gsenger.provider.realm.Friend;
-import com.pgizka.gsenger.provider.realm.Message;
-import com.pgizka.gsenger.provider.realm.Receiver;
-import com.pgizka.gsenger.provider.realm.TextMessage;
+import com.pgizka.gsenger.mainView.friends.ContactsFragment;
+import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.User;
+import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.Receiver;
+import com.pgizka.gsenger.provider.TextMessage;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private ChatsFragment chatsFragment;
-    private FriendsFragment friendsFragment;
+    private ContactsFragment contactsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        Friend friend = new Friend();
-        friend.setId(0);
-        friend.setServerId(123);
-        friend.setUserName("Pawel");
-        friend.setStatus("my super status");
+        User user = new User();
+        user.setId(0);
+        user.setServerId(123);
+        user.setUserName("Pawel");
+        user.setStatus("my super status");
 
         Chat chat = new Chat();
         chat.setId(0);
@@ -76,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        friend = realm.copyToRealm(friend);
+        user = realm.copyToRealm(user);
         chat = realm.copyToRealm(chat);
-        chat.setFriends(new RealmList<>(friend));
-        friend.setChats(new RealmList<Chat>(chat));
+        chat.setUsers(new RealmList<>(user));
+        user.setChats(new RealmList<Chat>(chat));
         textMessage = realm.copyToRealm(textMessage);
         message = realm.copyToRealm(message);
         message.setTextMessage(textMessage);
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         chat.setMessages(new RealmList<Message>(message));
         receiver = realm.copyToRealm(receiver);
         receiver.setMessage(message);
-        receiver.setFriend(friend);
+        receiver.setUser(user);
         realm.commitTransaction();
     }
 
@@ -134,11 +133,11 @@ public class MainActivity extends AppCompatActivity {
 
                 return chatsFragment;
             } else {
-                if(friendsFragment == null) {
-                    friendsFragment = new FriendsFragment();
+                if(contactsFragment == null) {
+                    contactsFragment = new ContactsFragment();
                 }
 
-                return friendsFragment;
+                return contactsFragment;
             }
         }
 

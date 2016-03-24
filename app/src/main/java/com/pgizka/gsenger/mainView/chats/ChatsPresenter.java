@@ -2,7 +2,7 @@ package com.pgizka.gsenger.mainView.chats;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.provider.realm.Chat;
+import com.pgizka.gsenger.provider.Chat;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;

@@ -1,11 +1,11 @@
-package com.pgizka.gsenger.provider.realm;
+package com.pgizka.gsenger.provider;
 
 
 import io.realm.RealmObject;
 
 public class Receiver extends RealmObject {
 
-    private Friend friend;
+    private User user;
     private Message message;
 
     private long delivered;
@@ -30,12 +30,12 @@ public class Receiver extends RealmObject {
         this.viewed = viewed;
     }
 
-    public Friend getFriend() {
-        return friend;
+    public User getUser() {
+        return user;
     }
 
-    public void setFriend(Friend friend) {
-        this.friend = friend;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Message getMessage() {

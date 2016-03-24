@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.provider.realm;
+package com.pgizka.gsenger.provider;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -14,7 +14,7 @@ public class Message extends RealmObject {
     private long sendDate;
     private int state;
 
-    private Friend sender;
+    private User sender;
     private Chat chat;
     private RealmList<Receiver> receivers;
 
@@ -97,11 +97,11 @@ public class Message extends RealmObject {
         this.state = state;
     }
 
-    public Friend getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(Friend sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 

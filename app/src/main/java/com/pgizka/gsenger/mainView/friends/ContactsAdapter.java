@@ -8,13 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.provider.realm.Friend;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
 
-    private List<Friend> friends;
+    private List<User> users;
 
     private OnContactClickListener onContactClickListener;
 
@@ -43,32 +43,32 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final Friend friend = friends.get(position);
+        final User user = users.get(position);
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onContactClickListener != null) {
-                    onContactClickListener.onContactClicked(position, friend);
+                    onContactClickListener.onContactClicked(position, user);
                 }
             }
         });
 
-        holder.userNameText.setText(friend.getUserName());
-        holder.statusText.setText(friend.getStatus());
+        holder.userNameText.setText(user.getUserName());
+        holder.statusText.setText(user.getStatus());
 
     }
 
     @Override
     public int getItemCount() {
-        if(friends != null) {
-            return friends.size();
+        if(users != null) {
+            return users.size();
         } else {
             return 0;
         }
     }
 
-    public void setFriends(List<Friend> friends) {
-        this.friends = friends;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public void setOnContactClickListener(OnContactClickListener onContactClickListener) {
@@ -76,7 +76,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     public static interface  OnContactClickListener {
-        void onContactClicked(int position, Friend friend);
+        void onContactClicked(int position, User user);
     }
 
 }

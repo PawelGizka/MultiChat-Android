@@ -1,15 +1,12 @@
 package com.pgizka.gsenger.conversationView;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.provider.realm.Chat;
-import com.pgizka.gsenger.provider.realm.Friend;
-import com.pgizka.gsenger.provider.realm.Message;
+import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.User;
+import com.pgizka.gsenger.provider.Message;
 
 import javax.inject.Inject;
 
@@ -25,7 +22,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private int friendId;
 
-    private Friend friend;
+    private User user;
     private Chat chat;
 
     private RealmResults<Message> messages;
@@ -44,7 +41,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Override
     public void onStart() {
-        friend = realm.where(Friend.class)
+        user = realm.where(User.class)
                 .equalTo("id", friendId)
                 .findFirst();
 
@@ -68,7 +65,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     private void getChat() {
         chat = realm.where(Chat.class)
-                .equalTo("friends.id", friendId)
+                .equalTo("users.id", friendId)
                 .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
                 .findFirst();
     }
