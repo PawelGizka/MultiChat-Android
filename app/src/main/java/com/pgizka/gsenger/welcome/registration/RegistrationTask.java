@@ -31,52 +31,30 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     @Inject
     UserAccountManager userAccountManager;
 
-    private String email;
-    private String userName;
-    private String password;
-    private int phoneNumber;
-    private String gcmToken;
+    private UserRegistrationRequest request;
 
-    public RegistrationTask(String email, String userName, String password, int phoneNumber, String gcmToken) {
+    public RegistrationTask(UserRegistrationRequest request) {
         GSengerApplication.getApplicationComponent().inject(this);
-
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.gcmToken = gcmToken;
+        this.request = request;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        UserRegistrationRequest requestDTO = createRequest();
-
-        UserRegistrationResponse responseDTO = null;
+        UserRegistrationResponse response = null;
         try {
-            Call<UserRegistrationResponse> call = userRestService.register(requestDTO);
-            Response<UserRegistrationResponse> response = call.execute();
-            if (response.isSuccess()) {
-                responseDTO = response.body();
+            Call<UserRegistrationResponse> call = userRestService.register(request);
+            Response<UserRegistrationResponse> httpResponse = call.execute();
+            if (httpResponse.isSuccess()) {
+                response = httpResponse.body();
             } else {
-                Log.i(TAG, "Connection failed, http code " + response.code());
+                Log.i(TAG, "Connection failed, http code " + httpResponse.code());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        processResponse(responseDTO, requestDTO);
+        processResponse(response, request);
         return null;
-    }
-
-    private UserRegistrationRequest createRequest() {
-        UserRegistrationRequest requestDTO = new UserRegistrationRequest();
-        requestDTO.setEmail(email);
-        requestDTO.setPassword(password);
-        requestDTO.setUserName(userName);
-        requestDTO.setPhoneNumber(phoneNumber);
-        requestDTO.setGcmToken(gcmToken);
-
-        return requestDTO;
     }
 
     private void processResponse(UserRegistrationResponse responseDTO, UserRegistrationRequest registrationRequest) {

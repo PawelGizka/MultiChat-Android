@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMUTil;
@@ -81,11 +85,6 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     public boolean shouldDisplay(Context context) {
         if (userAccountManager == null) {
             userAccountManager = GSengerApplication.getApplicationComponent().userAccountManager();
-            UserRegistrationRequest request = new UserRegistrationRequest();
-            request.setUserName("jam jest");
-            UserRegistrationResponse response = new UserRegistrationResponse();
-            response.setUserId(123);
-//            userAccountManager.setUserRegistered(request, response);
         }
         return !userAccountManager.isUserRegistered();
     }
@@ -94,11 +93,25 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         String userName = userNameEditText.getText().toString();
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        int phoneNumber = Integer.parseInt(phoneNumberEditText.getText().toString());
+        String phoneNumber = phoneNumberEditText.getText().toString();
         String token = GCMUTil.getRegistrationToken(getContext());
+        long parsedPhoneNumber = 0;
 
-        new RegistrationTask(email, userName, password, phoneNumber, token)
-                .execute();
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            parsedPhoneNumber = phoneNumberUtil.parse(phoneNumber, "PL").getNationalNumber();
+        } catch (NumberParseException e) {
+            e.printStackTrace();
+        }
+
+        UserRegistrationRequest request = new UserRegistrationRequest();
+        request.setUserName(userName);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setPhoneNumber((int) parsedPhoneNumber);
+        request.setGcmToken(token);
+
+        new RegistrationTask(request).execute();
 
         loginButton.setEnabled(false);
 
