@@ -4,9 +4,11 @@ package com.pgizka.gsenger.gcm.commands;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
+import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageDeliveredJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.Receiver;
@@ -16,7 +18,6 @@ import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,6 +34,9 @@ public class NewTextMessageCommand extends GCMCommand {
 
     @Inject
     UserAccountManager userAccountManager;
+
+    @Inject
+    JobManager jobManager;
 
     @Override
     public void execute(Context context, String action, String extraData) {
@@ -88,7 +92,7 @@ public class NewTextMessageCommand extends GCMCommand {
 
         Message message = new Message();
         message.setId(repository.getMessageNextId());
-        message.setState(messageData.getMessageId());
+        message.setServerId(messageData.getMessageId());
         message.setSendDate(messageData.getSendDate());
         message.setState(Message.State.RECEIVED.code);
         message = realm.copyToRealm(message);
@@ -111,6 +115,7 @@ public class NewTextMessageCommand extends GCMCommand {
         realm.commitTransaction();
 
         //TODO add message delivered job
+        jobManager.addJob(new SetMessageDeliveredJob(message.getId()));
     }
 
 }

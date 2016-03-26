@@ -24,7 +24,7 @@ public class SendMessageJob extends BaseJob {
     private transient Message message;
 
     @Inject
-    MessageRestService messageRestService;
+    transient MessageRestService messageRestService;
 
     public SendMessageJob(int messageId) {
         super(new Params(10).requireNetwork().persist().groupBy("message"));
