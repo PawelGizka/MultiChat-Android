@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
@@ -141,5 +142,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
         realm.commitTransaction();
 
+        jobManager.addJob(new SendMessageJob(message.getId()));
     }
 }

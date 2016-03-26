@@ -47,7 +47,7 @@ public class ApiModule {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.102:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
+                .baseUrl("http://192.168.1.100:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
@@ -59,6 +59,12 @@ public class ApiModule {
     @Singleton
     public UserRestService providesUserRestService(Retrofit retrofit) {
         return retrofit.create(UserRestService.class);
+    }
+
+    @Provides
+    @Singleton
+    public MessageRestService providesMessageRestService(Retrofit retrofit) {
+        return retrofit.create(MessageRestService.class);
     }
 
 }

@@ -6,6 +6,7 @@ import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
+import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsContract;
@@ -46,6 +47,8 @@ public interface ApplicationComponent {
     ChatsContract.Presenter chatsPresenter();
 
     void inject(GetContactsJob getContactsJob);
+
+    void inject(SendMessageJob sendMessageJob);
 
     void inject(RegistrationTask registrationTask);
 
