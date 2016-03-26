@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.commands.TestCommand;
 
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class GcmMessageHandler extends GcmListenerService {
         // Known messages and their GCM message receivers
         Map <String, GCMCommand> receivers = new HashMap<String, GCMCommand>();
         receivers.put("test", new TestCommand());
+        receivers.put("NEW_TEXT_MESSAGE_ACTION", new NewTextMessageCommand());
         MESSAGE_RECEIVERS = Collections.unmodifiableMap(receivers);
     }
 
@@ -33,7 +35,6 @@ public class GcmMessageHandler extends GcmListenerService {
             return;
         }
 
-        action = action.toLowerCase();
         GCMCommand command = MESSAGE_RECEIVERS.get(action);
         if (command == null) {
             Log.e(TAG, "Unknown command received: " + action);
