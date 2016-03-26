@@ -27,6 +27,13 @@
     <string name="connection_failed">Cannot connect to server</string>
     <string name="connection_unexpected_error">Unexpected error occur during connection to server</string>
 
+    <!-- Strings related to conversation view -->
+    <string name="conversation_status_waiting_to_send">Waiting to send</string>
+    <string name="conversation_status_sending">Sending...</string>
+    <string name="conversation_status_cannot_send">Cannot_send</string>
+    <string name="conversation_status_sent">Sent</string>
+    <string name="conversation_status_received">Received</string>
+
 
     <!-- Common String -->
     <string name="success">Success!</string>

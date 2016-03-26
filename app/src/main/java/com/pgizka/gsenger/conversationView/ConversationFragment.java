@@ -31,6 +31,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     private TextView emptyTextView;
     private EditText messageText;
     private FloatingActionButton sendButton;
+    private List<Message> messages;
 
     private ConversationAdapter conversationAdapter;
 
@@ -54,7 +55,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
         messageText = (EditText) view.findViewById(R.id.conversation_main_edit_text);
         sendButton = (FloatingActionButton) view.findViewById(R.id.conversation_send_message_floating_button);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(conversationAdapter);
 
@@ -62,6 +63,8 @@ public class ConversationFragment extends Fragment implements ConversationContra
             @Override
             public void onClick(View v) {
                 presenter.sendMessage(messageText.getText().toString());
+                messageText.setText("");
+                recyclerView.smoothScrollToPosition(messages.size());
             }
         });
 
@@ -76,6 +79,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
 
     @Override
     public void displayConversationItems(List<Message> messages) {
+        this.messages = messages;
         boolean noConversationItems = messages.size() == 0;
         if(noConversationItems) {
             emptyTextView.setVisibility(View.VISIBLE);

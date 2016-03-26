@@ -15,7 +15,15 @@ import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import static com.pgizka.gsenger.provider.Message.State.CANNOT_SEND;
+import static com.pgizka.gsenger.provider.Message.State.RECEIVED;
+import static com.pgizka.gsenger.provider.Message.State.SENDING;
+import static com.pgizka.gsenger.provider.Message.State.SENT;
+import static com.pgizka.gsenger.provider.Message.State.WAITING_TO_SEND;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
 
@@ -83,15 +91,38 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             MediaMessage mediaMessage = message.getMediaMessage();
         }
 
-        User sender = message.getSender();
+        String sendDate = getSendDate(message);
+        String status = getStatus(message);
 
+        User sender = message.getSender();
         boolean outgoing = sender.getId() == 0;
         if (outgoing) {
-            holder.infoText.setText("Me:");
+            holder.infoText.setText(status + " " + sendDate + " Me:");
         } else {
-            holder.infoText.setText(sender.getUserName());
+            holder.infoText.setText(status + " " + sendDate + sender.getUserName());
         }
+    }
 
+    private String getSendDate(Message message) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return simpleDateFormat.format(new Date(message.getSendDate()));
+    }
+
+    private String getStatus(Message message) {
+        int state = message.getState();
+        if (state == WAITING_TO_SEND.code) {
+            return "Waiting to send";
+        } else if (state == SENDING.code) {
+            return "Sending...";
+        } else if (state == CANNOT_SEND.code) {
+            return "Cannot send";
+        } else if (state == SENT.code) {
+            return "Sent";
+        } else if (state == RECEIVED.code) {
+            return "Received";
+        } else {
+            return "";
+        }
     }
 
 

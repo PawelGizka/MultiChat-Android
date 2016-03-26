@@ -35,7 +35,8 @@ public class Message extends RealmObject {
         WAITING_TO_SEND(0),
         SENDING(1),
         CANNOT_SEND(2),
-        SENT(3);
+        SENT(3),
+        RECEIVED(4);
 
         public int code;
 
