@@ -48,4 +48,12 @@ public class UserAccountManager {
         return user.getServerId();
     }
 
+    public User getOwner() {
+        Realm realm = Realm.getDefaultInstance();
+
+        return realm.where(User.class)
+                .equalTo("id", 0)
+                .findFirst();
+    }
+
 }
