@@ -8,7 +8,6 @@ import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageDeliveredJOb;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.Receiver;
