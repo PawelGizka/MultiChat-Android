@@ -112,11 +112,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     private String getStatus(Message message) {
         Receiver receiver = message.getReceivers().first();
 
-        if (receiver.getDelivered() > 0) {
-            return "Delivered";
-        } if (receiver.getViewed() > 0) {
+        if (receiver.getViewed() > 0) {
             return "Viewed";
+        } else if (receiver.getDelivered() > 0) {
+            return "Delivered";
         }
+
 
         int state = message.getState();
         if (state == WAITING_TO_SEND.code) {

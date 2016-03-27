@@ -72,9 +72,15 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.onStart();
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
     }
 
     @Override

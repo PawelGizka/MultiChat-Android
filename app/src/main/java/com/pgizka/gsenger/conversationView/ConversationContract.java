@@ -26,7 +26,9 @@ public interface ConversationContract {
 
         void onCreate(View view, int friendId);
 
-        void onStart();
+        void onResume();
+
+        void onPause();
 
     }
 

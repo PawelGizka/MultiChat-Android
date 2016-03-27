@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
@@ -13,12 +14,16 @@ import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.UserAccountManager;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
 
 public class ConversationPresenter implements ConversationContract.Presenter {
 
@@ -53,7 +58,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     }
 
     @Override
-    public void onStart() {
+    public void onResume() {
         owner = userAccountManager.getOwner();
         friend = realm.where(User.class)
                 .equalTo("id", friendId)
@@ -75,6 +80,16 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                 }
             });
         }
+
+        if (chat != null && messages != null) {
+            setAllMessagesViewed();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        messages.removeChangeListeners();
+        realm.removeAllChangeListeners();
     }
 
     private void getChat() {
@@ -96,8 +111,25 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                         .equalTo("chat.id", chat.getId())
                         .findAll();
                 conversationView.displayConversationItems(messages);
+                setAllMessagesViewed();
             }
         });
+    }
+
+    private void setAllMessagesViewed() {
+        List<Receiver> receivers = realm.where(Receiver.class)
+                .equalTo("message.chat.id", chat.getId())
+                .equalTo("user.id", owner.getId())
+                .equalTo("viewed", 0)
+                .findAll();
+
+        realm.beginTransaction();
+        for (int i = 0; i < receivers.size(); i++) {
+            Receiver receiver = receivers.get(i);
+            receiver.setViewed(System.currentTimeMillis());
+            jobManager.addJobInBackground(new SetMessageStateJob(receiver.getMessage().getId(), SET_VIEWED));
+        }
+        realm.commitTransaction();
     }
 
     @Override

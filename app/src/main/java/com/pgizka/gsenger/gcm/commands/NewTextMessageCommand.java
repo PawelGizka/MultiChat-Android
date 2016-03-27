@@ -52,6 +52,7 @@ public class NewTextMessageCommand extends GCMCommand {
         }
 
         Realm realm = Realm.getDefaultInstance();
+        realm.refresh();
         realm.beginTransaction();
 
         //TODO handle case when sender will not be in contacts
@@ -115,6 +116,7 @@ public class NewTextMessageCommand extends GCMCommand {
         }
 
         realm.commitTransaction();
+        realm.refresh();
 
         jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
     }

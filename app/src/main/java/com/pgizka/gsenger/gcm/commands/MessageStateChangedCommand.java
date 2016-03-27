@@ -46,6 +46,7 @@ public class MessageStateChangedCommand extends GCMCommand {
         }
 
         realm.commitTransaction();
+        realm.refresh();
     }
 
 }
