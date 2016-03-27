@@ -18,7 +18,7 @@ import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class SetMessageDeliveredJob extends BaseJob {
+public class SetMessageDeliveredJOb extends BaseJob {
 
     private transient Realm realm;
 
@@ -30,7 +30,7 @@ public class SetMessageDeliveredJob extends BaseJob {
     @Inject
     transient MessageRestService messageRestService;
 
-    public SetMessageDeliveredJob(int messageId) {
+    public SetMessageDeliveredJOb(int messageId) {
         super(new Params(5).requireNetwork().persist().groupBy("message_state"));
         this.messageId = messageId;
     }
