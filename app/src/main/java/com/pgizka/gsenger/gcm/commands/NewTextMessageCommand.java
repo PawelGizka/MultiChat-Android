@@ -8,7 +8,7 @@ import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageDeliveredJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.Receiver;
@@ -24,6 +24,8 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+
+import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_DELIVERED;
 
 public class NewTextMessageCommand extends GCMCommand {
 
@@ -114,8 +116,7 @@ public class NewTextMessageCommand extends GCMCommand {
 
         realm.commitTransaction();
 
-        //TODO add message delivered job
-        jobManager.addJob(new SetMessageDeliveredJob(message.getId()));
+        jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
     }
 
 }

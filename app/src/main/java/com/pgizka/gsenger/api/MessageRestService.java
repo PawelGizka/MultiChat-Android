@@ -19,4 +19,7 @@ public interface MessageRestService {
     @POST("message/delivered")
     Call<BaseResponse> setMessageDelivered(@Body MessageStateChangedRequest messageStateChangedRequest);
 
+    @POST("message/viewed")
+    Call<BaseResponse> setMessageViewed(@Body MessageStateChangedRequest messageStateChangedRequest);
+
 }

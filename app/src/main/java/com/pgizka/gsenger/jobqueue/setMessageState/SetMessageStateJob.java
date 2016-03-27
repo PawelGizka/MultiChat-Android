@@ -17,14 +17,20 @@ import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
-/**
- * Created by userpc on 2016-03-27.
- */
-public class SetMessageDeliveredJob extends BaseJob {
+import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_DELIVERED;
+import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
 
-    private transient Realm realm;
+public class SetMessageStateJob extends BaseJob {
+
+    public enum Type {
+        SET_DELIVERED,
+        SET_VIEWED;
+    }
 
     private int messageId;
+    private Type type;
+
+    private transient Realm realm;
 
     @Inject
     transient UserAccountManager userAccountManager;
@@ -32,9 +38,10 @@ public class SetMessageDeliveredJob extends BaseJob {
     @Inject
     transient MessageRestService messageRestService;
 
-    public SetMessageDeliveredJob(int messageId) {
+    public SetMessageStateJob(int messageId, Type type) {
         super(new Params(5).requireNetwork().persist().groupBy("message_state"));
         this.messageId = messageId;
+        this.type = type;
     }
 
     @Override
@@ -65,14 +72,21 @@ public class SetMessageDeliveredJob extends BaseJob {
         MessageStateChangedRequest messageStateChangedRequest = new MessageStateChangedRequest();
         messageStateChangedRequest.setMessageId(message.getServerId());
         messageStateChangedRequest.setReceiverId(owner.getServerId());
-        messageStateChangedRequest.setDate(receiver.getDelivered());
 
-        Call<BaseResponse> call = messageRestService.setMessageDelivered(messageStateChangedRequest);
+        Call<BaseResponse> call = null;
+
+        if (type == SET_DELIVERED) {
+            messageStateChangedRequest.setDate(receiver.getDelivered());
+            call = messageRestService.setMessageDelivered(messageStateChangedRequest);
+        } else if (type == SET_VIEWED) {
+            messageStateChangedRequest.setDate(receiver.getViewed());
+            call = messageRestService.setMessageViewed(messageStateChangedRequest);
+        }
+
         Response<BaseResponse> response = call.execute();
 
         if (response.isSuccess()) {
             //do nothing
-            response.body();
         } else {
             throw new Exception();
         }

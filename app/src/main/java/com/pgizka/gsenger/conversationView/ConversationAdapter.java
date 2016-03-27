@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
@@ -109,6 +110,14 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     }
 
     private String getStatus(Message message) {
+        Receiver receiver = message.getReceivers().first();
+
+        if (receiver.getDelivered() > 0) {
+            return "Delivered";
+        } if (receiver.getViewed() > 0) {
+            return "Viewed";
+        }
+
         int state = message.getState();
         if (state == WAITING_TO_SEND.code) {
             return "Waiting to send";

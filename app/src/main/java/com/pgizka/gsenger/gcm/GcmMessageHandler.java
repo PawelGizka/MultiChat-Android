@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.commands.TestCommand;
+import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,9 +19,14 @@ public class GcmMessageHandler extends GcmListenerService {
     private static final Map<String, GCMCommand> MESSAGE_RECEIVERS;
     static {
         // Known messages and their GCM message receivers
-        Map <String, GCMCommand> receivers = new HashMap<String, GCMCommand>();
+        Map <String, GCMCommand> receivers = new HashMap<>();
+        MessageStateChangedCommand messageStateChangedCommand = new MessageStateChangedCommand();
+
         receivers.put("test", new TestCommand());
         receivers.put("NEW_TEXT_MESSAGE_ACTION", new NewTextMessageCommand());
+        receivers.put(MessageStateChangedData.MESSAGE_DELIVERED_ACTION, messageStateChangedCommand);
+        receivers.put(MessageStateChangedData.MESSAGE_VIEWED_ACTION, messageStateChangedCommand);
+
         MESSAGE_RECEIVERS = Collections.unmodifiableMap(receivers);
     }
 
