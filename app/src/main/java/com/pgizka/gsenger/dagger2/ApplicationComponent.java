@@ -14,6 +14,7 @@ import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsContract;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
+import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
@@ -30,23 +31,9 @@ import retrofit2.Retrofit;
 @Component(modules = {ApplicationModule.class, ApiModule.class})
 public interface ApplicationComponent {
 
-    EventBus eventBus();
-
-    JobManager jobManager();
-
-    OkHttpClient okHttpClient();
-
-    Retrofit retrofit();
-
-    ContactsUtil contactsUtil();
+    Repository repository();
 
     UserAccountManager userAccountManager();
-
-    UserRestService userRestService();
-
-    ContactsContract.Presenter friendsPresenter();
-
-    ChatsContract.Presenter chatsPresenter();
 
     void inject(GetContactsJob getContactsJob);
 

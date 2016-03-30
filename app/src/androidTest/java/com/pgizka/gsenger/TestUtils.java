@@ -1,31 +1,88 @@
 package com.pgizka.gsenger;
 
-import android.support.annotation.NonNull;
 
+import android.support.annotation.NonNull;
+import android.support.test.InstrumentationRegistry;
+
+import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
+import com.pgizka.gsenger.dagger.TestApiModule;
+import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
+import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.dagger2.TestApiModule;
-import com.pgizka.gsenger.dagger2.TestApplicationModule;
+import com.pgizka.gsenger.provider.Repository;
+import com.pgizka.gsenger.provider.User;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-
 public class TestUtils {
 
-    public static ApplicationComponent getTestApplicationComponent(GSengerApplication gSengerApplication) {
-        return DaggerApplicationComponent.builder()
-                .applicationModule(new TestApplicationModule(gSengerApplication))
+    public static GSengerApplication getApplication() {
+        return (GSengerApplication) InstrumentationRegistry.getTargetContext().getApplicationContext();
+    }
+
+    public static void setupRealm() {
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplication())
+                .inMemory()
+                .deleteRealmIfMigrationNeeded()
+                .build());
+    }
+
+    public static TestApplicationComponent getTestApplicationComponent() {
+        return DaggerTestApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(getApplication()))
                 .apiModule(new TestApiModule())
                 .build();
+    }
+
+    public static User getOrCreateOwner() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.refresh();
+
+        User owner = realm.where(User.class)
+                .equalTo("id", 0)
+                .findFirst();
+
+        if (owner != null) {
+            return owner;
+        }
+
+        owner = new User();
+        owner.setId(0);
+        owner.setServerId(0);
+        owner.setUserName("Owner");
+        owner.setStatus("my super status");
+        realm.beginTransaction();
+        owner = realm.copyToRealm(owner);
+        realm.commitTransaction();
+
+        return owner;
+    }
+
+    public static User createUser() {
+        Repository repository = GSengerApplication.getApplicationComponent().repository();
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.refresh();
+        User user = new User();
+        user.setId(repository.getUserNextId());
+        user.setServerId(repository.getUserNextId());
+        user.setUserName("Pawel");
+        user.setStatus("my super status");
+        realm.beginTransaction();
+        user = realm.copyToRealm(user);
+        realm.commitTransaction();
+
+        return user;
     }
 
     public static <T> Call<T> createCall(T response) {
@@ -107,4 +164,5 @@ public class TestUtils {
             throw new RuntimeException();
         }
     }
+
 }

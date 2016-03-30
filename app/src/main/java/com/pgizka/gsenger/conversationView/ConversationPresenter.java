@@ -1,5 +1,6 @@
 package com.pgizka.gsenger.conversationView;
 
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
@@ -14,6 +15,7 @@ import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.UserAccountManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,7 +30,6 @@ import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Typ
 public class ConversationPresenter implements ConversationContract.Presenter {
 
     private ConversationContract.View conversationView;
-    private AppCompatActivity activity;
     private Realm realm;
 
     private int friendId;
@@ -54,7 +55,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         conversationView = view;
         realm = Realm.getDefaultInstance();
         this.friendId = friendId;
-        activity = conversationView.getHoldingActivity();
     }
 
     @Override
@@ -123,13 +123,19 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                 .equalTo("viewed", 0)
                 .findAll();
 
+        List<SetMessageStateJob> setMessageStateJobs = new ArrayList<>();
+
         realm.beginTransaction();
         for (int i = 0; i < receivers.size(); i++) {
             Receiver receiver = receivers.get(i);
             receiver.setViewed(System.currentTimeMillis());
-            jobManager.addJobInBackground(new SetMessageStateJob(receiver.getMessage().getId(), SET_VIEWED));
+            setMessageStateJobs.add(new SetMessageStateJob(receiver.getMessage().getId(), SET_VIEWED));
         }
         realm.commitTransaction();
+
+        for (SetMessageStateJob job : setMessageStateJobs) {
+            jobManager.addJobInBackground(job);
+        }
     }
 
     @Override
@@ -175,5 +181,20 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         realm.commitTransaction();
 
         jobManager.addJob(new SendMessageJob(message.getId()));
+    }
+
+    @VisibleForTesting
+    public void setFriend(User friend) {
+        this.friend = friend;
+    }
+
+    @VisibleForTesting
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    @VisibleForTesting
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 }

@@ -1,14 +1,17 @@
-package com.pgizka.gsenger.dagger2;
+package com.pgizka.gsenger.dagger;
 
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.UserRestService;
 
 import org.mockito.Mockito;
 
+import dagger.Module;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 import static org.mockito.Mockito.mock;
+
 
 public class TestApiModule extends ApiModule {
 
@@ -21,4 +24,11 @@ public class TestApiModule extends ApiModule {
     public UserRestService providesUserRestService(Retrofit retrofit) {
         return mock(UserRestService.class);
     }
+
+    @Override
+    public MessageRestService providesMessageRestService(Retrofit retrofit) {
+        return mock(MessageRestService.class);
+    }
+
 }
+
