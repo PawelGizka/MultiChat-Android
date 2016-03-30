@@ -52,7 +52,7 @@ public class ConversationTest extends AndroidTestCase {
     }
 
     @Test
-    public void testSendingTextMessage() throws Exception {
+    public void testSendingTextMessage_whenChatBetweenUsersNotExist() throws Exception {
         Realm realm = Realm.getDefaultInstance();
         User user = createUser();
         User owner = getOrCreateOwner();

@@ -11,6 +11,7 @@ import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.User;
 
@@ -19,6 +20,7 @@ import java.lang.reflect.Field;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,6 +75,7 @@ public class TestUtils {
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();
+
         User user = new User();
         user.setId(repository.getUserNextId());
         user.setServerId(repository.getUserNextId());
@@ -83,6 +86,27 @@ public class TestUtils {
         realm.commitTransaction();
 
         return user;
+    }
+
+    public static Chat createChatBetweenUsers(User firstUser, User secondUser) {
+        Repository repository = GSengerApplication.getApplicationComponent().repository();
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.refresh();
+
+        Chat chat = new Chat();
+        chat.setId(repository.getChatNextId());
+        chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
+        chat.setStartedDate(System.currentTimeMillis());
+
+        realm.beginTransaction();
+        chat = realm.copyToRealm(chat);
+        chat.setUsers(new RealmList<>(firstUser, secondUser));
+        firstUser.getChats().add(chat);
+        secondUser.getChats().add(chat);
+        realm.commitTransaction();
+
+        return chat;
     }
 
     public static <T> Call<T> createCall(T response) {

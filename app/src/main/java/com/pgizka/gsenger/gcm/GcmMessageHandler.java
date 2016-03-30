@@ -8,6 +8,7 @@ import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.commands.TestCommand;
 import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
+import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class GcmMessageHandler extends GcmListenerService {
         MessageStateChangedCommand messageStateChangedCommand = new MessageStateChangedCommand();
 
         receivers.put("test", new TestCommand());
-        receivers.put("NEW_TEXT_MESSAGE_ACTION", new NewTextMessageCommand());
+        receivers.put(NewTextMessageData.ACTION, new NewTextMessageCommand());
         receivers.put(MessageStateChangedData.MESSAGE_DELIVERED_ACTION, messageStateChangedCommand);
         receivers.put(MessageStateChangedData.MESSAGE_VIEWED_ACTION, messageStateChangedCommand);
 
