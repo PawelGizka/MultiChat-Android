@@ -116,18 +116,22 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         });
     }
 
-    private void setAllMessagesViewed() {
-        List<Receiver> receivers = realm.where(Receiver.class)
-                .equalTo("message.chat.id", chat.getId())
-                .equalTo("user.id", owner.getId())
-                .equalTo("viewed", 0)
-                .findAll();
-
+    @VisibleForTesting
+    public void setAllMessagesViewed() {
         List<SetMessageStateJob> setMessageStateJobs = new ArrayList<>();
 
         realm.beginTransaction();
-        for (int i = 0; i < receivers.size(); i++) {
-            Receiver receiver = receivers.get(i);
+        while (true) {
+            Receiver receiver = realm.where(Receiver.class)
+                    .equalTo("message.chat.id", chat.getId())
+                    .equalTo("user.id", owner.getId())
+                    .equalTo("viewed", 0)
+                    .findFirst();
+
+            if (receiver == null) {
+                break;
+            }
+
             receiver.setViewed(System.currentTimeMillis());
             setMessageStateJobs.add(new SetMessageStateJob(receiver.getMessage().getId(), SET_VIEWED));
         }

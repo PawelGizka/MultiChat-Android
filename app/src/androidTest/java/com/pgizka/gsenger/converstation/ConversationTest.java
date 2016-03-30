@@ -3,6 +3,7 @@ package com.pgizka.gsenger.converstation;
 
 import android.test.AndroidTestCase;
 
+import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.conversationView.ConversationContract;
@@ -14,6 +15,8 @@ import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.PutMessageResponse;
 import com.pgizka.gsenger.jobqueue.sendMessge.PutTextMessageRequest;
+import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 
@@ -21,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -70,7 +74,7 @@ public class ConversationTest extends AndroidTestCase {
 
         conversationPresenter.sendMessage("message");
 
-        verify(messageRestService, timeout(2000)).sendTextMessage(Matchers.<PutTextMessageRequest>any());
+        verify(messageRestService, after(2000)).sendTextMessage(Matchers.<PutTextMessageRequest>any());
 
         realm.refresh();
         Message message = realm.where(Message.class)
@@ -79,6 +83,25 @@ public class ConversationTest extends AndroidTestCase {
 
         assertNotNull(message);
         assertEquals(Message.State.SENT.code, message.getState());
+    }
+
+    @Test
+    public void testSettingAllMessagesToViewed() throws Exception {
+        User user = createUser();
+        User owner = getOrCreateOwner();
+        Chat chat = createChatBetweenUsers(owner, user);
+        createMessage(user, chat);
+        createMessage(user, chat);
+
+        conversationPresenter.onCreate(view, user.getId());
+        conversationPresenter.setOwner(owner);
+        conversationPresenter.setFriend(user);
+        conversationPresenter.setChat(chat);
+
+        when(messageRestService.setMessageViewed(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(new BaseResponse()));
+        conversationPresenter.setAllMessagesViewed();
+
+        verify(messageRestService, timeout(4000).times(2)).setMessageViewed(Mockito.<MessageStateChangedRequest>any());
     }
 
 }

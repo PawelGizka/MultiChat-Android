@@ -12,7 +12,10 @@ import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
+import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
 import java.io.IOException;
@@ -107,6 +110,41 @@ public class TestUtils {
         realm.commitTransaction();
 
         return chat;
+    }
+
+    public static Message createMessage(User sender, Chat chat) {
+        Repository repository = GSengerApplication.getApplicationComponent().repository();
+        Realm realm = Realm.getDefaultInstance();
+        User owner = getOrCreateOwner();
+
+        realm.beginTransaction();
+
+        TextMessage textMessage = new TextMessage();
+        textMessage.setText("SampleText");
+        textMessage = realm.copyToRealm(textMessage);
+
+        Message message = new Message();
+        message.setId(repository.getMessageNextId());
+        message.setServerId(repository.getMessageNextId());
+        message.setSendDate(System.currentTimeMillis());
+        message.setState(Message.State.RECEIVED.code);
+        message = realm.copyToRealm(message);
+
+        message.setSender(sender);
+        message.setChat(chat);
+        message.setType(Message.Type.TEXT_MESSAGE.code);
+        message.setTextMessage(textMessage);
+        chat.getMessages().add(message);
+
+        Receiver receiver = new Receiver();
+        receiver.setDelivered(System.currentTimeMillis());
+        receiver = realm.copyToRealm(receiver);
+        receiver.setMessage(message);
+        receiver.setUser(owner);
+        message.getReceivers().add(receiver);
+
+        realm.commitTransaction();
+        return message;
     }
 
     public static <T> Call<T> createCall(T response) {
