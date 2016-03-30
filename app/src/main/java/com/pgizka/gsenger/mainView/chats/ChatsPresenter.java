@@ -1,7 +1,9 @@
 package com.pgizka.gsenger.mainView.chats;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
+import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.provider.Chat;
 
 import io.realm.Realm;
@@ -40,7 +42,10 @@ public class ChatsPresenter implements ChatsContract.Presenter {
 
     @Override
     public void chatClicked(Chat chat) {
-
+        Intent intent = new Intent(activity, ConversationActivity.class);
+        intent.putExtra(ConversationActivity.CHAT_ID_ARGUMENT, chat.getId());
+        intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, chat.getUsers().last().getId());
+        activity.startActivity(intent);
     }
 
 }

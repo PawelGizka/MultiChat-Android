@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
@@ -43,6 +44,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         public ImageView videoImage;
         public TextView messageText;
         public FrameLayout imageFrameLayout;
+        public RelativeLayout headerRelativeLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -55,6 +57,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             this.videoImage = (ImageView) view.findViewById(R.id.message_video_image_view);
             this.messageText = (TextView) view.findViewById(R.id.message_text_view);
             this.imageFrameLayout = (FrameLayout) view.findViewById(R.id.message_image_frame_layout);
+            this.headerRelativeLayout = (RelativeLayout) view.findViewById(R.id.header);
         }
     }
 
@@ -84,6 +87,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         holder.videoImage.setVisibility(View.GONE);
         holder.image.setVisibility(View.GONE);
         holder.imageFrameLayout.setVisibility(View.GONE);
+        holder.headerRelativeLayout.setVisibility(View.GONE);
 
         if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
             TextMessage textMessage = message.getTextMessage();

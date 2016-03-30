@@ -41,8 +41,9 @@ public class ConversationFragment extends Fragment implements ConversationContra
         GSengerApplication.getApplicationComponent().inject(this);
         conversationAdapter = new ConversationAdapter();
         Bundle arguments = getArguments();
-        int friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT);
-        presenter.onCreate(this, friendId);
+        int friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT, -1);
+        int chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
+        presenter.onCreate(this, friendId, chatId);
     }
 
     @Nullable

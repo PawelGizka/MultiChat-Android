@@ -24,7 +24,7 @@ public interface ConversationContract {
 
         void sendMessage(String text);
 
-        void onCreate(View view, int friendId);
+        void onCreate(View view, int friendId, int chatId);
 
         void onResume();
 

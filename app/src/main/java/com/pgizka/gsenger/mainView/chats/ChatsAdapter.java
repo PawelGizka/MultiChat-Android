@@ -54,7 +54,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder,final int position) {
         final Chat chat = chats.get(position);
 
-        User user = chat.getUsers().first();
         Message message = chat.getMessages().last();
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +66,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         });
 
         if(chat.getType() == Chat.Type.SINGLE_CONVERSATION.code) {
+            User user = chat.getUsers().first();
+            if (user.getId() == 0) {
+                user = chat.getUsers().last();
+            }
             holder.chatNameTextView.setText(user.getUserName());
         } else {
             holder.chatNameTextView.setText(chat.getChatName());

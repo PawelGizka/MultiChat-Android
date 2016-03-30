@@ -4,7 +4,7 @@
 
     <!-- Titles of activities and fragments -->
     <string name="title_activity_welcome">Sign in</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">GSenger</string>
 
     <!-- Strings related to registration -->
     <string name="registration_prompt_email">Email</string>

@@ -33,6 +33,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private Realm realm;
 
     private int friendId;
+    private int chatId;
 
     private User friend;
     private User owner;
@@ -50,11 +51,12 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     Repository repository;
 
     @Override
-    public void onCreate(ConversationContract.View view, int friendId) {
+    public void onCreate(ConversationContract.View view, int friendId, int chatId) {
         GSengerApplication.getApplicationComponent().inject(this);
         conversationView = view;
         realm = Realm.getDefaultInstance();
         this.friendId = friendId;
+        this.chatId = chatId;
     }
 
     @Override
@@ -88,7 +90,9 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Override
     public void onPause() {
-        messages.removeChangeListeners();
+        if (messages != null) {
+            messages.removeChangeListeners();
+        }
         realm.removeAllChangeListeners();
     }
 

@@ -15,7 +15,9 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:src="@drawable/defult_contact_image"
+        />
 
     <TextView
         android:id="@+id/contact_item_user_name_text"
@@ -27,8 +29,8 @@
         android:layout_alignTop="@+id/contact_item_main_image"
         android:layout_toRightOf="@+id/contact_item_main_image"
         android:layout_toEndOf="@+id/contact_item_main_image"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"/>
 
     <TextView
         android:id="@+id/contact_item_status_text"
