@@ -53,12 +53,9 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         getUsers();
         contactsView.displayContactsList(users);
 
-        users.addChangeListener(new RealmChangeListener() {
-            @Override
-            public void onChange() {
-                getUsers();
-                contactsView.displayContactsList(users);
-            }
+        users.addChangeListener(() -> {
+            getUsers();
+            contactsView.displayContactsList(users);
         });
     }
 

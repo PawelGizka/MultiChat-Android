@@ -31,12 +31,9 @@ public class ChatsPresenter implements ChatsContract.Presenter {
         chats = realm.where(Chat.class).findAll();
         chatsView.displayChatsList(chats);
 
-        chats.addChangeListener(new RealmChangeListener() {
-            @Override
-            public void onChange() {
-                chats = realm.where(Chat.class).findAll();
-                chatsView.displayChatsList(chats);
-            }
+        chats.addChangeListener(() -> {
+            chats = realm.where(Chat.class).findAll();
+            chatsView.displayChatsList(chats);
         });
     }
 
