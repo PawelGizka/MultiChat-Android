@@ -12,6 +12,7 @@ import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
@@ -92,23 +93,12 @@ public class TestUtils {
     }
 
     public static Chat createChatBetweenUsers(User firstUser, User secondUser) {
-        Repository repository = GSengerApplication.getApplicationComponent().repository();
-
+        ChatRepository chatRepository = GSengerApplication.getApplicationComponent().chatRepository();
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();
-
-        Chat chat = new Chat();
-        chat.setId(repository.getChatNextId());
-        chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
-        chat.setStartedDate(System.currentTimeMillis());
-
         realm.beginTransaction();
-        chat = realm.copyToRealm(chat);
-        chat.setUsers(new RealmList<>(firstUser, secondUser));
-        firstUser.getChats().add(chat);
-        secondUser.getChats().add(chat);
+        Chat chat = chatRepository.createSingleConversationChatBetweenUsers(firstUser, secondUser);
         realm.commitTransaction();
-
         return chat;
     }
 

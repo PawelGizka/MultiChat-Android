@@ -10,7 +10,9 @@ import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.TextMessage;
@@ -40,6 +42,12 @@ public class NewTextMessageCommand extends GCMCommand {
     @Inject
     JobManager jobManager;
 
+    @Inject
+    MessageRepository messageRepository;
+
+    @Inject
+    ChatRepository chatRepository;
+
     @Override
     public void execute(Context context, String action, String extraData) {
         GSengerApplication.getApplicationComponent().inject(this);
@@ -60,31 +68,11 @@ public class NewTextMessageCommand extends GCMCommand {
                 .equalTo("serverId", messageData.getSenderId())
                 .findFirst();
 
-        List<User> receiverUsers = new RealmList<>();
         Chat chat = null;
 
         boolean singleConversation = messageData.getChatId() == -1;
         if (singleConversation) {
-            User owner = userAccountManager.getOwner();
-            receiverUsers.add(owner);
-
-            chat = realm.where(Chat.class)
-                    .equalTo("users.id", sender.getId())
-                    .equalTo("users.id", owner.getId())
-                    .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
-                    .findFirst();
-
-            if (chat == null) {
-                chat = new Chat();
-                chat.setId(repository.getChatNextId());
-                chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
-                chat.setStartedDate(System.currentTimeMillis());
-                chat = realm.copyToRealm(chat);
-                chat.getUsers().add(sender);
-                chat.getUsers().add(owner);
-                sender.getChats().add(chat);
-                owner.getChats().add(chat);
-            }
+            chat = chatRepository.getOrCreateSingleConversationChatWith(sender);
         } else {
             //TODO handle group conversation
         }
@@ -93,27 +81,10 @@ public class NewTextMessageCommand extends GCMCommand {
         textMessage.setText(messageData.getText());
         textMessage = realm.copyToRealm(textMessage);
 
-        Message message = new Message();
-        message.setId(repository.getMessageNextId());
-        message.setServerId(messageData.getMessageId());
-        message.setSendDate(messageData.getSendDate());
-        message.setState(Message.State.RECEIVED.code);
-        message = realm.copyToRealm(message);
-
-        message.setSender(sender);
-        message.setChat(chat);
+        Message message = messageRepository.createIncomingMessageWithReceiver(messageData, sender, chat);
         message.setType(Message.Type.TEXT_MESSAGE.code);
         message.setTextMessage(textMessage);
         chat.getMessages().add(message);
-
-        for (User user : receiverUsers) {
-            Receiver receiver = new Receiver();
-            receiver.setDelivered(System.currentTimeMillis());
-            receiver = realm.copyToRealm(receiver);
-            receiver.setMessage(message);
-            receiver.setUser(user);
-            message.getReceivers().add(receiver);
-        }
 
         realm.commitTransaction();
         realm.refresh();

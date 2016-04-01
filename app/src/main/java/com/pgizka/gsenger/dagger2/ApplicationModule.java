@@ -11,6 +11,8 @@ import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
 import com.pgizka.gsenger.mainView.friends.ContactsContract;
 import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
+import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -40,6 +42,18 @@ public class ApplicationModule {
     @Singleton
     public Repository providesRepository() {
         return new Repository(application);
+    }
+
+    @Provides
+    @Singleton
+    public MessageRepository providesMessageRepository(Repository repository, UserAccountManager userAccountManager) {
+        return new MessageRepository(repository, userAccountManager);
+    }
+
+    @Provides
+    @Singleton
+    public ChatRepository providesChatRepository(Repository repository, UserAccountManager userAccountManager) {
+        return new ChatRepository(repository, userAccountManager);
     }
 
     @Provides

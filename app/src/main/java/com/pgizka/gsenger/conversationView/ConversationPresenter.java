@@ -2,12 +2,16 @@ package com.pgizka.gsenger.conversationView;
 
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.path.android.jobqueue.JobManager;
+import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.TextMessage;
@@ -28,6 +32,7 @@ import io.realm.RealmResults;
 import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
 
 public class ConversationPresenter implements ConversationContract.Presenter {
+    static final String TAG = ConversationPresenter.class.getSimpleName();
 
     private ConversationContract.View conversationView;
     private Realm realm;
@@ -50,6 +55,12 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Inject
     Repository repository;
+
+    @Inject
+    MessageRepository messageRepository;
+
+    @Inject
+    ChatRepository chatRepository;
 
     @Override
     public void onCreate(ConversationContract.View view, int friendId, int chatId) {
@@ -75,6 +86,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             conversationView.displayConversationItems(messages);
         } else {
             realm.where(Chat.class).findAll().addChangeListener(() -> {
+                Log.i(TAG, "on chats change called");
                 getChat();
                 if (chat != null) {
                     getMessages();
@@ -109,6 +121,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                 .findAll();
 
         messages.addChangeListener(() -> {
+            Log.i(TAG, "on messages change called");
             messages = realm.where(Message.class)
                     .equalTo("chat.id", chat.getId())
                     .findAll();
@@ -152,39 +165,17 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         realm.beginTransaction();
 
         if (chat == null) {
-            chat = new Chat();
-            chat.setId(repository.getChatNextId());
-            chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
-            chat.setStartedDate(System.currentTimeMillis());
-            chat = realm.copyToRealm(chat);
+            chat = chatRepository.createSingleConversationChatWith(friend);
         }
-
-        chat.setUsers(new RealmList<>(owner, friend));
-        friend.getChats().add(chat);
-        owner.getChats().add(chat);
 
         TextMessage textMessage = new TextMessage();
         textMessage.setText(text);
         textMessage = realm.copyToRealm(textMessage);
 
-        Message message = new Message();
-        message.setId(repository.getMessageNextId());
+        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
         message.setType(Message.Type.TEXT_MESSAGE.code);
-        message.setSendDate(System.currentTimeMillis());
-        message.setState(Message.State.WAITING_TO_SEND.code);
-        message = realm.copyToRealm(message);
-
-        message.setSender(owner);
-        message.setChat(chat);
         message.setTextMessage(textMessage);
         chat.getMessages().add(message);
-
-        Receiver receiver = new Receiver();
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(friend);
-
-        message.setReceivers(new RealmList<>(receiver));
 
         realm.commitTransaction();
 

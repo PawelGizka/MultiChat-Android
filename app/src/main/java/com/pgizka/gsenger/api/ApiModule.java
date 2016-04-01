@@ -47,7 +47,7 @@ public class ApiModule {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.103:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
+                .baseUrl("http://192.168.1.101:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();

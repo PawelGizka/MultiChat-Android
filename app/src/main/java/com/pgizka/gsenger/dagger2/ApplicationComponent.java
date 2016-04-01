@@ -14,6 +14,8 @@ import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsContract;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
+import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -34,6 +36,8 @@ public interface ApplicationComponent {
     Repository repository();
 
     UserAccountManager userAccountManager();
+
+    ChatRepository chatRepository();
 
     void inject(GetContactsJob getContactsJob);
 

@@ -65,7 +65,8 @@ public class ConversationTest extends AndroidTestCase {
         putMessageResponse.setResultCode(ResultCode.OK.code);
         putMessageResponse.setMessageServerId(12);
 
-        conversationPresenter.onCreate(view, user.getId());
+        int chatId = -1;
+        conversationPresenter.onCreate(view, user.getId(), chatId);
         conversationPresenter.setFriend(user);
         conversationPresenter.setOwner(owner);
 
@@ -93,7 +94,7 @@ public class ConversationTest extends AndroidTestCase {
         createMessage(user, chat);
         createMessage(user, chat);
 
-        conversationPresenter.onCreate(view, user.getId());
+        conversationPresenter.onCreate(view, user.getId(), chat.getId());
         conversationPresenter.setOwner(owner);
         conversationPresenter.setFriend(user);
         conversationPresenter.setChat(chat);
