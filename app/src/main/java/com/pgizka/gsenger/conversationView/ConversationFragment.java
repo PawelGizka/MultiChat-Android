@@ -18,6 +18,7 @@ import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     private TextView emptyTextView;
     private EditText messageText;
     private FloatingActionButton sendButton;
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
 
     private ConversationAdapter conversationAdapter;
 

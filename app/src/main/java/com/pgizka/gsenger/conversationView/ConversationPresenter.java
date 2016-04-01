@@ -40,6 +40,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private Chat chat;
 
     private RealmResults<Message> messages;
+    private boolean paused;
 
     @Inject
     JobManager jobManager;
@@ -61,6 +62,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Override
     public void onResume() {
+        paused = false;
         owner = userAccountManager.getOwner();
         friend = realm.where(User.class)
                 .equalTo("id", friendId)
@@ -90,6 +92,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Override
     public void onPause() {
+        paused = true;
         if (messages != null) {
             messages.removeChangeListeners();
         }
@@ -122,6 +125,9 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @VisibleForTesting
     public void setAllMessagesViewed() {
+        if (paused) {
+            return;
+        }
         List<SetMessageStateJob> setMessageStateJobs = new ArrayList<>();
 
         realm.beginTransaction();
