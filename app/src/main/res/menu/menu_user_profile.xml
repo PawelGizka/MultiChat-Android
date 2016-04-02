@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.pgizka.gsenger.userStatusView.UserProfileActivity">
+
+    <item
+        android:id="@+id/user_profile_save_changes_action"
+        android:title="Save Changes"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:showAsAction="always"
+
+        />
+
+</menu>

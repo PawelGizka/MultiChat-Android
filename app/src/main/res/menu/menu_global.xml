@@ -3,7 +3,11 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.pgizka.gsenger.mainView.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/user_profile_action"
+        android:title="User Profile"
         android:orderInCategory="100"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:showAsAction="never"
+
+        />
 </menu>

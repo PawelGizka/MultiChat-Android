@@ -17,6 +17,8 @@ import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
+import com.pgizka.gsenger.userStatusView.UserProfileFragment;
+import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
@@ -53,10 +55,14 @@ public interface ApplicationComponent {
 
     void inject(ConversationPresenter conversationPresenter);
 
+    void inject(UserProfilePresenter userProfilePresenter);
+
     void inject(ContactsFragment contactsFragment);
 
     void inject(ChatsFragment chatsFragment);
 
     void inject(ConversationFragment conversationFragment);
+
+    void inject(UserProfileFragment userProfileFragment);
 
 }

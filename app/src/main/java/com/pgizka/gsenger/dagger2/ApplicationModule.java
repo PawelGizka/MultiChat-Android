@@ -14,7 +14,10 @@ import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
+import com.pgizka.gsenger.userStatusView.UserProfileContract;
+import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
+import com.pgizka.gsenger.util.ImagePickerUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -89,6 +92,12 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
+    public ImagePickerUtil providesImagePickerUtil() {
+        return new ImagePickerUtil();
+    }
+
+    @Provides
+    @Singleton
     public ContactsContract.Presenter providesFriendsPresenter() {
         return new ContactsPresenter();
     }
@@ -103,6 +112,12 @@ public class ApplicationModule {
     @Singleton
     public ConversationContract.Presenter providesConversationPresenter() {
         return new ConversationPresenter();
+    }
+
+    @Provides
+    @Singleton
+    public UserProfileContract.Presenter providesUserProfilePresenter() {
+        return new UserProfilePresenter();
     }
 
 }
