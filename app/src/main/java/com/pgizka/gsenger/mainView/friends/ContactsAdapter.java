@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.mainView.friends;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.User;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,10 +23,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     private List<User> users;
 
     private OnContactClickListener onContactClickListener;
-    private Context context;
+    private Fragment fragment;
 
-    public ContactsAdapter(Context context) {
-        this.context = context;
+    public ContactsAdapter(Fragment fragment) {
+        this.fragment = fragment;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,9 +69,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
         String userPhotoHash = user.getPhotoHash();
         if (userPhotoHash != null) {
-            Picasso.with(context)
+            Glide.with(fragment)
                     .load(ApiModule.buildUserPhotoPath(user))
-                    .stableKey(userPhotoHash)
+                    .signature(new StringSignature(userPhotoHash))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.contactImageView);
         }
     }

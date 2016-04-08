@@ -41,7 +41,7 @@ public class ContactsFragment extends Fragment implements ContactsContract.View 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GSengerApplication.getApplicationComponent().inject(this);
-        contactsAdapter = new ContactsAdapter(getContext());
+        contactsAdapter = new ContactsAdapter(this);
         presenter.onCreate(this);
     }
 

@@ -37,13 +37,13 @@ import retrofit2.Retrofit;
 @Component(modules = {ApplicationModule.class, ApiModule.class})
 public interface ApplicationComponent {
 
-    OkHttpClient okHttpClient();
-
     Repository repository();
 
     UserAccountManager userAccountManager();
 
     ChatRepository chatRepository();
+
+    void inject(MyGlideModule myGlideModule);
 
     void inject(GetContactsJob getContactsJob);
 

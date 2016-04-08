@@ -3,9 +3,8 @@ package com.pgizka.gsenger.dagger2;
 import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 
-import com.jakewharton.picasso.OkHttp3Downloader;
+import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.api.ApiModule;
-import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -25,11 +24,8 @@ public class GSengerApplication extends Application {
                 .apiModule(new ApiModule())
                 .build();
 
-        OkHttpClient okHttpClient = applicationComponent.okHttpClient();
-        Picasso picasso = new Picasso.Builder(this)
-                .downloader(new OkHttp3Downloader(okHttpClient))
-                .build();
-        Picasso.setSingletonInstance(picasso);
+
+
     }
 
     public static ApplicationComponent getApplicationComponent() {

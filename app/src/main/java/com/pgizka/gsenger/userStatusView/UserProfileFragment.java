@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,15 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import com.jakewharton.picasso.OkHttp3Downloader;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.util.ImagePickerUtil;
-import com.squareup.picasso.Downloader;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Request;
-import com.squareup.picasso.RequestHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -118,7 +116,9 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
         } else if (requestCode == CROP_PHOTO_REQUEST) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 updatedUserPhoto = data.getData();
-                Picasso.with(getContext()).load(updatedUserPhoto).into(mainImage);
+                Glide.with(this)
+                        .load(updatedUserPhoto)
+                        .into(mainImage);
             }
         }
     }
@@ -136,7 +136,11 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     @Override
     public void setUserPhotoPath(File userPhoto) {
         if (updatedUserPhoto == null) {
-            Picasso.with(getActivity()).load(userPhoto).into(mainImage);
+            Glide.with(this)
+                    .load(userPhoto)
+                    //we want to always load the most recent image
+                    .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
+                    .into(mainImage);
         }
     }
 }

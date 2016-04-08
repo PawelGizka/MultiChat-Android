@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.mainView.chats;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.Chat;
@@ -15,7 +19,6 @@ import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
-import com.squareup.picasso.Picasso;
 
 
 import java.text.SimpleDateFormat;
@@ -27,10 +30,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     private List<Chat> chats;
 
     private OnChatClickListener onChatClickListener;
-    private Context context;
+    private Fragment fragment;
 
-    public ChatsAdapter(Context context) {
-        this.context = context;
+    public ChatsAdapter(Fragment fragment) {
+        this.fragment = fragment;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -105,9 +108,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
         String userPhotoHash = user.getPhotoHash();
         if (userPhotoHash != null) {
-            Picasso.with(context)
+            Glide.with(fragment)
                     .load(ApiModule.buildUserPhotoPath(user))
-                    .stableKey(userPhotoHash)
+                    .signature(new StringSignature(userPhotoHash))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.mainImageView);
         }
     }
