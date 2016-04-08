@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -51,7 +52,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
             realm.beginTransaction();
             owner.setPhotoPath(photoPath);
             realm.commitTransaction();
-//            jobManager.addJob(new UpdateUserPhotoJob(null));
+            jobManager.addJob(new UpdateUserPhotoJob());
         }
 
         if (!userName.equals(owner.getUserName()) || !status.equals(owner.getStatus())) {

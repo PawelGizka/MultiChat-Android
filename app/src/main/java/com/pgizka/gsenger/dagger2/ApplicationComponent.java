@@ -9,6 +9,7 @@ import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
+import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
@@ -51,6 +52,8 @@ public interface ApplicationComponent {
     void inject(SetMessageStateJob setMessageStateJob);
 
     void inject(UpdateUserStatusJob updateUserStatusJob);
+
+    void inject(UpdateUserPhotoJob updateUserPhotoJob);
 
     void inject(RegistrationTask registrationTask);
 

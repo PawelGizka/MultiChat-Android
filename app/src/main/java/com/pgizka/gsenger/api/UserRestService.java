@@ -6,6 +6,7 @@ import com.pgizka.gsenger.welcome.registration.UserRegistrationRequest;
 import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusRequest;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,5 +26,10 @@ public interface UserRestService {
     Call<ResponseBody> updateStatus(
             @Path("userId") int userServerId,
             @Body UpdateUserStatusRequest updateUserStatusRequest);
+
+    @POST("user/updatePhoto/{userId}")
+    Call<ResponseBody> updatePhoto(
+            @Path("userId") int userServerId,
+            @Body RequestBody requestBody);
 
 }
