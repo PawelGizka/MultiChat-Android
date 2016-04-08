@@ -5,6 +5,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pgizka.gsenger.provider.User;
 
 import javax.inject.Singleton;
 
@@ -17,6 +18,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class ApiModule {
+
+    public static final String BASE_URL = "http://192.168.1.100:8080/GSengerGradle-1.0-SNAPSHOT/webresources/";
 
     @Provides
     @Singleton
@@ -47,7 +50,7 @@ public class ApiModule {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.100:8080/GSengerGradle-1.0-SNAPSHOT/webresources/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
@@ -65,6 +68,10 @@ public class ApiModule {
     @Singleton
     public MessageRestService providesMessageRestService(Retrofit retrofit) {
         return retrofit.create(MessageRestService.class);
+    }
+
+    public static String buildUserPhotoPath(User user) {
+        return BASE_URL + "user/getPhoto/" + user.getServerId();
     }
 
 }

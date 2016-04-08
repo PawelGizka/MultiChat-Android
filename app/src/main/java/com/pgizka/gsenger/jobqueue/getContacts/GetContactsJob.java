@@ -95,8 +95,6 @@ public class GetContactsJob extends BaseJob {
 
             boolean contactExists = localContact != null;
             if (contactExists) {
-                checkUserPhotoActuality(foundContact, localContact);
-
                 foundContact.setId(localContact.getId());
             } else {
                 foundContact.setId(repository.getUserNextId());
@@ -108,15 +106,6 @@ public class GetContactsJob extends BaseJob {
         }
     }
 
-    private void checkUserPhotoActuality(User foundUser, User localUser) {
-        String remoteHash = foundUser.getPhotoHash();
-        String localHash = localUser.getPhotoHash();
-
-        if ((remoteHash != null && localHash == null) ||
-                (remoteHash != null && localHash != null && !remoteHash.equals(localHash))) {
-            //TODO enqueue new download photo job
-        }
-    }
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {

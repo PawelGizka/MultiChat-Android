@@ -41,7 +41,7 @@ public class ContactsFragment extends Fragment implements ContactsContract.View 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GSengerApplication.getApplicationComponent().inject(this);
-        contactsAdapter = new ContactsAdapter();
+        contactsAdapter = new ContactsAdapter(getContext());
         presenter.onCreate(this);
     }
 
@@ -71,12 +71,7 @@ public class ContactsFragment extends Fragment implements ContactsContract.View 
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.refreshFriends();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.refreshFriends());
 
         return view;
     }

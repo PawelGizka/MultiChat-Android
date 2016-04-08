@@ -1,5 +1,6 @@
 package com.pgizka.gsenger.mainView.friends;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -17,6 +20,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     private List<User> users;
 
     private OnContactClickListener onContactClickListener;
+    private Context context;
+
+    public ContactsAdapter(Context context) {
+        this.context = context;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
@@ -56,6 +64,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         holder.userNameText.setText(user.getUserName());
         holder.statusText.setText(user.getStatus());
 
+        String userPhotoHash = user.getPhotoHash();
+        if (userPhotoHash != null) {
+            Picasso.with(context)
+                    .load(ApiModule.buildUserPhotoPath(user))
+                    .stableKey(userPhotoHash)
+                    .into(holder.contactImageView);
+        }
     }
 
     @Override
@@ -75,7 +90,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         this.onContactClickListener = onContactClickListener;
     }
 
-    public static interface  OnContactClickListener {
+    public interface  OnContactClickListener {
         void onContactClicked(int position, User user);
     }
 

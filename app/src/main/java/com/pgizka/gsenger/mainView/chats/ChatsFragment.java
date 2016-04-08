@@ -39,7 +39,7 @@ public class ChatsFragment extends Fragment implements ChatsContract.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GSengerApplication.getApplicationComponent().inject(this);
-        chatsAdapter = new ChatsAdapter();
+        chatsAdapter = new ChatsAdapter(getContext());
         presenter.onCreate(this);
     }
 

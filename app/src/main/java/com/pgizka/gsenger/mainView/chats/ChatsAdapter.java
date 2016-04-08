@@ -1,5 +1,6 @@
 package com.pgizka.gsenger.mainView.chats;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
+import com.squareup.picasso.Picasso;
 
 
 import java.text.SimpleDateFormat;
@@ -24,6 +27,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     private List<Chat> chats;
 
     private OnChatClickListener onChatClickListener;
+    private Context context;
+
+    public ChatsAdapter(Context context) {
+        this.context = context;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
@@ -55,6 +63,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         final Chat chat = chats.get(position);
 
         Message message = chat.getMessages().last();
+        User user = chat.getUsers().first();
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +75,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         });
 
         if(chat.getType() == Chat.Type.SINGLE_CONVERSATION.code) {
-            User user = chat.getUsers().first();
             if (user.getId() == 0) {
                 user = chat.getUsers().last();
             }
@@ -94,6 +102,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         String date = simpleDateFormat.format(new Date(message.getSendDate()));
         holder.dateTextView.setText(date);
+
+        String userPhotoHash = user.getPhotoHash();
+        if (userPhotoHash != null) {
+            Picasso.with(context)
+                    .load(ApiModule.buildUserPhotoPath(user))
+                    .stableKey(userPhotoHash)
+                    .into(holder.mainImageView);
+        }
     }
 
 
