@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -58,7 +59,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
             owner.setUserName(userName);
             owner.setStatus(status);
             realm.commitTransaction();
-//            jobManager.addJob(new UpdateUserStatusJob());
+            jobManager.addJob(new UpdateUserStatusJob());
         }
 
     }
