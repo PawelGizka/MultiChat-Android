@@ -2,6 +2,9 @@ package com.pgizka.gsenger.userStatusView;
 
 
 import android.graphics.Bitmap;
+import android.net.Uri;
+
+import java.io.File;
 
 public interface UserProfileContract {
 
@@ -10,7 +13,7 @@ public interface UserProfileContract {
 
         void setStatus(String status);
 
-        void setUserPhoto(Bitmap userPhoto);
+        void setUserPhotoPath(File userPhoto);
     }
 
     interface Presenter {
@@ -18,7 +21,7 @@ public interface UserProfileContract {
 
         void onResume();
 
-        void onSaveChanges(Bitmap userPhoto, String userName, String status);
+        void onSaveChanges(Uri userPhoto, String userName, String status);
     }
 
 }
