@@ -97,6 +97,11 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         if (chat != null && messages != null) {
             setAllMessagesViewed();
         }
+
+        conversationView.displayUsername(friend.getUserName());
+        if (friend.getPhotoHash() != null) {
+            conversationView.displayUserImage(friend);
+        }
     }
 
     @Override

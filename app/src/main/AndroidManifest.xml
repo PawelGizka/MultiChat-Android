@@ -69,7 +69,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".conversationView.ConversationActivity">
+        <activity
+            android:name=".conversationView.ConversationActivity"
+            >
         </activity>
         <activity
             android:name=".userStatusView.UserProfileActivity"

@@ -12,26 +12,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ConversationFragment extends Fragment implements ConversationContract.View {
 
     @Inject
     ConversationContract.Presenter presenter;
 
-    private RecyclerView recyclerView;
-    private TextView emptyTextView;
-    private EditText messageText;
-    private FloatingActionButton sendButton;
+    @Bind(R.id.conversation_recycler_view) RecyclerView recyclerView;
+    @Bind(R.id.conversation_empty_text_view) TextView emptyTextView;
+    @Bind(R.id.conversation_main_edit_text) EditText messageText;
+    private TextView usernameTextView;
+    private ImageView userImageView;
+
     private List<Message> messages = new ArrayList<>();
 
     private ConversationAdapter conversationAdapter;
@@ -51,24 +63,14 @@ public class ConversationFragment extends Fragment implements ConversationContra
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conversation, container, false);
+        ButterKnife.bind(this, view);
 
-        emptyTextView = (TextView) view.findViewById(R.id.conversation_empty_text_view);
-        recyclerView = (RecyclerView) view.findViewById(R.id.conversation_recycler_view);
-        messageText = (EditText) view.findViewById(R.id.conversation_main_edit_text);
-        sendButton = (FloatingActionButton) view.findViewById(R.id.conversation_send_message_floating_button);
+        usernameTextView = (TextView) getActivity().findViewById(R.id.conversation_username_text);
+        userImageView = (ImageView) getActivity().findViewById(R.id.conversation_user_image);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(conversationAdapter);
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.sendMessage(messageText.getText().toString());
-                messageText.setText("");
-                recyclerView.smoothScrollToPosition(messages.size());
-            }
-        });
 
         return view;
     }
@@ -85,6 +87,13 @@ public class ConversationFragment extends Fragment implements ConversationContra
         presenter.onPause();
     }
 
+    @OnClick(R.id.conversation_send_message_floating_button)
+    public void onSendMessageButtonClicked() {
+        presenter.sendMessage(messageText.getText().toString());
+        messageText.setText("");
+        recyclerView.smoothScrollToPosition(messages.size());
+    }
+
     @Override
     public void displayConversationItems(List<Message> messages) {
         this.messages = messages;
@@ -96,6 +105,20 @@ public class ConversationFragment extends Fragment implements ConversationContra
             conversationAdapter.setMessages(messages);
             conversationAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void displayUserImage(User user) {
+        Glide.with(this)
+                .load(ApiModule.buildUserPhotoPath(user))
+                .signature(new StringSignature(user.getPhotoHash()))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(userImageView);
+    }
+
+    @Override
+    public void displayUsername(String userName) {
+        usernameTextView.setText(userName);
     }
 
     @Override

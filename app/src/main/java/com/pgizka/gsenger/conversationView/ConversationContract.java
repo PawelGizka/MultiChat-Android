@@ -3,6 +3,7 @@ package com.pgizka.gsenger.conversationView;
 import android.support.v7.app.AppCompatActivity;
 
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
@@ -15,6 +16,10 @@ public interface ConversationContract {
         void displayConversationItems(List<Message> conversationItems);
 
         void displayErrorMessage(String message);
+
+        void displayUserImage(User user);
+
+        void displayUsername(String userName);
 
         void setPresenter(ConversationContract.Presenter presenter);
 
