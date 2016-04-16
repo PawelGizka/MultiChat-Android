@@ -1,14 +1,18 @@
 package com.pgizka.gsenger.conversationView;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -20,6 +24,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaActivity;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
@@ -48,14 +54,18 @@ public class ConversationFragment extends Fragment implements ConversationContra
 
     private ConversationAdapter conversationAdapter;
 
+    private int friendId;
+    private int chatId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         GSengerApplication.getApplicationComponent().inject(this);
         conversationAdapter = new ConversationAdapter();
         Bundle arguments = getArguments();
-        int friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT, -1);
-        int chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
+        friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT, -1);
+        chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
         presenter.onCreate(this, friendId, chatId);
     }
 
@@ -85,6 +95,49 @@ public class ConversationFragment extends Fragment implements ConversationContra
     public void onPause() {
         super.onPause();
         presenter.onPause();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_conversation, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.show_attachment_menu_action: {
+                showAttachmentPopupMenu();
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showAttachmentPopupMenu() {
+        View showAttachmentView = getActivity().findViewById(R.id.show_attachment_menu_action);
+        PopupMenu popup = new PopupMenu(getActivity(), showAttachmentView);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_conversation_attachment, popup.getMenu());
+        popup.show();
+
+        popup.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+
+            String action = null;
+            if (id == R.id.chose_photo_action) {
+                action = SendMediaFragment.CHOSE_PHOTO_ACTION;
+            }
+
+            Intent intent = new Intent(getContext(), SendMediaActivity.class);
+            intent.putExtra(SendMediaFragment.ACTION_ARGUMENT, action);
+            intent.putExtra(SendMediaFragment.USER_ID_ARGUMENT, friendId);
+            intent.putExtra(SendMediaFragment.CHAT_ID_ARGUMENT, chatId);
+            startActivity(intent);
+            return true;
+        });
     }
 
     @OnClick(R.id.conversation_send_message_floating_button)

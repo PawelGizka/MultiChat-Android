@@ -51,47 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-//        createChat();
     }
-
-    private void createChat() {
-        User user = new User();
-        user.setId(1);
-        user.setServerId(123);
-        user.setUserName("Pawel");
-        user.setStatus("my super status");
-
-        Chat chat = new Chat();
-        chat.setId(0);
-        chat.setType(Chat.Type.SINGLE_CONVERSATION.code);
-
-        TextMessage textMessage = new TextMessage();
-        textMessage.setText("hello everyone");
-
-        Message message = new Message();
-        message.setId(0);
-        message.setType(Message.Type.TEXT_MESSAGE.code);
-
-        Receiver receiver = new Receiver();
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        user = realm.copyToRealm(user);
-        chat = realm.copyToRealm(chat);
-        chat.setUsers(new RealmList<>(user));
-        user.setChats(new RealmList<Chat>(chat));
-        textMessage = realm.copyToRealm(textMessage);
-        message = realm.copyToRealm(message);
-        message.setTextMessage(textMessage);
-        message.setChat(chat);
-        message.setSender(user);
-        chat.setMessages(new RealmList<Message>(message));
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(user);
-        realm.commitTransaction();
-    }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

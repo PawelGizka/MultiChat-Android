@@ -18,6 +18,16 @@ public class ChatRepository {
     }
 
     public Chat getOrCreateSingleConversationChatWith(User friend) {
+        Chat chat = getSingleConversationChatWith(friend);
+
+        if (chat == null) {
+            chat = createSingleConversationChatWith(friend);
+        }
+
+        return chat;
+    }
+
+    public Chat getSingleConversationChatWith(User friend) {
         Realm realm = Realm.getDefaultInstance();
 
         Chat chat = realm.where(Chat.class)
@@ -25,10 +35,6 @@ public class ChatRepository {
                 .equalTo("users.id", userAccountManager.getOwner().getId())
                 .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
                 .findFirst();
-
-        if (chat == null) {
-            chat = createSingleConversationChatWith(friend);
-        }
 
         return chat;
     }

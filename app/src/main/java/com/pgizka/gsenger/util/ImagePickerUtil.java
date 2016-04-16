@@ -28,7 +28,7 @@ public class ImagePickerUtil {
     private static final String TAG = "ImagePicker";
     private static final String TEMP_IMAGE_NAME = "tempImage";
 
-    public Intent getPickImageIntent(Context context) {
+    public Intent getPickOrTakeImageIntent(Context context) {
         Intent chooserIntent = null;
 
         List<Intent> intentList = new ArrayList<>();

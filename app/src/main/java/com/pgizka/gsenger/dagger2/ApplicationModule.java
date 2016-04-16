@@ -6,6 +6,8 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.di.DependencyInjector;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
@@ -18,6 +20,7 @@ import com.pgizka.gsenger.userStatusView.UserProfileContract;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.ImagePickerUtil;
+import com.pgizka.gsenger.util.StorageResolver;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -98,6 +101,12 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
+    public StorageResolver providesStorageResolver() {
+        return new StorageResolver(application);
+    }
+
+    @Provides
+    @Singleton
     public ContactsContract.Presenter providesFriendsPresenter() {
         return new ContactsPresenter();
     }
@@ -118,6 +127,12 @@ public class ApplicationModule {
     @Singleton
     public UserProfileContract.Presenter providesUserProfilePresenter() {
         return new UserProfilePresenter();
+    }
+
+    @Provides
+    @Singleton
+    public SendMediaContract.Presenter providesSendMediaPresenter() {
+        return new SendMediaPresenter();
     }
 
 }

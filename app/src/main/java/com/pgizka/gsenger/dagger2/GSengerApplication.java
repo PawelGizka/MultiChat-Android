@@ -5,6 +5,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.util.StorageResolver;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -25,6 +26,8 @@ public class GSengerApplication extends Application {
                 .build();
 
 
+        StorageResolver storageResolver = applicationComponent.storageResolver();
+        storageResolver.makeAllDirs();
 
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.pgizka.gsenger.userStatusView.UserProfileActivity">
+
+    <item
+        android:id="@+id/show_attachment_menu_action"
+        android:title="Send Atachment"
+        android:icon="@drawable/ic_attach_file_white_36dp"
+        app:showAsAction="always"
+        android:showAsAction="always">
+
+
+    </item>
+
+
+</menu>

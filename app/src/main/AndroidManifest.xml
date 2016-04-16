@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- Google Cloud Messaging permissions -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
@@ -26,22 +27,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.pgizka.gsenger.dagger2.MyGlideModule"
-            android:value="GlideModule" />
+            android:value="GlideModule"/>
 
         <activity
             android:name=".mainView.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".welcome.WelcomeActivity"
             android:label="@string/title_activity_welcome">
         </activity>
-
         <activity android:name=".welcome.BootStrapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -69,14 +67,14 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".conversationView.ConversationActivity"
-            >
+        <activity android:name=".conversationView.ConversationActivity">
         </activity>
         <activity
             android:name=".userStatusView.UserProfileActivity"
             android:label="@string/title_activity_user_status"
             android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".conversationView.sendMediaView.SendMediaActivity">
         </activity>
     </application>
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".conversationView.sendMediaView.SendMediaFragment"
+    >
+
+    <ImageView
+        android:id="@+id/send_media_main_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/send_media_appbar"
+        android:layout_above="@+id/send_media_description_edit_text"
+        android:scaleType="fitCenter"
+        android:src="@drawable/defult_contact_image"
+        />
+
+    <EditText
+        android:id="@+id/send_media_description_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/send_media_cancel_button"
+        android:text="Some description"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        />
+
+    <Button
+        android:id="@+id/send_media_cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        app:layout_widthPercent="49.5%"
+        android:text="Cancel"
+        android:textColor="#FFFFFF"
+        android:background="#444444"
+        />
+
+    <Button
+        android:id="@+id/send_media_send_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:layout_widthPercent="49.5%"
+        android:text="Send"
+        android:textColor="#FFFFFF"
+        android:background="#444444"
+        />
+
+
+</android.support.percent.PercentRelativeLayout>

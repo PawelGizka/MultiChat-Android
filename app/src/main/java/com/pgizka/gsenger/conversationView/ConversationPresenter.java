@@ -1,11 +1,9 @@
 package com.pgizka.gsenger.conversationView;
 
 import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
@@ -25,8 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
@@ -79,7 +75,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                 .equalTo("id", friendId)
                 .findFirst();
 
-        getChat();
+        chat = chatRepository.getSingleConversationChatWith(friend);
 
         if (chat != null) {
             getMessages();
@@ -87,7 +83,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         } else {
             realm.where(Chat.class).findAll().addChangeListener(() -> {
                 Log.i(TAG, "on chats change called");
-                getChat();
+                chat = chatRepository.getSingleConversationChatWith(friend);
                 if (chat != null) {
                     getMessages();
                 }
@@ -111,13 +107,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             messages.removeChangeListeners();
         }
         realm.removeAllChangeListeners();
-    }
-
-    private void getChat() {
-        chat = realm.where(Chat.class)
-                .equalTo("users.id", friendId)
-                .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
-                .findFirst();
     }
 
     private void getMessages() {

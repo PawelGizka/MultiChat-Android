@@ -1,37 +1,30 @@
 package com.pgizka.gsenger.dagger2;
 
-import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.ApiModule;
-import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
+import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
-import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
-import com.pgizka.gsenger.mainView.friends.ContactsContract;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.provider.ChatRepository;
-import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.userStatusView.UserProfileFragment;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
-import com.pgizka.gsenger.util.ContactsUtil;
+import com.pgizka.gsenger.util.StorageResolver;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
-
-import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
 
 @Singleton
 @Component(modules = {ApplicationModule.class, ApiModule.class})
@@ -42,6 +35,8 @@ public interface ApplicationComponent {
     UserAccountManager userAccountManager();
 
     ChatRepository chatRepository();
+
+    StorageResolver storageResolver();
 
     void inject(MyGlideModule myGlideModule);
 
@@ -72,5 +67,9 @@ public interface ApplicationComponent {
     void inject(ConversationFragment conversationFragment);
 
     void inject(UserProfileFragment userProfileFragment);
+
+    void inject(SendMediaFragment sendMediaFragment);
+
+    void inject(SendMediaPresenter sendMediaPresenter);
 
 }

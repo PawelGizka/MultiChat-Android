@@ -2,16 +2,28 @@ package com.pgizka.gsenger.jobqueue.sendMessge;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -25,6 +37,9 @@ public class SendMessageJob extends BaseJob {
 
     @Inject
     transient MessageRestService messageRestService;
+
+    @Inject
+    transient EventBus eventBus;
 
     public SendMessageJob(int messageId) {
         super(new Params(10).requireNetwork().persist().groupBy("message"));
@@ -58,9 +73,7 @@ public class SendMessageJob extends BaseJob {
         message.setState(Message.State.SENDING.code);
         realm.commitTransaction();
 
-        PutTextMessageRequest messageRequest = new PutTextMessageRequest(message);
-
-        Call<PutMessageResponse> call = messageRestService.sendTextMessage(messageRequest);
+        Call<PutMessageResponse> call = processMessage();
         Response<PutMessageResponse> response = call.execute();
 
         if (response.isSuccess()) {
@@ -73,6 +86,67 @@ public class SendMessageJob extends BaseJob {
             throw new Exception();
         }
 
+    }
+
+    private Call<PutMessageResponse> processMessage() {
+        int type = message.getType();
+        if (type == Message.Type.TEXT_MESSAGE.code) {
+            return processTextMessage();
+        } else if (type == Message.Type.MEDIA_MESSAGE.code) {
+            return processMediaMessage();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private Call<PutMessageResponse> processTextMessage() {
+        PutTextMessageRequest messageRequest = new PutTextMessageRequest(message);
+        Call<PutMessageResponse> call = messageRestService.sendTextMessage(messageRequest);
+        return call;
+    }
+
+    private Call<PutMessageResponse> processMediaMessage() {
+        MediaMessage mediaMessage = message.getMediaMessage();
+
+        RequestBody dataRequestBody = new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return MediaType.parse("octet-stream");
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                File file = new File(mediaMessage.getPath());
+                InputStream inputStream = new FileInputStream(file);
+
+                byte[] buffer = new byte[8192];
+                int cnt = 0;
+                int sent = 0;
+                while ((cnt = inputStream.read(buffer)) > 0) {
+                    sink.write(buffer, 0, cnt);
+                    sent += cnt;
+                    int progress = (int) (sent / file.length());
+                    eventBus.post(new SendMediaMessageProgressUpdateEvent(message.getId(), progress));
+                }
+            }
+        };
+
+        RequestBody metaDataRequestBody =new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return null;
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                PutMediaMessageRequest putMediaMessageRequest = new PutMediaMessageRequest(message);
+                String metadata = new Gson().getAdapter(PutMediaMessageRequest.class).toJson(putMediaMessageRequest);
+                sink.writeUtf8(metadata);
+            }
+        };
+
+        Call<PutMessageResponse> call = messageRestService.sendMediaMessage(dataRequestBody, metaDataRequestBody);
+        return call;
     }
 
     @Override

@@ -1,12 +1,7 @@
 package com.pgizka.gsenger.userStatusView;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -28,19 +23,12 @@ import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.util.ImagePickerUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.OkHttpClient;
 
 public class UserProfileFragment extends Fragment implements UserProfileContract.View {
 
@@ -87,7 +75,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
 
     @OnClick(R.id.user_profile_change_photo_button)
     public void onChangePhotoButtonClicked() {
-        Intent intent = imagePickerUtil.getPickImageIntent(getActivity());
+        Intent intent = imagePickerUtil.getPickOrTakeImageIntent(getActivity());
         startActivityForResult(intent, PICK_PHOTO_REQUEST);
     }
 
