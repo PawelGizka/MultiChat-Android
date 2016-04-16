@@ -62,7 +62,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         GSengerApplication.getApplicationComponent().inject(this);
-        conversationAdapter = new ConversationAdapter();
+        conversationAdapter = new ConversationAdapter(this);
         Bundle arguments = getArguments();
         friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT, -1);
         chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);

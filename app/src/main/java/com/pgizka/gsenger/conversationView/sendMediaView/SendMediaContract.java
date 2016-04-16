@@ -22,7 +22,7 @@ public interface SendMediaContract {
 
         void onResume();
 
-        void sendPhoto(Uri photoUri);
+        void sendPhoto(Uri photoUri, String description);
     }
 
 }

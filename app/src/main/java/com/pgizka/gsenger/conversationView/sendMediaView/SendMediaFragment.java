@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +34,7 @@ public class SendMediaFragment extends Fragment implements SendMediaContract.Vie
     private static final int PICK_PHOTO_REQUEST = 0;
 
     @Bind(R.id.send_media_main_image) ImageView mainImageView;
+    @Bind(R.id.send_media_description_edit_text) EditText descriptionEditText;
     private Toolbar toolbar;
 
     @Inject
@@ -153,7 +155,7 @@ public class SendMediaFragment extends Fragment implements SendMediaContract.Vie
     @OnClick(R.id.send_media_send_button)
     public void onSendButtonClicked() {
         if (action.equals(CHOSE_PHOTO_ACTION)) {
-            presenter.sendPhoto(dataToSend);
+            presenter.sendPhoto(dataToSend, descriptionEditText.getText().toString());
         }
     }
 

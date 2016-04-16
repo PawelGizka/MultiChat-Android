@@ -1,6 +1,8 @@
 package com.pgizka.gsenger.conversationView;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
@@ -20,6 +23,9 @@ import com.pgizka.gsenger.provider.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static com.pgizka.gsenger.provider.Message.State.CANNOT_SEND;
 import static com.pgizka.gsenger.provider.Message.State.RECEIVED;
@@ -34,30 +40,28 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     private List<Message> messages;
 
+    private Fragment fragment;
+
+    public ConversationAdapter(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public View view;
-        public TextView infoText;
-        public ProgressBar progressBar;
-        public TextView fileNameText;
-        public TextView filePathText;
-        public ImageView image;
-        public ImageView videoImage;
-        public TextView messageText;
-        public FrameLayout imageFrameLayout;
-        public RelativeLayout headerRelativeLayout;
+        View view;
+        @Bind(R.id.message_info_text) TextView infoText;
+        @Bind(R.id.message_progress_bar) ProgressBar progressBar;
+        @Bind(R.id.message_file_name_text) TextView fileNameText;
+        @Bind(R.id.message_file_path_text) TextView filePathText;
+        @Bind(R.id.message_image_view) ImageView image;
+        @Bind(R.id.message_video_image_view) ImageView videoImage;
+        @Bind(R.id.message_text_view) TextView messageText;
+        @Bind(R.id.message_image_frame_layout) FrameLayout imageFrameLayout;
+        @Bind(R.id.header) RelativeLayout headerRelativeLayout;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            this.infoText = (TextView) view.findViewById(R.id.message_info_text);
-            this.progressBar = (ProgressBar) view.findViewById(R.id.message_progress_bar);
-            this.fileNameText = (TextView) view.findViewById(R.id.message_file_name_text);
-            this.filePathText = (TextView)view.findViewById(R.id.message_file_path_text);
-            this.image = (ImageView) view.findViewById(R.id.message_image_view);
-            this.videoImage = (ImageView) view.findViewById(R.id.message_video_image_view);
-            this.messageText = (TextView) view.findViewById(R.id.message_text_view);
-            this.imageFrameLayout = (FrameLayout) view.findViewById(R.id.message_image_frame_layout);
-            this.headerRelativeLayout = (RelativeLayout) view.findViewById(R.id.header);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -91,9 +95,32 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
         if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
             TextMessage textMessage = message.getTextMessage();
+            holder.messageText.setVisibility(View.VISIBLE);
             holder.messageText.setText(textMessage.getText());
         } else {
             MediaMessage mediaMessage = message.getMediaMessage();
+            int type = mediaMessage.getMediaType();
+            if (type == MediaMessage.Type.PHOTO.code) {
+                String description = mediaMessage.getDescription();
+                if (!TextUtils.isEmpty(description)) {
+                    holder.messageText.setVisibility(View.VISIBLE);
+                    holder.messageText.setText(description);
+                } else {
+                    holder.messageText.setVisibility(View.GONE);
+                }
+
+                String path = mediaMessage.getPath();
+                if (!TextUtils.isEmpty(path)) {
+                    holder.imageFrameLayout.setVisibility(View.VISIBLE);
+                    holder.image.setVisibility(View.VISIBLE);
+
+                    Glide.with(fragment)
+                            .load(path)
+                            .into(holder.image);
+                }
+
+            }
+
         }
 
         String sendDate = getSendDate(message);

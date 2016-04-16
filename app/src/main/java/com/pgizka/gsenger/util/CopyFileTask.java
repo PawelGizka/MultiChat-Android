@@ -68,7 +68,7 @@ public class CopyFileTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (copyFinishedListener != null) {
-            copyFinishedListener.onCopyFinished(fileName, path);
+            copyFinishedListener.onCopyFinished(fileName, path + "/" + fileName);
         }
 
     }

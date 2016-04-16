@@ -58,20 +58,20 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     }
 
     @Override
-    public void sendPhoto(Uri photoUri) {
+    public void sendPhoto(Uri photoUri, String description) {
         view.showProgressDialog("Copying File...");
         new CopyFileTask(context)
                 .from(photoUri)
                 .to(StorageResolver.IMAGES_SENT_PATH)
                 .onCopyingFinished((newFileName, path) -> {
                     view.dismissProgressDialog();
-                    sendMediaMessage(MediaMessage.Type.PHOTO.code, newFileName, path);
+                    sendMediaMessage(MediaMessage.Type.PHOTO.code, newFileName, path, description);
                     view.finish();
                 })
                 .execute();
     }
 
-    public void sendMediaMessage(int type, String fileName, String path) {
+    public void sendMediaMessage(int type, String fileName, String path, String description) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
@@ -79,6 +79,7 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
         mediaMessage.setMediaType(type);
         mediaMessage.setFileName(fileName);
         mediaMessage.setPath(path);
+        mediaMessage.setDescription(description);
 
         mediaMessage = realm.copyToRealm(mediaMessage);
 
