@@ -75,27 +75,27 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
+        User friend = realm.where(User.class)
+                .equalTo("id", friendId)
+                .findFirst();
+
+        Chat chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
+        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
+        chat.getMessages().add(message);
+
         MediaMessage mediaMessage = new MediaMessage();
         mediaMessage.setMediaType(type);
         mediaMessage.setFileName(fileName);
         mediaMessage.setPath(path);
         mediaMessage.setDescription(description);
-
         mediaMessage = realm.copyToRealm(mediaMessage);
 
-        User friend = realm.where(User.class)
-                .equalTo("id", friendId)
-                .findFirst();
-        Chat chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
-
-        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
         message.setType(Message.Type.MEDIA_MESSAGE.code);
         message.setMediaMessage(mediaMessage);
-        chat.getMessages().add(message);
 
         realm.commitTransaction();
 
-//        jobManager.addJob(new SendMessageJob(message.getId()));
+        jobManager.addJob(new SendMessageJob(message.getId()));
     }
 
 }

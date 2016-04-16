@@ -158,18 +158,16 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        if (chat == null) {
-            chat = chatRepository.createSingleConversationChatWith(friend);
-        }
+        chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
+        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
+        chat.getMessages().add(message);
 
         TextMessage textMessage = new TextMessage();
         textMessage.setText(text);
         textMessage = realm.copyToRealm(textMessage);
 
-        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
         message.setType(Message.Type.TEXT_MESSAGE.code);
         message.setTextMessage(textMessage);
-        chat.getMessages().add(message);
 
         realm.commitTransaction();
 

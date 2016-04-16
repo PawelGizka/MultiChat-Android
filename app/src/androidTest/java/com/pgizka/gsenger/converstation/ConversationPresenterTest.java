@@ -35,7 +35,7 @@ import io.realm.Realm;
 import static com.pgizka.gsenger.TestUtils.*;
 import static org.mockito.Mockito.*;
 
-public class ConversationTest extends AndroidTestCase {
+public class ConversationPresenterTest extends AndroidTestCase {
 
     @Mock
     ConversationContract.View view;
@@ -61,9 +61,8 @@ public class ConversationTest extends AndroidTestCase {
         User user = createUser();
         User owner = getOrCreateOwner();
 
-        PutMessageResponse putMessageResponse = new PutMessageResponse();
-        putMessageResponse.setResultCode(ResultCode.OK.code);
-        putMessageResponse.setMessageServerId(12);
+        int messageServerId = 12;
+        PutMessageResponse putMessageResponse = new PutMessageResponse(ResultCode.OK, messageServerId);
 
         int chatId = -1;
         conversationPresenter.onCreate(view, user.getId(), chatId);
@@ -79,7 +78,7 @@ public class ConversationTest extends AndroidTestCase {
 
         realm.refresh();
         Message message = realm.where(Message.class)
-                .equalTo("serverId", 12)
+                .equalTo("serverId", messageServerId)
                 .findFirst();
 
         assertNotNull(message);
