@@ -52,8 +52,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public MessageRepository providesMessageRepository(Repository repository, UserAccountManager userAccountManager) {
-        return new MessageRepository(repository, userAccountManager);
+    public MessageRepository providesMessageRepository(Repository repository, ChatRepository chatRepository, UserAccountManager userAccountManager) {
+        return new MessageRepository(repository, chatRepository, userAccountManager);
     }
 
     @Provides

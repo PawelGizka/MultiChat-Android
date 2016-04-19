@@ -11,6 +11,7 @@ import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
@@ -39,6 +40,7 @@ public class TestUtils {
     public static void setupRealm() {
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplication())
                 .inMemory()
+                .name("test.realm")
                 .deleteRealmIfMigrationNeeded()
                 .build());
     }
@@ -135,6 +137,19 @@ public class TestUtils {
 
         realm.commitTransaction();
         return message;
+    }
+
+    public static NewMessageData prepareMessageData(User sender, int messageServerId) {
+        NewMessageData messageData = new NewMessageData();
+        prepareMessageData(messageData, sender, messageServerId);
+        return messageData;
+    }
+
+    public static void prepareMessageData(NewMessageData messageData, User sender, int messageServerId) {
+        messageData.setSenderId(sender.getServerId());
+        messageData.setSendDate(System.currentTimeMillis());
+        messageData.setMessageId(messageServerId);
+        messageData.setChatId(-1);
     }
 
     public static <T> Call<T> createCall(T response) {

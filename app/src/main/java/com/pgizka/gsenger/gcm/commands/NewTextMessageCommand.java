@@ -34,19 +34,10 @@ public class NewTextMessageCommand extends GCMCommand {
     private NewTextMessageData messageData;
 
     @Inject
-    Repository repository;
-
-    @Inject
-    UserAccountManager userAccountManager;
-
-    @Inject
     JobManager jobManager;
 
     @Inject
     MessageRepository messageRepository;
-
-    @Inject
-    ChatRepository chatRepository;
 
     @Override
     public void execute(Context context, String action, String extraData) {
@@ -63,28 +54,14 @@ public class NewTextMessageCommand extends GCMCommand {
         realm.refresh();
         realm.beginTransaction();
 
-        //TODO handle case when sender will not be in contacts
-        User sender = realm.where(User.class)
-                .equalTo("serverId", messageData.getSenderId())
-                .findFirst();
-
-        Chat chat = null;
-
-        boolean singleConversation = messageData.getChatId() == -1;
-        if (singleConversation) {
-            chat = chatRepository.getOrCreateSingleConversationChatWith(sender);
-        } else {
-            //TODO handle group conversation
-        }
+        Message message = messageRepository.handleIncomingMessage(extraData);
 
         TextMessage textMessage = new TextMessage();
         textMessage.setText(messageData.getText());
         textMessage = realm.copyToRealm(textMessage);
 
-        Message message = messageRepository.createIncomingMessageWithReceiver(messageData, sender, chat);
         message.setType(Message.Type.TEXT_MESSAGE.code);
         message.setTextMessage(textMessage);
-        chat.getMessages().add(message);
 
         realm.commitTransaction();
         realm.refresh();

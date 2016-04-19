@@ -109,7 +109,7 @@ public class GetContactsJob extends BaseJob {
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
-        Log.i(TAG, "onShouldReRunOnThrowable");
+        Log.e(TAG, "onShouldReRunOnThrowable", throwable);
         eventBus.post(new GetContactsFinishedEvent());
         return RetryConstraint.CANCEL;
     }

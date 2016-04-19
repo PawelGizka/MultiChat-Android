@@ -6,6 +6,7 @@ import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.gcm.NewTextMessageCommandTest;
+import com.pgizka.gsenger.provider.MessageRepositoryTest;
 
 import javax.inject.Singleton;
 
@@ -20,5 +21,7 @@ public interface TestApplicationComponent extends ApplicationComponent {
     void inject(SendMediaPresenterTest sendMediaPresenterTest);
 
     void inject(NewTextMessageCommandTest newTextMessageCommandTest);
+
+    void inject(MessageRepositoryTest messageRepositoryTest);
 
 }

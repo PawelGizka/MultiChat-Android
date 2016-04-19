@@ -29,13 +29,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-import static com.pgizka.gsenger.TestUtils.createCall;
-import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
-import static com.pgizka.gsenger.TestUtils.createUser;
-import static com.pgizka.gsenger.TestUtils.getApplication;
-import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
-import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
-import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static com.pgizka.gsenger.TestUtils.*;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -59,22 +53,7 @@ public class NewTextMessageCommandTest {
     }
 
     @Test
-    public void testReceivingTextMessage_whenChatAndUsersExists() throws Exception {
-        User owner = getOrCreateOwner();
-        User sender = createUser();
-        createChatBetweenUsers(owner, sender);
-
-        int messageServerId = 15;
-        String data = new Gson().getAdapter(NewTextMessageData.class).toJson(prepareTextMessageData(sender, messageServerId));
-
-        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(new BaseResponse()));
-        textMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);
-
-        verifyNewTextMessageHandledCorrectly(messageServerId);
-    }
-
-    @Test
-    public void testReceivingTextMessage_whenUsersExistsAndChatNotExist() throws Exception {
+    public void testReceivingTextMessage() throws Exception {
         User owner = getOrCreateOwner();
         User sender = createUser();
 
@@ -94,13 +73,6 @@ public class NewTextMessageCommandTest {
         return textMessageData;
     }
 
-    private void prepareMessageData(NewMessageData messageData, User sender, int messageServerId) {
-        messageData.setSenderId(sender.getServerId());
-        messageData.setSendDate(System.currentTimeMillis());
-        messageData.setMessageId(messageServerId);
-        messageData.setChatId(-1);
-    }
-
     private void verifyNewTextMessageHandledCorrectly(int messageServerId) throws Exception {
         verify(messageRestService, timeout(2000)).setMessageDelivered(Mockito.<MessageStateChangedRequest>any());
 
@@ -113,13 +85,7 @@ public class NewTextMessageCommandTest {
         assertNotNull(message);
         TextMessage textMessage = message.getTextMessage();
         assertNotNull(textMessage);
-
-        Receiver receiver = realm.where(Receiver.class)
-                .equalTo("user.id", getOrCreateOwner().getId())
-                .equalTo("message.id", message.getId())
-                .findFirst();
-
-        assertNotNull(receiver);
+        assertNotNull(textMessage.getText());
     }
 
 }

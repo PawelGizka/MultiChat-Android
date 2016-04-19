@@ -2,7 +2,7 @@ package com.pgizka.gsenger.gcm.data;
 
 import java.util.List;
 
-public abstract class NewMessageData {
+public class NewMessageData {
 
     private int messageId;
     private long sendDate;

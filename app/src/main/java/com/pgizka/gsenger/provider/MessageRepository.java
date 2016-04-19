@@ -1,9 +1,13 @@
 package com.pgizka.gsenger.provider;
 
 
+import com.google.gson.Gson;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
+import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.util.UserAccountManager;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -13,11 +17,13 @@ import io.realm.RealmList;
 public class MessageRepository {
 
     private Repository repository;
+    private ChatRepository chatRepository;
     private UserAccountManager userAccountManager;
 
-    public MessageRepository(Repository repository, UserAccountManager userAccountManager) {
+    public MessageRepository(Repository repository, ChatRepository chatRepository, UserAccountManager userAccountManager) {
         this.repository = repository;
         this.userAccountManager = userAccountManager;
+        this.chatRepository = chatRepository;
     }
 
     public Message createOutgoingMessageWithReceiver(Chat chat, User friend) {
@@ -40,6 +46,36 @@ public class MessageRepository {
 
         message.setReceivers(new RealmList<>(receiver));
 
+        return message;
+    }
+
+    public Message handleIncomingMessage(String extraData) {
+        NewMessageData messageData;
+        try {
+            messageData = new Gson().getAdapter(NewMessageData.class).fromJson(extraData);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Realm realm = Realm.getDefaultInstance();
+
+        //TODO handle case when sender will not be in contacts
+        User sender = realm.where(User.class)
+                .equalTo("serverId", messageData.getSenderId())
+                .findFirst();
+
+        Chat chat = null;
+
+        boolean singleConversation = messageData.getChatId() == -1;
+        if (singleConversation) {
+            chat = chatRepository.getOrCreateSingleConversationChatWith(sender);
+        } else {
+            //TODO handle group conversation
+        }
+
+        Message message = createIncomingMessageWithReceiver(messageData, sender, chat);
+        chat.getMessages().add(message);
         return message;
     }
 
