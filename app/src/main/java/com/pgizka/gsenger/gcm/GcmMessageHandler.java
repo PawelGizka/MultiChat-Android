@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
+import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.commands.TestCommand;
 import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
+import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 
 import java.util.Collections;
@@ -25,6 +27,7 @@ public class GcmMessageHandler extends GcmListenerService {
 
         receivers.put("test", new TestCommand());
         receivers.put(NewTextMessageData.ACTION, new NewTextMessageCommand());
+        receivers.put(NewMediaMessageData.ACTION, new NewMediaMessageCommand());
         receivers.put(MessageStateChangedData.MESSAGE_DELIVERED_ACTION, messageStateChangedCommand);
         receivers.put(MessageStateChangedData.MESSAGE_VIEWED_ACTION, messageStateChangedCommand);
 

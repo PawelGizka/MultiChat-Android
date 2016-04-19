@@ -2,6 +2,7 @@ package com.pgizka.gsenger.converstation;
 
 
 import android.content.Context;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.ResultCode;
@@ -19,8 +20,10 @@ import com.pgizka.gsenger.provider.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
@@ -40,6 +43,7 @@ import static org.mockito.Mockito.when;
 
 import static org.junit.Assert.*;
 
+@RunWith(AndroidJUnit4.class)
 public class SendMediaPresenterTest {
 
     @Mock
@@ -61,6 +65,7 @@ public class SendMediaPresenterTest {
         GSengerApplication.setApplicationComponent(applicationComponent);
 
         sendMediaPresenter = new SendMediaPresenter();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test

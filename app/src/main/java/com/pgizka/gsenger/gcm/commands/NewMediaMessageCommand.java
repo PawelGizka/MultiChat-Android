@@ -10,6 +10,7 @@ import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
+import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
@@ -52,6 +53,8 @@ public class NewMediaMessageCommand extends GCMCommand {
 
         Message message = messageRepository.handleIncomingMessage(extraData);
 
+        message.setState(Message.State.WAITING_TO_DOWNLOAD.code);
+
         MediaMessage mediaMessage = new MediaMessage();
         mediaMessage.setFileName(messageData.getFileName());
         mediaMessage.setDescription(messageData.getDescription());
@@ -65,6 +68,7 @@ public class NewMediaMessageCommand extends GCMCommand {
         realm.refresh();
 
         jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
+        jobManager.addJob(new GetMediaMessageDataJob(message.getId()));
     }
 
 

@@ -31,6 +31,7 @@ import static com.pgizka.gsenger.provider.Message.State.CANNOT_SEND;
 import static com.pgizka.gsenger.provider.Message.State.RECEIVED;
 import static com.pgizka.gsenger.provider.Message.State.SENDING;
 import static com.pgizka.gsenger.provider.Message.State.SENT;
+import static com.pgizka.gsenger.provider.Message.State.WAITING_TO_DOWNLOAD;
 import static com.pgizka.gsenger.provider.Message.State.WAITING_TO_SEND;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
@@ -161,6 +162,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             return "Sent";
         } else if (state == RECEIVED.code) {
             return "Received";
+        } else if (state == WAITING_TO_DOWNLOAD.code) {
+            return "Waiting to Download";
         } else {
             return "";
         }

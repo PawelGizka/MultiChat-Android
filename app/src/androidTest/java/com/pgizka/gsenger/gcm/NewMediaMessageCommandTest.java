@@ -1,5 +1,7 @@
 package com.pgizka.gsenger.gcm;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import com.google.gson.Gson;
 import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
@@ -17,13 +19,17 @@ import com.pgizka.gsenger.provider.User;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.createUser;
@@ -37,7 +43,11 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@RunWith(AndroidJUnit4.class)
 public class NewMediaMessageCommandTest {
+
+    @Mock
+    ResponseBody responseBody;
 
     @Inject
     MessageRestService messageRestService;
@@ -54,6 +64,7 @@ public class NewMediaMessageCommandTest {
         GSengerApplication.setApplicationComponent(applicationComponent);
 
         mediaMessageCommand = new NewMediaMessageCommand();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -64,7 +75,7 @@ public class NewMediaMessageCommandTest {
         int messageServerId = 15;
         String data = new Gson().getAdapter(NewMediaMessageData.class).toJson(prepareMediaMessageData(sender, messageServerId));
 
-        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(new BaseResponse()));
+        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
         mediaMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);
 
         verifyNewMediaMessageHandledCorrectly(messageServerId);
@@ -81,6 +92,7 @@ public class NewMediaMessageCommandTest {
 
     private void verifyNewMediaMessageHandledCorrectly(int messageServerId) throws Exception {
         verify(messageRestService, timeout(2000)).setMessageDelivered(Mockito.<MessageStateChangedRequest>any());
+        verify(messageRestService, timeout(2000)).getMediaMessageData(messageServerId);
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();

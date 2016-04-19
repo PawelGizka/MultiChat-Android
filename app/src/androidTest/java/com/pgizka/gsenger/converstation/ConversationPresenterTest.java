@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.converstation;
 
 
+import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
 
 import com.pgizka.gsenger.api.BaseResponse;
@@ -22,6 +23,7 @@ import com.pgizka.gsenger.provider.User;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -31,14 +33,19 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(AndroidJUnit4.class)
 public class ConversationPresenterTest extends AndroidTestCase {
 
     @Mock
     ConversationContract.View view;
+
+    @Mock
+    ResponseBody responseBody;
 
     @Inject
     MessageRestService messageRestService;
@@ -98,7 +105,7 @@ public class ConversationPresenterTest extends AndroidTestCase {
         conversationPresenter.setFriend(user);
         conversationPresenter.setChat(chat);
 
-        when(messageRestService.setMessageViewed(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(new BaseResponse()));
+        when(messageRestService.setMessageViewed(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
         conversationPresenter.setAllMessagesViewed();
 
         verify(messageRestService, timeout(4000).times(2)).setMessageViewed(Mockito.<MessageStateChangedRequest>any());

@@ -14,6 +14,7 @@ import com.pgizka.gsenger.util.UserAccountManager;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -73,7 +74,7 @@ public class SetMessageStateJob extends BaseJob {
         messageStateChangedRequest.setMessageId(message.getServerId());
         messageStateChangedRequest.setReceiverId(owner.getServerId());
 
-        Call<BaseResponse> call = null;
+        Call<ResponseBody> call = null;
 
         if (type == SET_DELIVERED) {
             messageStateChangedRequest.setDate(receiver.getDelivered());
@@ -83,7 +84,7 @@ public class SetMessageStateJob extends BaseJob {
             call = messageRestService.setMessageViewed(messageStateChangedRequest);
         }
 
-        Response<BaseResponse> response = call.execute();
+        Response<ResponseBody> response = call.execute();
 
         if (response.isSuccess()) {
             //do nothing

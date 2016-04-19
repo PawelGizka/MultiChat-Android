@@ -8,6 +8,7 @@ import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
+import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
@@ -50,6 +51,8 @@ public interface ApplicationComponent {
     void inject(UpdateUserStatusJob updateUserStatusJob);
 
     void inject(UpdateUserPhotoJob updateUserPhotoJob);
+
+    void inject(GetMediaMessageDataJob getMediaMessageDataJob);
 
     void inject(RegistrationTask registrationTask);
 

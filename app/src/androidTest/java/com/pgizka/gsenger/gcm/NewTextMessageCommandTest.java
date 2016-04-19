@@ -1,6 +1,8 @@
 package com.pgizka.gsenger.gcm;
 
 
+import android.support.test.runner.AndroidJUnit4;
+
 import com.google.gson.Gson;
 import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
@@ -21,22 +23,30 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.*;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(AndroidJUnit4.class)
 public class NewTextMessageCommandTest {
 
     @Inject
     MessageRestService messageRestService;
+
+    @Mock
+    ResponseBody responseBody;
 
     private NewTextMessageCommand textMessageCommand;
     private GSengerApplication gSengerApplication;
@@ -50,6 +60,7 @@ public class NewTextMessageCommandTest {
         GSengerApplication.setApplicationComponent(applicationComponent);
 
         textMessageCommand = new NewTextMessageCommand();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -60,7 +71,7 @@ public class NewTextMessageCommandTest {
         int messageServerId = 15;
         String data = new Gson().getAdapter(NewTextMessageData.class).toJson(prepareTextMessageData(sender, messageServerId));
 
-        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(new BaseResponse()));
+        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
         textMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);
 
         verifyNewTextMessageHandledCorrectly(messageServerId);
