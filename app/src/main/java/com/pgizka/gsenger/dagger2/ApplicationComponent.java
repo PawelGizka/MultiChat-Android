@@ -5,6 +5,7 @@ import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
+import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
@@ -53,6 +54,8 @@ public interface ApplicationComponent {
     void inject(RegistrationTask registrationTask);
 
     void inject(NewTextMessageCommand newTextMessageCommand);
+
+    void inject(NewMediaMessageCommand newMediaMessageCommand);
 
     void inject(ContactsPresenter contactsPresenter);
 
