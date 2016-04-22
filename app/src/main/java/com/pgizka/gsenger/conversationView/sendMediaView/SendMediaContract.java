@@ -23,6 +23,10 @@ public interface SendMediaContract {
         void onResume();
 
         void sendPhoto(Uri photoUri, String description);
+
+        void sendVideo(Uri videoUri, String description);
+
+        void sendFile(Uri fileUri, String description);
     }
 
 }

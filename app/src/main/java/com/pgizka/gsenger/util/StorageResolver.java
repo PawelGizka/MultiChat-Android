@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import com.pgizka.gsenger.provider.MediaMessage;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +23,10 @@ public class StorageResolver {
     public static final String MEDIA_PATH = GSENGER_ROOT_PATH + "/" + "Media";
     public static final String IMAGES_PATH = MEDIA_PATH + "/" + "Images";
     public static final String IMAGES_SENT_PATH = IMAGES_PATH + "/" + "Sent";
+    public static final String VIDEO_PATH = MEDIA_PATH + "/" + "Video";
+    public static final String VIDEO_SENT_PATH = VIDEO_PATH + "/" + "Sent";
+    public static final String FILE_PATH = MEDIA_PATH + "/" + "File";
+    public static final String FILE_SENT_PATH = FILE_PATH + "/" + "Sent";
 
     private Context context;
 
@@ -28,12 +34,26 @@ public class StorageResolver {
         this.context = context;
     }
 
-    public void makeAllDirs() {
-        File imagesDir = new File(IMAGES_PATH);
-        imagesDir.mkdirs();
+    public static void makeAllDirs() {
+        new File(IMAGES_PATH).mkdirs();
+        new File(IMAGES_SENT_PATH).mkdirs();
+        new File(VIDEO_PATH).mkdirs();
+        new File(VIDEO_SENT_PATH).mkdirs();
+        new File(FILE_PATH).mkdirs();
+        new File(FILE_SENT_PATH).mkdirs();
+    }
 
-        File sentImagesDir = new File(IMAGES_SENT_PATH);
-        sentImagesDir.mkdirs();
+    public static String getPathForIncomingMediaData(MediaMessage mediaMessage) {
+        int type = mediaMessage.getMediaType();
+        if (type == MediaMessage.Type.PHOTO.code) {
+            return IMAGES_PATH;
+        } else if (type == MediaMessage.Type.VIDEO.code) {
+            return VIDEO_PATH;
+        } else if (type == MediaMessage.Type.FILE.code) {
+            return FILE_PATH;
+        } else {
+            return GSENGER_ROOT_PATH;
+        }
     }
 
     public static String getRealPathFromUri(Uri uri, Context context) {

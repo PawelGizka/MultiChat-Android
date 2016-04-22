@@ -1,5 +1,8 @@
 package com.pgizka.gsenger.conversationView;
 
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
@@ -28,6 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static com.pgizka.gsenger.provider.Message.State.CANNOT_SEND;
+import static com.pgizka.gsenger.provider.Message.State.DOWNLOADING;
 import static com.pgizka.gsenger.provider.Message.State.RECEIVED;
 import static com.pgizka.gsenger.provider.Message.State.SENDING;
 import static com.pgizka.gsenger.provider.Message.State.SENT;
@@ -100,16 +105,17 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             holder.messageText.setText(textMessage.getText());
         } else {
             MediaMessage mediaMessage = message.getMediaMessage();
+
+            String description = mediaMessage.getDescription();
+            if (!TextUtils.isEmpty(description)) {
+                holder.messageText.setVisibility(View.VISIBLE);
+                holder.messageText.setText(description);
+            } else {
+                holder.messageText.setVisibility(View.GONE);
+            }
+
             int type = mediaMessage.getMediaType();
             if (type == MediaMessage.Type.PHOTO.code) {
-                String description = mediaMessage.getDescription();
-                if (!TextUtils.isEmpty(description)) {
-                    holder.messageText.setVisibility(View.VISIBLE);
-                    holder.messageText.setText(description);
-                } else {
-                    holder.messageText.setVisibility(View.GONE);
-                }
-
                 String path = mediaMessage.getPath();
                 if (!TextUtils.isEmpty(path)) {
                     holder.imageFrameLayout.setVisibility(View.VISIBLE);
@@ -119,7 +125,25 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                             .load(path)
                             .into(holder.image);
                 }
+            } else if (type == MediaMessage.Type.VIDEO.code) {
+                String path = mediaMessage.getPath();
+                if (!TextUtils.isEmpty(path)) {
+                    holder.imageFrameLayout.setVisibility(View.VISIBLE);
+                    holder.videoImage.setVisibility(View.VISIBLE);
+                    holder.image.setVisibility(View.VISIBLE);
 
+                    Glide.with(fragment)
+                            .load(path)
+                            .asBitmap()
+                            .videoDecoder(new FileDescriptorBitmapDecoder(fragment.getActivity()))
+                            .into(holder.image);
+                }
+            } else if (type == MediaMessage.Type.FILE.code) {
+                holder.fileNameText.setVisibility(View.VISIBLE);
+                holder.filePathText.setVisibility(View.VISIBLE);
+
+                holder.fileNameText.setText(mediaMessage.getFileName());
+                holder.filePathText.setText(mediaMessage.getPath());
             }
 
         }
@@ -164,6 +188,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             return "Received";
         } else if (state == WAITING_TO_DOWNLOAD.code) {
             return "Waiting to Download";
+        } else if (state == DOWNLOADING.code) {
+            return "Downloading";
         } else {
             return "";
         }

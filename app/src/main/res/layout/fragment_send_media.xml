@@ -13,10 +13,37 @@
         android:id="@+id/send_media_main_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/send_media_appbar"
+        android:layout_alignParentTop="true"
         android:layout_above="@+id/send_media_description_edit_text"
         android:scaleType="fitCenter"
-        android:src="@drawable/defult_contact_image"
+
+        />
+
+    <TextView
+        android:id="@+id/send_media_file_path_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="/jakas/file.txt"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/send_media_file_size_text"
+        android:layout_below="@+id/send_media_file_path_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="/jakas/file.txt"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#CCCCCC"
+        android:visibility="gone"
         />
 
     <EditText

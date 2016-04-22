@@ -11,5 +11,33 @@
         android:showAsAction="never"
         />
 
+    <item
+        android:id="@+id/take_photo_action"
+        android:title="Take photo"
+        app:showAsAction="never"
+        android:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/chose_video_action"
+        android:title="Chose video"
+        app:showAsAction="never"
+        android:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/take_video_action"
+        android:title="Take video"
+        app:showAsAction="never"
+        android:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/chose_file_action"
+        android:title="Chose file"
+        app:showAsAction="never"
+        android:showAsAction="never"
+        />
+
 
 </menu>

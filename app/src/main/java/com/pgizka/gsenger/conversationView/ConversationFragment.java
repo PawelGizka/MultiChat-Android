@@ -129,6 +129,14 @@ public class ConversationFragment extends Fragment implements ConversationContra
             String action = null;
             if (id == R.id.chose_photo_action) {
                 action = SendMediaFragment.CHOSE_PHOTO_ACTION;
+            } else if (id == R.id.take_photo_action) {
+                action = SendMediaFragment.TAKE_PHOTO_ACTION;
+            } else if (id == R.id.chose_video_action) {
+                action = SendMediaFragment.CHOSE_VIDEO_ACTION;
+            } else if (id == R.id.take_video_action) {
+                action = SendMediaFragment.TAKE_VIDEO_ACTION;
+            } else if (id == R.id.chose_file_action) {
+                action = SendMediaFragment.CHOSE_FILE_ACTION;
             }
 
             Intent intent = new Intent(getContext(), SendMediaActivity.class);

@@ -82,7 +82,9 @@ public class GetMediaMessageDataJob extends BaseJob {
             MediaMessage mediaMessage = message.getMediaMessage();
             InputStream inputStream = response.body().byteStream();
 
-            File file = new File(StorageResolver.IMAGES_PATH, mediaMessage.getFileName());
+            File file = new File(
+                    StorageResolver.getPathForIncomingMediaData(mediaMessage),
+                    mediaMessage.getFileName());
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
             byte[] buffer = new byte[8192];

@@ -71,6 +71,34 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
                 .execute();
     }
 
+    @Override
+    public void sendVideo(Uri videoUri, String description) {
+        view.showProgressDialog("Copying File...");
+        new CopyFileTask(context)
+                .from(videoUri)
+                .to(StorageResolver.VIDEO_SENT_PATH)
+                .onCopyingFinished((newFileName, path) -> {
+                    view.dismissProgressDialog();
+                    sendMediaMessage(MediaMessage.Type.VIDEO.code, newFileName, path, description);
+                    view.finish();
+                })
+                .execute();
+    }
+
+    @Override
+    public void sendFile(Uri fileUri, String description) {
+        view.showProgressDialog("Copying File...");
+        new CopyFileTask(context)
+                .from(fileUri)
+                .to(StorageResolver.FILE_SENT_PATH)
+                .onCopyingFinished((newFileName, path) -> {
+                    view.dismissProgressDialog();
+                    sendMediaMessage(MediaMessage.Type.FILE.code, newFileName, path, description);
+                    view.finish();
+                })
+                .execute();
+    }
+
     public void sendMediaMessage(int type, String fileName, String path, String description) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
