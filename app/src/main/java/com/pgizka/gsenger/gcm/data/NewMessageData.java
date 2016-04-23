@@ -1,12 +1,14 @@
 package com.pgizka.gsenger.gcm.data;
 
+import com.pgizka.gsenger.provider.User;
+
 import java.util.List;
 
 public class NewMessageData {
 
     private int messageId;
     private long sendDate;
-    private int senderId;
+    private User sender;
     private long chatId;
     private List<Integer> receiversIds;
 
@@ -29,12 +31,12 @@ public class NewMessageData {
         this.sendDate = sendDate;
     }
 
-    public int getSenderId() {
-        return senderId;
+    public User getSender() {
+        return sender;
     }
 
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
     public long getChatId() {

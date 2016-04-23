@@ -17,11 +17,36 @@ public class User extends RealmObject {
     private String photoPath;
     private String photoHash;
 
+    private String phoneNumber;
+    private boolean isInContacts;
+
     private RealmList<TextMessage> sentTextMessages;
     private RealmList<Receiver> receivers;
     private RealmList<Chat> chats;
 
     public User() {
+    }
+
+    /**
+     * Gson does not support serializing realm objects, so to walk around this issue
+     * we copy User entity to new User entity NOT covered by UserRealmProxy Object.
+     * Maybe Gson Type Adapter would be better idea, but for now this solution is enough.
+     *
+     * @implNote This solution does not work with Lists inside object
+     *
+     * @param user to copy
+     */
+    public User(User user) {
+        this.id = user.getId();
+        this.serverId = user.getServerId();
+        this.userName = user.getUserName();
+        this.addedDate = user.getAddedDate();
+        this.lastLoggedDate = user.getLastLoggedDate();
+        this.status = user.getStatus();
+        this.photoPath = user.getPhotoPath();
+        this.photoHash = user.getPhotoHash();
+        this.phoneNumber = user.getPhoneNumber();
+        this.isInContacts = user.isInContacts();
     }
 
     public int getId() {
@@ -82,6 +107,22 @@ public class User extends RealmObject {
 
     public String getPhotoHash() {
         return photoHash;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isInContacts() {
+        return isInContacts;
+    }
+
+    public void setInContacts(boolean inContacts) {
+        isInContacts = inContacts;
     }
 
     public void setPhotoHash(String photoHash) {

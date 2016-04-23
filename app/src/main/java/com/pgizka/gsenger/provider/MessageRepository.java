@@ -60,10 +60,17 @@ public class MessageRepository {
 
         Realm realm = Realm.getDefaultInstance();
 
-        //TODO handle case when sender will not be in contacts
         User sender = realm.where(User.class)
-                .equalTo("serverId", messageData.getSenderId())
+                .equalTo("serverId", messageData.getSender().getServerId())
                 .findFirst();
+
+        boolean senderExists = sender != null;
+        if (!senderExists) {
+            sender = messageData.getSender();
+            sender.setId(repository.getUserNextId());
+            sender.setInContacts(false);
+            sender = realm.copyToRealm(sender);
+        }
 
         Chat chat = null;
 

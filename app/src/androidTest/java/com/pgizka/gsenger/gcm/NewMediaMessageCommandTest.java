@@ -3,18 +3,16 @@ package com.pgizka.gsenger.gcm;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
-import com.pgizka.gsenger.api.BaseResponse;
+import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
-import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
 import org.junit.Before;
@@ -32,7 +30,6 @@ import io.realm.Realm;
 import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
-import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getApplication;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
@@ -70,7 +67,7 @@ public class NewMediaMessageCommandTest {
     @Test
     public void testReceivingMediaMessage() throws Exception {
         User owner = getOrCreateOwner();
-        User sender = createUser();
+        User sender = TestUtils.createUser();
 
         int messageServerId = 15;
         String data = new Gson().getAdapter(NewMediaMessageData.class).toJson(prepareMediaMessageData(sender, messageServerId));

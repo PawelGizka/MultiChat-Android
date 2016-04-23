@@ -4,20 +4,18 @@ package com.pgizka.gsenger.converstation;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.ResultCode;
-import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.PutMessageResponse;
-import com.pgizka.gsenger.jobqueue.sendMessge.PutTextMessageRequest;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +31,6 @@ import io.realm.Realm;
 import okhttp3.RequestBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
-import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
@@ -71,7 +68,7 @@ public class SendMediaPresenterTest {
     @Test
     public void testSendingMediaMessage_whenChatBetweenUsersNotExist() throws Exception {
         Realm realm = Realm.getDefaultInstance();
-        User user = createUser();
+        User user = TestUtils.createUser();
         User owner = getOrCreateOwner();
 
         int messageServerId = 12;

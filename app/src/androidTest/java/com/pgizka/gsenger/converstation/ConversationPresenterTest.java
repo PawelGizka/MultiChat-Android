@@ -2,17 +2,12 @@ package com.pgizka.gsenger.converstation;
 
 
 import android.support.test.runner.AndroidJUnit4;
-import android.test.AndroidTestCase;
 
-import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
-import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
-import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.dagger2.ApplicationModule;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.PutMessageResponse;
 import com.pgizka.gsenger.jobqueue.sendMessge.PutTextMessageRequest;
@@ -21,6 +16,7 @@ import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +35,7 @@ import static com.pgizka.gsenger.TestUtils.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(AndroidJUnit4.class)
-public class ConversationPresenterTest extends AndroidTestCase {
+public class ConversationPresenterTest  {
 
     @Mock
     ConversationContract.View view;
@@ -88,8 +84,8 @@ public class ConversationPresenterTest extends AndroidTestCase {
                 .equalTo("serverId", messageServerId)
                 .findFirst();
 
-        assertNotNull(message);
-        assertEquals(Message.State.SENT.code, message.getState());
+        Assert.assertNotNull(message);
+        Assert.assertEquals(Message.State.SENT.code, message.getState());
     }
 
     @Test

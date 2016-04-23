@@ -7,8 +7,12 @@ import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.util.StorageResolver;
 
+import io.realm.DynamicRealm;
+import io.realm.FieldAttribute;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
+import io.realm.RealmSchema;
 import okhttp3.OkHttpClient;
 
 public class GSengerApplication extends Application {
@@ -18,7 +22,22 @@ public class GSengerApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build());
+        RealmMigration realmMigration = (realm, oldVersion, newVersion) -> {
+            RealmSchema realmSchema = realm.getSchema();
+
+            if (oldVersion == 0 || oldVersion == 1) {
+                realmSchema.get("User")
+                        .addField("phoneNumber", String.class)
+                        .addField("isInContacts", boolean.class);
+                oldVersion++;
+            }
+
+        };
+
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
+                .schemaVersion(2)
+                .migration(realmMigration)
+                .build());
 
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))

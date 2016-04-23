@@ -7,9 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
 import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.dagger2.ApplicationModule;
-import com.pgizka.gsenger.dagger2.DaggerApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.provider.Chat;
@@ -21,11 +19,9 @@ import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmList;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +39,11 @@ public class TestUtils {
                 .name("test.realm")
                 .deleteRealmIfMigrationNeeded()
                 .build());
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
     }
 
     public static TestApplicationComponent getTestApplicationComponent() {
@@ -77,20 +78,25 @@ public class TestUtils {
     }
 
     public static User createUser() {
-        Repository repository = GSengerApplication.getApplicationComponent().repository();
-
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();
+
+        User user = createNotPersistedUser();
+        realm.beginTransaction();
+        user = realm.copyToRealm(user);
+        realm.commitTransaction();
+
+        return user;
+    }
+
+    public static User createNotPersistedUser() {
+        Repository repository = GSengerApplication.getApplicationComponent().repository();
 
         User user = new User();
         user.setId(repository.getUserNextId());
         user.setServerId(repository.getUserNextId());
         user.setUserName("Pawel");
         user.setStatus("my super status");
-        realm.beginTransaction();
-        user = realm.copyToRealm(user);
-        realm.commitTransaction();
-
         return user;
     }
 
@@ -146,7 +152,8 @@ public class TestUtils {
     }
 
     public static void prepareMessageData(NewMessageData messageData, User sender, int messageServerId) {
-        messageData.setSenderId(sender.getServerId());
+        User user = new User(sender);
+        messageData.setSender(user);
         messageData.setSendDate(System.currentTimeMillis());
         messageData.setMessageId(messageServerId);
         messageData.setChatId(-1);

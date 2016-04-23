@@ -4,22 +4,15 @@ package com.pgizka.gsenger.gcm;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
-import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
-import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
-import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
-
-import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
