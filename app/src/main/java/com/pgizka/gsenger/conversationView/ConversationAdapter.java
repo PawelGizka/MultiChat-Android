@@ -156,7 +156,13 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         if (outgoing) {
             holder.infoText.setText(status + " " + sendDate + " Me:");
         } else {
-            holder.infoText.setText(status + " " + sendDate + sender.getUserName());
+            String userName;
+            if (sender.isInContacts()) {
+                userName = sender.getUserName();
+            } else {
+                userName = sender.getPhoneNumber();
+            }
+            holder.infoText.setText(status + " " + sendDate + userName);
         }
     }
 

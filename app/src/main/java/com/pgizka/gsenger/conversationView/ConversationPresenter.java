@@ -94,7 +94,12 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             setAllMessagesViewed();
         }
 
-        conversationView.displayUsername(friend.getUserName());
+        if (friend.isInContacts()) {
+            conversationView.displayUsername(friend.getUserName());
+        } else {
+            conversationView.displayUsername(friend.getPhoneNumber());
+        }
+
         if (friend.getPhotoHash() != null) {
             conversationView.displayUserImage(friend);
         }

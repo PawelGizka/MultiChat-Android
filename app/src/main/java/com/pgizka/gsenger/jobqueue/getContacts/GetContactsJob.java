@@ -15,12 +15,15 @@ import com.pgizka.gsenger.util.ContactsUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -63,8 +66,7 @@ public class GetContactsJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         Log.i(TAG, "getting contacts");
-        List<String> phoneNumbers = contactsUtil.listAllContactsPhoneNumbers();
-        GetContactsRequest friendsRequest = prepareRequest(phoneNumbers);
+        GetContactsRequest friendsRequest = prepareRequest();
 
         Call<GetContactsResponse> call = userRestService.getContacts(friendsRequest);
         Response<GetContactsResponse> response = call.execute();
@@ -78,9 +80,20 @@ public class GetContactsJob extends BaseJob {
         eventBus.post(new GetContactsFinishedEvent());
     }
 
-    private GetContactsRequest prepareRequest(List<String> phoneNumbers) {
+    private GetContactsRequest prepareRequest() {
+        List<String> phoneNumbers = contactsUtil.listAllContactsPhoneNumbers();
+
+        RealmResults<User> users = realm.where(User.class)
+                .notEqualTo("id", 0) // not include owner
+                .findAll();
+        List<Integer> userIds = new ArrayList<>(users.size());
+        for (User user : users) {
+            userIds.add(user.getServerId());
+        }
+
         GetContactsRequest getContactsRequest = new GetContactsRequest();
         getContactsRequest.setPhoneNumbers(phoneNumbers);
+        getContactsRequest.setUserIds(userIds);
         return getContactsRequest;
     }
 

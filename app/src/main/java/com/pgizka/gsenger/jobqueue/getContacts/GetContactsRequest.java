@@ -4,7 +4,8 @@ import java.util.List;
 
 public class GetContactsRequest {
 
-    List<String> phoneNumbers;
+    private List<String> phoneNumbers;
+    private List<Integer> userIds;
 
     public GetContactsRequest() {
     }
@@ -17,13 +18,11 @@ public class GetContactsRequest {
         this.phoneNumbers = phoneNumbers;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public List<Integer> getUserIds() {
+        return userIds;
+    }
 
-        GetContactsRequest that = (GetContactsRequest) o;
-
-        return that.getPhoneNumbers().containsAll(phoneNumbers);
+    public void setUserIds(List<Integer> userIds) {
+        this.userIds = userIds;
     }
 }

@@ -81,7 +81,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             if (user.getId() == 0) {
                 user = chat.getUsers().last();
             }
-            holder.chatNameTextView.setText(user.getUserName());
+            if (user.isInContacts()) {
+                holder.chatNameTextView.setText(user.getUserName());
+            } else {
+                holder.chatNameTextView.setText(user.getPhoneNumber());
+            }
         } else {
             holder.chatNameTextView.setText(chat.getChatName());
 
