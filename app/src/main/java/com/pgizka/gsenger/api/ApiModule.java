@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
 
-    public static final String BASE_URL = "http://192.168.1.101:8080/GSengerGradle-1.0-SNAPSHOT/webresources/";
+    public static final String BASE_URL = "http://192.168.0.14:8080/GSengerGradle-1.0-SNAPSHOT/webresources/";
 
     @Provides
     @Singleton
@@ -68,6 +68,12 @@ public class ApiModule {
     @Singleton
     public MessageRestService providesMessageRestService(Retrofit retrofit) {
         return retrofit.create(MessageRestService.class);
+    }
+
+    @Provides
+    @Singleton
+    public ChatRestService providesChatRestService(Retrofit retrofit) {
+        return  retrofit.create(ChatRestService.class);
     }
 
     public static String buildUserPhotoPath(User user) {

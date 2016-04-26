@@ -18,7 +18,7 @@ public class User extends RealmObject {
     private String photoHash;
 
     private String phoneNumber;
-    private boolean isInContacts;
+    private boolean inContacts;
 
     private RealmList<TextMessage> sentTextMessages;
     private RealmList<Receiver> receivers;
@@ -46,7 +46,7 @@ public class User extends RealmObject {
         this.photoPath = user.getPhotoPath();
         this.photoHash = user.getPhotoHash();
         this.phoneNumber = user.getPhoneNumber();
-        this.isInContacts = user.isInContacts();
+        this.inContacts = user.isInContacts();
     }
 
     public int getId() {
@@ -118,11 +118,11 @@ public class User extends RealmObject {
     }
 
     public boolean isInContacts() {
-        return isInContacts;
+        return inContacts;
     }
 
     public void setInContacts(boolean inContacts) {
-        isInContacts = inContacts;
+        this.inContacts = inContacts;
     }
 
     public void setPhotoHash(String photoHash) {

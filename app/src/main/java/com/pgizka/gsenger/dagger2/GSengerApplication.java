@@ -32,10 +32,16 @@ public class GSengerApplication extends Application {
                 oldVersion++;
             }
 
+            if (oldVersion == 2 || oldVersion == 3) {
+                realmSchema.get("User")
+                        .removeField("isInContacts")
+                        .addField("inContacts", boolean.class);
+            }
+
         };
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
-                .schemaVersion(2)
+                .schemaVersion(4)
                 .migration(realmMigration)
                 .build());
 

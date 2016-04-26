@@ -55,7 +55,6 @@ public class GetContactsJob extends BaseJob {
     public void inject(ApplicationComponent applicationComponent) {
         super.inject(applicationComponent);
         applicationComponent.inject(this);
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -66,6 +65,7 @@ public class GetContactsJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         Log.i(TAG, "getting contacts");
+        realm = Realm.getDefaultInstance();
         GetContactsRequest friendsRequest = prepareRequest();
 
         Call<GetContactsResponse> call = userRestService.getContacts(friendsRequest);

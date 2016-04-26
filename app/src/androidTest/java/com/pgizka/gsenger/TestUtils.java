@@ -189,7 +189,11 @@ public class TestUtils {
 
         @Override
         public void enqueue(Callback<T> callback) {
-
+            if (mCode > 199 && mCode < 300) {
+                callback.onResponse(this, buildResponse());
+            } else {
+                callback.onFailure(this, new Exception());
+            }
         }
 
         @NonNull

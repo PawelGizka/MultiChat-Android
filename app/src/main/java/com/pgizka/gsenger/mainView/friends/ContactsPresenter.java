@@ -63,7 +63,7 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         //get all users except owner of this phone
         users = realm.where(User.class)
                 .notEqualTo("id", 0) //owner id = 0
-                .equalTo("isInContacts", true) // only show users in contacts
+                .equalTo("inContacts", true) // only show users in contacts
                 .findAll();
     }
 

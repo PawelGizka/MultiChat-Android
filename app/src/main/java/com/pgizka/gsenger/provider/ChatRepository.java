@@ -4,6 +4,8 @@ package com.pgizka.gsenger.provider;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.util.UserAccountManager;
 
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -56,6 +58,31 @@ public class ChatRepository {
         chat.setUsers(new RealmList<>(firstUser, secondUser));
         firstUser.getChats().add(chat);
         secondUser.getChats().add(chat);
+
+        return chat;
+    }
+
+    public Chat createGroupChat(int chatServerId, String chatName, long startedDate, List<User> participants) {
+        Realm realm = Realm.getDefaultInstance();
+
+        Chat chat = new Chat();
+        chat.setId(repository.getChatNextId());
+        chat.setServerId(chatServerId);
+        chat.setChatName(chatName);
+        chat.setStartedDate(startedDate);
+        chat.setType(Chat.Type.GROUP.code);
+
+        RealmList<User> realmList = new RealmList<>();
+        for (User participant : participants) {
+            realmList.add(participant);
+        }
+        realmList.add(userAccountManager.getOwner());
+
+        chat.setUsers(realmList);
+
+        realm.beginTransaction();
+        chat = realm.copyToRealm(chat);
+        realm.commitTransaction();
 
         return chat;
     }

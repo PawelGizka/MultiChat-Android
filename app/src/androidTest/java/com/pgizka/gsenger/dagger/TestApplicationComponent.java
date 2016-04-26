@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.dagger;
 
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.chatsView.CreateChatPresenterTest;
 import com.pgizka.gsenger.converstation.ConversationPresenterTest;
 import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
@@ -26,5 +27,7 @@ public interface TestApplicationComponent extends ApplicationComponent {
     void inject(MessageRepositoryTest messageRepositoryTest);
 
     void inject(NewMediaMessageCommandTest newMediaMessageCommandTest);
+
+    void inject(CreateChatPresenterTest createChatPresenterTest);
 
 }

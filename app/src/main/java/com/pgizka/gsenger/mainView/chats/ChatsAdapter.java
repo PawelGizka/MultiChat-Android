@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.RealmList;
+
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
     private List<Chat> chats;
@@ -65,15 +67,17 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder,final int position) {
         final Chat chat = chats.get(position);
 
-        Message message = chat.getMessages().last();
         User user = chat.getUsers().first();
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onChatClickListener != null) {
-                    onChatClickListener.onChatClicked(chat);
-                }
+        Message message = null;
+        RealmList<Message> messages = chat.getMessages();
+        if (!messages.isEmpty()) {
+            message = messages.last();
+        }
+
+        holder.view.setOnClickListener(v -> {
+            if (onChatClickListener != null) {
+                onChatClickListener.onChatClicked(chat);
             }
         });
 
@@ -91,7 +95,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
         }
 
-        if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
+        if (message == null) {
+            holder.descriptionTextView.setText("No messages");
+        } else if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
             TextMessage textMessage = message.getTextMessage();
             holder.descriptionTextView.setText(textMessage.getText());
         } else {
@@ -106,9 +112,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             }
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        String date = simpleDateFormat.format(new Date(message.getSendDate()));
-        holder.dateTextView.setText(date);
+        if (message != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            String date = simpleDateFormat.format(new Date(message.getSendDate()));
+            holder.dateTextView.setText(date);
+            holder.dateTextView.setVisibility(View.VISIBLE);
+        } else {
+            holder.dateTextView.setVisibility(View.GONE);
+        }
 
         String userPhotoHash = user.getPhotoHash();
         if (userPhotoHash != null) {

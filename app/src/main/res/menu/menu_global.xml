@@ -5,9 +5,18 @@
     <item
         android:id="@+id/user_profile_action"
         android:title="User Profile"
-        android:orderInCategory="100"
         app:showAsAction="never"
         android:showAsAction="never"
 
         />
+
+    <item
+        android:id="@+id/create_group_chat_action"
+        android:title="Create Chat"
+        app:showAsAction="never"
+        android:showAsAction="never"
+
+        />
+
+
 </menu>

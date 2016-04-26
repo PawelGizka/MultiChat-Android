@@ -1,6 +1,8 @@
 package com.pgizka.gsenger.dagger2;
 
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.chatsView.CreateChatFragment;
+import com.pgizka.gsenger.chatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
@@ -77,5 +79,9 @@ public interface ApplicationComponent {
     void inject(SendMediaFragment sendMediaFragment);
 
     void inject(SendMediaPresenter sendMediaPresenter);
+
+    void inject(CreateChatFragment chatFragment);
+
+    void inject(CreateChatPresenter createChatPresenter);
 
 }

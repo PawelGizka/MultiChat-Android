@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.dagger;
 
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.api.ChatRestService;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.UserRestService;
 
@@ -28,6 +29,11 @@ public class TestApiModule extends ApiModule {
     @Override
     public MessageRestService providesMessageRestService(Retrofit retrofit) {
         return mock(MessageRestService.class);
+    }
+
+    @Override
+    public ChatRestService providesChatRestService(Retrofit retrofit) {
+        return mock(ChatRestService.class);
     }
 
 }

@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.pgizka.gsenger.mainView.MainActivity">
+
+    <item
+        android:id="@+id/create_chat_action"
+        android:title="Create"
+        app:showAsAction="always"
+        android:showAsAction="always"
+
+        />
+
+</menu>

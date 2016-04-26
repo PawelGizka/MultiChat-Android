@@ -76,6 +76,8 @@
         </activity>
         <activity android:name=".conversationView.sendMediaView.SendMediaActivity">
         </activity>
+        <activity android:name=".chatsView.CreateChatActivity">
+        </activity>
     </application>
 
 </manifest>

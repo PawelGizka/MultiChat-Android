@@ -8,6 +8,8 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.di.DependencyInjector;
+import com.pgizka.gsenger.chatsView.CreateChatContract;
+import com.pgizka.gsenger.chatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
@@ -138,6 +140,12 @@ public class ApplicationModule {
     @Singleton
     public SendMediaContract.Presenter providesSendMediaPresenter() {
         return new SendMediaPresenter();
+    }
+
+    @Provides
+    @Singleton
+    public CreateChatContract.Presenter providesCreateChatPresenter() {
+        return new CreateChatPresenter();
     }
 
 }

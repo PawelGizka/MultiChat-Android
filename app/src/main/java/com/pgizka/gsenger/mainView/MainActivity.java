@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.chatsView.CreateChatActivity;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
 import com.pgizka.gsenger.provider.Chat;
@@ -111,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.user_profile_action) {
             startActivity(new Intent(this, UserProfileActivity.class));
+            return true;
+        } else if (id == R.id.create_group_chat_action) {
+            startActivity(new Intent(this, CreateChatActivity.class));
             return true;
         }
 
