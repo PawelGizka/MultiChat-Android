@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 
 import com.bumptech.glide.Glide;
+import com.facebook.FacebookSdk;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.util.StorageResolver;
 
@@ -54,6 +55,7 @@ public class GSengerApplication extends Application {
         StorageResolver storageResolver = applicationComponent.storageResolver();
         storageResolver.makeAllDirs();
 
+        FacebookSdk.sdkInitialize(this);
     }
 
     public static ApplicationComponent getApplicationComponent() {

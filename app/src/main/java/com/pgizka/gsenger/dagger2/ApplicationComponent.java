@@ -24,6 +24,7 @@ import com.pgizka.gsenger.userStatusView.UserProfileFragment;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.StorageResolver;
 import com.pgizka.gsenger.util.UserAccountManager;
+import com.pgizka.gsenger.welcome.registration.RegistrationFragment;
 import com.pgizka.gsenger.welcome.registration.RegistrationTask;
 
 import javax.inject.Singleton;
@@ -41,6 +42,8 @@ public interface ApplicationComponent {
     ChatRepository chatRepository();
 
     StorageResolver storageResolver();
+
+    void inject(RegistrationFragment registrationFragment);
 
     void inject(MyGlideModule myGlideModule);
 

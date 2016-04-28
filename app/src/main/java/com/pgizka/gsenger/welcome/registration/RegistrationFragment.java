@@ -19,10 +19,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
@@ -33,6 +41,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegistrationFragment extends Fragment implements WelcomeActivity.WelcomeActivityContent {
     static final String TAG = RegistrationFragment.class.getSimpleName();
 
@@ -41,15 +60,22 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     private EditText passwordEditText;
     private EditText phoneNumberEditText;
     private Button loginButton;
+    private LoginButton facbookLoginButton;
 
     private ProgressDialog progressDialog;
 
     private UserAccountManager userAccountManager;
 
+    private CallbackManager callbackManager;
+
+    @Inject
+    UserRestService userRestService;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        GSengerApplication.getApplicationComponent().inject(this);
         userAccountManager = new UserAccountManager(getActivity());
     }
 
@@ -70,6 +96,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         passwordEditText = (EditText) view.findViewById(R.id.registration_password);
         phoneNumberEditText = (EditText) view.findViewById(R.id.registration_phone_number);
         loginButton = (Button) view.findViewById(R.id.registration_sign_in_button);
+        facbookLoginButton = (LoginButton) view.findViewById(R.id.facbook_login_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +105,54 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
             }
         });
 
+        facbookLoginButton.setFragment(this);
+        List<String> permissions = new ArrayList<>();
+        permissions.add("user_friends");
+        permissions.add("email");
+        permissions.add("public_profile");
+        facbookLoginButton.setReadPermissions(permissions);
+        callbackManager = CallbackManager.Factory.create();
+        facbookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.i(TAG, "On facebook success");
+                AccessToken accessToken = loginResult.getAccessToken();
+
+                userRestService.setToken(accessToken.getToken()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            Log.i(TAG, response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "On facebook cancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.i(TAG, "On facebook error", error);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

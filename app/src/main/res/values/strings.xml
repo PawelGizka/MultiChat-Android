@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GSenger</string>
     <string name="google_app_id">1048796346746</string>
+    <string name="facebook_app_id">1705691849698511</string>
 
     <!-- Titles of activities and fragments -->
     <string name="title_activity_welcome">Sign in</string>
