@@ -97,7 +97,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         if (friend.isInContacts()) {
             conversationView.displayUsername(friend.getUserName());
         } else {
-            conversationView.displayUsername(friend.getPhoneNumber());
+            conversationView.displayUsername(String.valueOf(friend.getPhoneNumber()));
         }
 
         if (friend.getPhotoHash() != null) {

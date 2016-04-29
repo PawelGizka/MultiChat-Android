@@ -38,10 +38,16 @@ public class GSengerApplication extends Application {
                         .addField("inContacts", boolean.class);
             }
 
+            if (oldVersion == 4) {
+                realmSchema.get("User")
+                        .removeField("phoneNumber")
+                        .addField("phoneNumber", int.class);
+            }
+
         };
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
-                .schemaVersion(4)
+                .schemaVersion(5)
                 .migration(realmMigration)
                 .build());
 

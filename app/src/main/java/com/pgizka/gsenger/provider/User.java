@@ -17,7 +17,7 @@ public class User extends RealmObject {
     private String photoPath;
     private String photoHash;
 
-    private String phoneNumber;
+    private int phoneNumber;
     private boolean inContacts;
 
     private RealmList<TextMessage> sentTextMessages;
@@ -109,11 +109,11 @@ public class User extends RealmObject {
         return photoHash;
     }
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
