@@ -47,12 +47,14 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     @Override
     public void onSaveChanges(Uri userPhoto, String userName, String status) {
         Realm realm = Realm.getDefaultInstance();
+        boolean changesSaved = false;
         if (userPhoto != null) {
             String photoPath = userAccountManager.saveOwnerImage(userPhoto);
             realm.beginTransaction();
             owner.setPhotoPath(photoPath);
             realm.commitTransaction();
             jobManager.addJob(new UpdateUserPhotoJob());
+            changesSaved = true;
         }
 
         if (!userName.equals(owner.getUserName()) || !status.equals(owner.getStatus())) {
@@ -61,6 +63,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
             owner.setStatus(status);
             realm.commitTransaction();
             jobManager.addJob(new UpdateUserStatusJob());
+            changesSaved = true;
+        }
+
+        if (changesSaved) {
+            view.displayMessage("Changes were saved.");
         }
 
     }

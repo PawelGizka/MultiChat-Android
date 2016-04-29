@@ -65,12 +65,13 @@ public class ImagePickerUtil {
         return list;
     }
 
-    public Intent getCropImageIntent(Intent imageReturnedIntent) {
+    public Intent getCropImageIntent(Intent imageReturnedIntent, Context context) {
         Uri uri = imageReturnedIntent.getData();
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(uri, "image/*");
         cropIntent.putExtra("crop", "true");
         cropIntent.putExtra("return-data", true);
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
         cropIntent.putExtra("aspectX", 1);
         cropIntent.putExtra("aspectY", 1);
         cropIntent.putExtra("scale", "true");

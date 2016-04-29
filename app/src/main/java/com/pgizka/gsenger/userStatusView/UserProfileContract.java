@@ -14,6 +14,8 @@ public interface UserProfileContract {
         void setStatus(String status);
 
         void setUserPhotoPath(File userPhoto);
+
+        void displayMessage(String message);
     }
 
     interface Presenter {
