@@ -18,10 +18,13 @@ public class MessageRepository {
 
     private Repository repository;
     private ChatRepository chatRepository;
+    private UserRepository userRepository;
     private UserAccountManager userAccountManager;
 
-    public MessageRepository(Repository repository, ChatRepository chatRepository, UserAccountManager userAccountManager) {
+    public MessageRepository(Repository repository, ChatRepository chatRepository,
+                             UserRepository userRepository, UserAccountManager userAccountManager) {
         this.repository = repository;
+        this.userRepository = userRepository;
         this.userAccountManager = userAccountManager;
         this.chatRepository = chatRepository;
     }
@@ -60,17 +63,7 @@ public class MessageRepository {
 
         Realm realm = Realm.getDefaultInstance();
 
-        User sender = realm.where(User.class)
-                .equalTo("serverId", messageData.getSender().getServerId())
-                .findFirst();
-
-        boolean senderExists = sender != null;
-        if (!senderExists) {
-            sender = messageData.getSender();
-            sender.setId(repository.getUserNextId());
-            sender.setInContacts(false);
-            sender = realm.copyToRealm(sender);
-        }
+        User sender = userRepository.getOrCreateLocalUser(messageData.getSender());
 
         Chat chat = null;
 

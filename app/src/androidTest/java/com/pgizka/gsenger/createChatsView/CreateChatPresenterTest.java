@@ -1,9 +1,8 @@
-package com.pgizka.gsenger.chatsView;
+package com.pgizka.gsenger.createChatsView;
 
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.ChatRestService;
-import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.chats.PutChatRequest;

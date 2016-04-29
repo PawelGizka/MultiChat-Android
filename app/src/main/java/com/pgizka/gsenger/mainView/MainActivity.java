@@ -14,18 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.chatsView.CreateChatActivity;
+import com.pgizka.gsenger.createChatsView.CreateChatActivity;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
-import com.pgizka.gsenger.provider.Chat;
-import com.pgizka.gsenger.provider.User;
-import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.Receiver;
-import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.userStatusView.UserProfileActivity;
-
-import io.realm.Realm;
-import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity {
 

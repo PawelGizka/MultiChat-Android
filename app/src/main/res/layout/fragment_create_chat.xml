@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pgizka.gsenger.chatsView.CreateChatFragment">
+    tools:context="com.pgizka.gsenger.createChatsView.CreateChatFragment">
 
     <EditText
         android:id="@+id/create_chat_chat_name_edit_text"

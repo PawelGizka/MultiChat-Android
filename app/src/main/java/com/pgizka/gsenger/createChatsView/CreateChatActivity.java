@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.chatsView;
+package com.pgizka.gsenger.createChatsView;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

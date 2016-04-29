@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.chatsView;
+package com.pgizka.gsenger.createChatsView;
 
 
 import android.text.TextUtils;
@@ -7,16 +7,15 @@ import com.pgizka.gsenger.api.ChatRestService;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.chats.PutChatRequest;
 import com.pgizka.gsenger.jobqueue.chats.PutChatResponse;
-import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.User;
+import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +28,9 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
 
     @Inject
     ChatRepository chatRepository;
+
+    @Inject
+    UserAccountManager userAccountManager;
 
     private CreateChatContract.View view;
 
@@ -65,6 +67,8 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
 
         view.showProgressDialog();
 
+        participants.add(userAccountManager.getOwner());
+
         PutChatRequest putChatRequest = new PutChatRequest(chatName, participants);
         Call<PutChatResponse> call = chatRestService.createChat(putChatRequest);
         call.enqueue(new Callback<PutChatResponse>() {
@@ -73,7 +77,11 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
                 view.dismissProgressDialog();
                 if (response.isSuccess()) {
                     PutChatResponse putChatResponse = response.body();
-                    chatRepository.createGroupChat(putChatResponse.getChatId(), chatName, putChatRequest.getStartedDate(), participants);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.refresh();
+                    realm.beginTransaction();
+                    chatRepository.createGroupChat(putChatRequest, putChatResponse, participants);
+                    realm.commitTransaction();
                     view.closeWindow();
                 } else {
                     view.displayErrorMessage("Cannot create Chat, problem with connection.");

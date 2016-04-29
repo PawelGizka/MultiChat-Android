@@ -1,15 +1,11 @@
 package com.pgizka.gsenger.dagger2;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.di.DependencyInjector;
-import com.pgizka.gsenger.chatsView.CreateChatContract;
-import com.pgizka.gsenger.chatsView.CreateChatPresenter;
+import com.pgizka.gsenger.createChatsView.CreateChatContract;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
@@ -22,6 +18,7 @@ import com.pgizka.gsenger.mainView.friends.ContactsPresenter;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Repository;
+import com.pgizka.gsenger.provider.UserRepository;
 import com.pgizka.gsenger.userStatusView.UserProfileContract;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
@@ -35,7 +32,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.RealmObject;
 
 @Module
 public class ApplicationModule {
@@ -59,14 +55,22 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public MessageRepository providesMessageRepository(Repository repository, ChatRepository chatRepository, UserAccountManager userAccountManager) {
-        return new MessageRepository(repository, chatRepository, userAccountManager);
+    public UserRepository providesUserRepository(Repository repository, UserAccountManager userAccountManager) {
+        return new UserRepository(repository, userAccountManager);
     }
 
     @Provides
     @Singleton
-    public ChatRepository providesChatRepository(Repository repository, UserAccountManager userAccountManager) {
-        return new ChatRepository(repository, userAccountManager);
+    public MessageRepository providesMessageRepository(Repository repository, ChatRepository chatRepository,
+                                                       UserRepository userRepository, UserAccountManager userAccountManager) {
+        return new MessageRepository(repository, chatRepository, userRepository, userAccountManager);
+    }
+
+    @Provides
+    @Singleton
+    public ChatRepository providesChatRepository(Repository repository, UserRepository userRepository,
+                                                 UserAccountManager userAccountManager) {
+        return new ChatRepository(repository, userRepository, userAccountManager);
     }
 
     @Provides

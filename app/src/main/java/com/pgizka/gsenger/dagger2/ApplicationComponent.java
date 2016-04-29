@@ -1,12 +1,13 @@
 package com.pgizka.gsenger.dagger2;
 
 import com.pgizka.gsenger.api.ApiModule;
-import com.pgizka.gsenger.chatsView.CreateChatFragment;
-import com.pgizka.gsenger.chatsView.CreateChatPresenter;
+import com.pgizka.gsenger.createChatsView.CreateChatFragment;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
+import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
@@ -61,6 +62,8 @@ public interface ApplicationComponent {
     void inject(NewTextMessageCommand newTextMessageCommand);
 
     void inject(NewMediaMessageCommand newMediaMessageCommand);
+
+    void inject(NewGroupChatCommand newGroupChatCommand);
 
     void inject(ContactsPresenter contactsPresenter);
 
