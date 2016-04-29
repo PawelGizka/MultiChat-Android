@@ -1,7 +1,11 @@
 package com.pgizka.gsenger.mainView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,6 +22,9 @@ import com.pgizka.gsenger.createChatsView.CreateChatActivity;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
 import com.pgizka.gsenger.mainView.friends.ContactsFragment;
 import com.pgizka.gsenger.userStatusView.UserProfileActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        showRequestPermissionsDialogsIfNecessary();
     }
 
     /**
@@ -112,4 +121,28 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void showRequestPermissionsDialogsIfNecessary() {
+
+        String[] permissions = new String[]{
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        List<String> neededPermissions = new ArrayList<>();
+
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                neededPermissions.add(permission);
+            }
+        }
+
+        if (neededPermissions.size() > 0) {
+            String[] neededPermissionArray = new String[neededPermissions.size()];
+            neededPermissions.toArray(neededPermissionArray);
+
+            ActivityCompat.requestPermissions(this, neededPermissionArray, 0);
+        }
+    }
+
 }
