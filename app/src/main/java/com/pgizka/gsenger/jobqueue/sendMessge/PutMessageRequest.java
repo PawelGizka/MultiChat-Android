@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.jobqueue.sendMessge;
 
 
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 
 public abstract class PutMessageRequest {
@@ -16,7 +17,15 @@ public abstract class PutMessageRequest {
     public PutMessageRequest(Message message) {
         this.sendDate = message.getSendDate();
         this.senderId = message.getSender().getServerId();
-        this.receiverId = message.getReceivers().get(0).getUser().getServerId();
+
+        Chat chat = message.getChat();
+        if (chat.getType() == Chat.Type.GROUP.code) {
+            this.chatId = chat.getServerId();
+            this.receiverId = -1;
+        } else {
+            this.receiverId = message.getReceivers().get(0).getUser().getServerId();
+            this.chatId = -1;
+        }
     }
 
     public long getSendDate() {

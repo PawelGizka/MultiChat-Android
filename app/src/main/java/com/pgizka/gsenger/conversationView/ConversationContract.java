@@ -17,9 +17,9 @@ public interface ConversationContract {
 
         void displayErrorMessage(String message);
 
-        void displayUserImage(User user);
+        void displayChatImage(User user);
 
-        void displayUsername(String userName);
+        void displayChatName(String userName);
 
         void setPresenter(ConversationContract.Presenter presenter);
 

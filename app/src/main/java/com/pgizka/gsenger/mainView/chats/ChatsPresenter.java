@@ -40,8 +40,12 @@ public class ChatsPresenter implements ChatsContract.Presenter {
     @Override
     public void chatClicked(Chat chat) {
         Intent intent = new Intent(activity, ConversationActivity.class);
-        intent.putExtra(ConversationActivity.CHAT_ID_ARGUMENT, chat.getId());
-        intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, chat.getUsers().last().getId());
+        if (chat.getType() == Chat.Type.GROUP.code) {
+            intent.putExtra(ConversationActivity.CHAT_ID_ARGUMENT, chat.getId());
+        } else {
+            //FIXME possible errors when owner id is get
+            intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, chat.getUsers().last().getId());
+        }
         activity.startActivity(intent);
     }
 
