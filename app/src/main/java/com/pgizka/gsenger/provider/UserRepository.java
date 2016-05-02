@@ -8,11 +8,9 @@ import io.realm.Realm;
 public class UserRepository {
 
     private Repository repository;
-    private UserAccountManager userAccountManager;
 
-    public UserRepository(Repository repository, UserAccountManager userAccountManager) {
+    public UserRepository(Repository repository) {
         this.repository = repository;
-        this.userAccountManager = userAccountManager;
     }
 
     public User getOrCreateLocalUser(User userFromServer) {

@@ -64,7 +64,7 @@ public class ConversationPresenterTest  {
         User owner = getOrCreateOwner();
 
         int messageServerId = 12;
-        PutMessageResponse putMessageResponse = new PutMessageResponse(ResultCode.OK, messageServerId);
+        PutMessageResponse putMessageResponse = new PutMessageResponse(messageServerId);
 
         int chatId = -1;
         conversationPresenter.onCreate(view, user.getId(), chatId);

@@ -77,14 +77,16 @@ public class ChatRepository {
         chat.setStartedDate(request.getStartedDate());
         chat.setType(Chat.Type.GROUP.code);
 
+        chat = realm.copyToRealm(chat);
+
         RealmList<User> realmList = new RealmList<>();
         for (User participant : participants) {
             realmList.add(participant);
+            participant.getChats().add(chat);
         }
 
         chat.setUsers(realmList);
 
-        chat = realm.copyToRealm(chat);
 
         return chat;
     }
@@ -108,14 +110,16 @@ public class ChatRepository {
         chat.setChatName(newChatData.getName());
         chat.setStartedDate(newChatData.getStartedDate());
 
+        chat = realm.copyToRealm(chat);
+
         RealmList<User> participants = new RealmList<>();
         for (User participant : newChatData.getParticipants()) {
             User localParticipant = userRepository.getOrCreateLocalUser(participant);
             participants.add(localParticipant);
+            localParticipant.getChats().add(chat);
         }
         chat.setUsers(participants);
 
-        chat = realm.copyToRealm(chat);
 
         return chat;
     }

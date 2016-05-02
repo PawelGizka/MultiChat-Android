@@ -35,7 +35,9 @@ public class MessageRepository {
         message.setState(Message.State.WAITING_TO_SEND.code);
         message = realm.copyToRealm(message);
 
-        message.setSender(userAccountManager.getOwner());
+        User owner = userAccountManager.getOwner();
+        message.setSender(owner);
+        owner.getSentMessages().add(message);
         message.setChat(chat);
         chat.getMessages().add(message);
 
@@ -51,6 +53,7 @@ public class MessageRepository {
             receiver = realm.copyToRealm(receiver);
             receiver.setMessage(message);
             receiver.setUser(participant);
+            participant.getReceivers().add(receiver);
 
             receivers.add(receiver);
         }
@@ -83,7 +86,6 @@ public class MessageRepository {
         }
 
         Message message = createIncomingMessageWithReceivers(messageData, sender, chat);
-        chat.getMessages().add(message);
         return message;
     }
 
@@ -98,28 +100,29 @@ public class MessageRepository {
         message = realm.copyToRealm(message);
 
         message.setSender(sender);
+        sender.getSentMessages().add(message);
         message.setChat(chat);
-
-        Receiver receiver = new Receiver();
-        receiver.setDelivered(System.currentTimeMillis());
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(userAccountManager.getOwner());
-        message.getReceivers().add(receiver);
+        chat.getMessages().add(message);
 
         List<User> participants = chat.getUsers();
         for (User participant : participants) {
-            if (participant.getId() == sender.getId() ||
-                    participant.getId() == 0) {
+            if (participant.getId() == sender.getId()) {
                 continue;
             }
-            receiver = new Receiver();
-            receiver = realm.copyToRealm(receiver);
-            receiver.setMessage(message);
-            receiver.setUser(participant);
-            message.getReceivers().add(receiver);
-        }
+            Receiver receiver = new Receiver();
 
+            boolean isOwner = participant.getId() == 0;
+            if (isOwner) {
+                receiver.setDelivered(System.currentTimeMillis());
+            }
+
+            receiver = realm.copyToRealm(receiver);
+
+            receiver.setMessage(message);
+            message.getReceivers().add(receiver);
+            receiver.setUser(participant);
+            participant.getReceivers().add(receiver);
+        }
 
         return message;
     }

@@ -19,9 +19,11 @@ import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
 import java.io.IOException;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +43,9 @@ public class TestUtils {
                 .build());
 
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
+        if (!realm.isInTransaction()) {
+            realm.beginTransaction();
+        }
         realm.deleteAll();
         realm.commitTransaction();
     }
@@ -143,6 +147,43 @@ public class TestUtils {
 
         realm.commitTransaction();
         return message;
+    }
+
+    public static Chat createGroupChat(List<User> participants) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+
+        Chat chat = new Chat();
+        chat.setId(0);
+        chat.setServerId(1);
+        chat.setChatName("Sample chat name");
+        chat.setStartedDate(System.currentTimeMillis());
+        chat.setType(Chat.Type.GROUP.code);
+
+        chat = realm.copyToRealm(chat);
+
+        RealmList<User> realmList = new RealmList<>();
+        for (User participant : participants) {
+            realmList.add(participant);
+            participant.getChats().add(chat);
+        }
+
+        chat.setUsers(realmList);
+        realm.commitTransaction();
+
+        return chat;
+    }
+
+    public static NewMessageData prepareMessageData(Chat chat, User sender, int messageServerId) {
+        NewMessageData messageData = new NewMessageData();
+
+        User user = new User(sender);
+        messageData.setSender(user);
+        messageData.setSendDate(System.currentTimeMillis());
+        messageData.setMessageId(messageServerId);
+        messageData.setChatId(chat.getServerId());
+
+        return messageData;
     }
 
     public static NewMessageData prepareMessageData(User sender, int messageServerId) {

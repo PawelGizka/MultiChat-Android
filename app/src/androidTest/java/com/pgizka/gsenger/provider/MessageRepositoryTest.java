@@ -14,6 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -67,7 +70,7 @@ public class MessageRepositoryTest {
     }
 
     @Test
-    public void testReceivingTextMessage_whenUsersExistsAndChatNotExist() throws Exception {
+    public void testReceivingMessage_whenUsersExistsAndChatNotExist() throws Exception {
         User owner = getOrCreateOwner();
         User sender = createUser();
 
@@ -85,7 +88,7 @@ public class MessageRepositoryTest {
     }
 
     @Test
-    public void testReceivingTextMessage_whenSenderNotExists() throws Exception {
+    public void testReceivingMessage_whenSenderNotExists() throws Exception {
         User owner = getOrCreateOwner();
         User sender = createNotPersistedUser();
 
@@ -104,6 +107,33 @@ public class MessageRepositoryTest {
                 .equalTo("serverId", sender.getServerId())
                 .findFirst();
         assertNotNull(persistedSender);
+    }
+
+    @Test
+    public void testReceivingMessage_inGroupChat() throws Exception {
+        User owner = getOrCreateOwner();
+        User user1 = createUser();
+        User user2 = createUser();
+
+        List<User> participants = new ArrayList<>();
+        participants.add(owner);
+        participants.add(user1);
+        participants.add(user2);
+
+        Chat chat = createGroupChat(participants);
+
+        int messageServerId = 15;
+
+        String data = new Gson().getAdapter(NewMessageData.class).toJson(prepareMessageData(chat, user1, messageServerId));
+
+        realm.refresh();
+        realm.beginTransaction();
+
+        messageRepository.handleIncomingMessage(data);
+
+        realm.commitTransaction();
+
+        verifyNewMessageHandledCorrectly(messageServerId);
     }
 
     private void verifyNewMessageHandledCorrectly(int messageServerId) throws Exception {

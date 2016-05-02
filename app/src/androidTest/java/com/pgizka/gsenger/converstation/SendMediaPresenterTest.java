@@ -71,10 +71,11 @@ public class SendMediaPresenterTest {
         User owner = getOrCreateOwner();
 
         int messageServerId = 12;
-        PutMessageResponse putMessageResponse = new PutMessageResponse(ResultCode.OK, messageServerId);
+        PutMessageResponse putMessageResponse = new PutMessageResponse(messageServerId);
 
         int chatId = -1;
         sendMediaPresenter.onCreate(view, context, user.getId(), chatId);
+        sendMediaPresenter.onResume();
 
         when(messageRestService.sendMediaMessage(Matchers.<RequestBody>any(), Matchers.<RequestBody>any()))
                 .thenReturn(createCall(putMessageResponse));

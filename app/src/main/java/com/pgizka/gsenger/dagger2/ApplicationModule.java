@@ -55,8 +55,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public UserRepository providesUserRepository(Repository repository, UserAccountManager userAccountManager) {
-        return new UserRepository(repository, userAccountManager);
+    public UserRepository providesUserRepository(Repository repository) {
+        return new UserRepository(repository);
     }
 
     @Provides
@@ -80,12 +80,9 @@ public class ApplicationModule {
                 .consumerKeepAlive(45)
                 .maxConsumerCount(3)
                 .minConsumerCount(1)
-                .injector(new DependencyInjector() {
-                    @Override
-                    public void inject(Job job) {
-                        if (job instanceof BaseJob) {
-                            ((BaseJob) job).inject(application.getApplicationComponent());
-                        }
+                .injector(job -> {
+                    if (job instanceof BaseJob) {
+                        ((BaseJob) job).inject(application.getApplicationComponent());
                     }
                 })
                 .build();
