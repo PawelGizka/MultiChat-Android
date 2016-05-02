@@ -56,8 +56,6 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     static final String TAG = RegistrationFragment.class.getSimpleName();
 
     private EditText userNameEditText;
-    private EditText emailEditText;
-    private EditText passwordEditText;
     private EditText phoneNumberEditText;
     private Button loginButton;
     private LoginButton facbookLoginButton;
@@ -92,8 +90,6 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
 
         userNameEditText = (EditText) view.findViewById(R.id.registration_user_name);
-        emailEditText = (EditText) view.findViewById(R.id.registration_email);
-        passwordEditText = (EditText) view.findViewById(R.id.registration_password);
         phoneNumberEditText = (EditText) view.findViewById(R.id.registration_phone_number);
         loginButton = (Button) view.findViewById(R.id.registration_sign_in_button);
         facbookLoginButton = (LoginButton) view.findViewById(R.id.facbook_login_button);
@@ -101,7 +97,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLoginButtonClicked();
+                onLoginButtonClicked(null);
             }
         });
 
@@ -112,27 +108,13 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         permissions.add("public_profile");
         facbookLoginButton.setReadPermissions(permissions);
         callbackManager = CallbackManager.Factory.create();
+
         facbookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.i(TAG, "On facebook success");
                 AccessToken accessToken = loginResult.getAccessToken();
-
-                userRestService.setToken(accessToken.getToken()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Log.i(TAG, response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });
+                onLoginButtonClicked(accessToken.getToken());
             }
 
             @Override
@@ -163,10 +145,8 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         return !userAccountManager.isUserRegistered();
     }
 
-    private void onLoginButtonClicked() {
+    private void onLoginButtonClicked(String facebookToken) {
         String userName = userNameEditText.getText().toString();
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
         String token = GCMUTil.getRegistrationToken(getContext());
         long parsedPhoneNumber = 0;
@@ -180,10 +160,11 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
         UserRegistrationRequest request = new UserRegistrationRequest();
         request.setUserName(userName);
-        request.setEmail(email);
-        request.setPassword(password);
         request.setPhoneNumber((int) parsedPhoneNumber);
         request.setGcmToken(token);
+        if (facebookToken != null) {
+            request.setFacebookToken(facebookToken);
+        }
 
         new RegistrationTask(request).execute();
 
