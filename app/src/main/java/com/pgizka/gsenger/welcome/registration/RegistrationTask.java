@@ -1,14 +1,13 @@
 package com.pgizka.gsenger.welcome.registration;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.util.UserAccountManager;
+import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse.ResultCode;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,6 +17,8 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static com.pgizka.gsenger.welcome.registration.UserRegistrationResponse.ResultCode.*;
 
 public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     static final String TAG = RegistrationTask.class.getSimpleName();
@@ -66,13 +67,13 @@ public class RegistrationTask extends AsyncTask<Void, Void, Void> {
             registrationEvent.setMessage(R.string.connection_failed);
         } else {
             int resultCode = responseDTO.getResultCode();
-            if (resultCode == ResultCode.OK.code) {
+            if (resultCode == OK.code) {
                 registrationEvent.setSuccess(true);
                 userAccountManager.setUserRegistered(registrationRequest, responseDTO);
-            } else if (resultCode == ResultCode.USER_ALREADY_EXIST.code) {
+            } else if (resultCode == USER_ALREADY_EXIST.code) {
                 registrationEvent.setSuccess(false);
                 registrationEvent.setMessage(R.string.registration_error_user_already_exist);
-            } else if(resultCode == ResultCode.UNEXPECTED_ERROR.code) {
+            } else if(resultCode == UNEXPECTED_ERROR.code) {
                 registrationEvent.setSuccess(false);
                 registrationEvent.setMessage(R.string.connection_unexpected_error);
             }

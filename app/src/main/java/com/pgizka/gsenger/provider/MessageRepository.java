@@ -2,14 +2,11 @@ package com.pgizka.gsenger.provider;
 
 
 import com.google.gson.Gson;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
-import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.io.IOException;
-
-import javax.inject.Inject;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -18,15 +15,18 @@ public class MessageRepository {
 
     private Repository repository;
     private ChatRepository chatRepository;
+    private UserRepository userRepository;
     private UserAccountManager userAccountManager;
 
-    public MessageRepository(Repository repository, ChatRepository chatRepository, UserAccountManager userAccountManager) {
+    public MessageRepository(Repository repository, ChatRepository chatRepository,
+                             UserRepository userRepository, UserAccountManager userAccountManager) {
         this.repository = repository;
+        this.userRepository = userRepository;
         this.userAccountManager = userAccountManager;
         this.chatRepository = chatRepository;
     }
 
-    public Message createOutgoingMessageWithReceiver(Chat chat, User friend) {
+    public Message createOutgoingMessageWithReceivers(Chat chat) {
         Realm realm = Realm.getDefaultInstance();
 
         Message message = new Message();
@@ -35,21 +35,36 @@ public class MessageRepository {
         message.setState(Message.State.WAITING_TO_SEND.code);
         message = realm.copyToRealm(message);
 
-        message.setSender(userAccountManager.getOwner());
+        User owner = userAccountManager.getOwner();
+        message.setSender(owner);
+        owner.getSentMessages().add(message);
         message.setChat(chat);
         chat.getMessages().add(message);
 
-        Receiver receiver = new Receiver();
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(friend);
+        List<User> participants = chat.getUsers();
+        RealmList<Receiver> receivers = new RealmList<>();
+        for (User participant : participants) {
+            boolean isOwner = participant.getId() == 0;
+            if (isOwner) {
+                continue;
+            }
 
-        message.setReceivers(new RealmList<>(receiver));
+            Receiver receiver = new Receiver();
+            receiver = realm.copyToRealm(receiver);
+            receiver.setMessage(message);
+            receiver.setUser(participant);
+            participant.getReceivers().add(receiver);
+
+            receivers.add(receiver);
+        }
+
+        message.setReceivers(receivers);
 
         return message;
     }
 
     public Message handleIncomingMessage(String extraData) {
+        Realm realm = Realm.getDefaultInstance();
         NewMessageData messageData;
         try {
             messageData = new Gson().getAdapter(NewMessageData.class).fromJson(extraData);
@@ -58,35 +73,23 @@ public class MessageRepository {
             return null;
         }
 
-        Realm realm = Realm.getDefaultInstance();
+        User sender = userRepository.getOrCreateLocalUser(messageData.getSender());
 
-        User sender = realm.where(User.class)
-                .equalTo("serverId", messageData.getSender().getServerId())
-                .findFirst();
-
-        boolean senderExists = sender != null;
-        if (!senderExists) {
-            sender = messageData.getSender();
-            sender.setId(repository.getUserNextId());
-            sender.setInContacts(false);
-            sender = realm.copyToRealm(sender);
-        }
-
-        Chat chat = null;
-
+        Chat chat;
         boolean singleConversation = messageData.getChatId() == -1;
         if (singleConversation) {
             chat = chatRepository.getOrCreateSingleConversationChatWith(sender);
         } else {
-            //TODO handle group conversation
+            chat = realm.where(Chat.class)
+                    .equalTo("serverId", messageData.getChatId())
+                    .findFirst();
         }
 
-        Message message = createIncomingMessageWithReceiver(messageData, sender, chat);
-        chat.getMessages().add(message);
+        Message message = createIncomingMessageWithReceivers(messageData, sender, chat);
         return message;
     }
 
-    public Message createIncomingMessageWithReceiver(NewMessageData messageData, User sender, Chat chat) {
+    public Message createIncomingMessageWithReceivers(NewMessageData messageData, User sender, Chat chat) {
         Realm realm = Realm.getDefaultInstance();
 
         Message message = new Message();
@@ -97,14 +100,29 @@ public class MessageRepository {
         message = realm.copyToRealm(message);
 
         message.setSender(sender);
+        sender.getSentMessages().add(message);
         message.setChat(chat);
+        chat.getMessages().add(message);
 
-        Receiver receiver = new Receiver();
-        receiver.setDelivered(System.currentTimeMillis());
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(userAccountManager.getOwner());
-        message.getReceivers().add(receiver);
+        List<User> participants = chat.getUsers();
+        for (User participant : participants) {
+            if (participant.getId() == sender.getId()) {
+                continue;
+            }
+            Receiver receiver = new Receiver();
+
+            boolean isOwner = participant.getId() == 0;
+            if (isOwner) {
+                receiver.setDelivered(System.currentTimeMillis());
+            }
+
+            receiver = realm.copyToRealm(receiver);
+
+            receiver.setMessage(message);
+            message.getReceivers().add(receiver);
+            receiver.setUser(participant);
+            participant.getReceivers().add(receiver);
+        }
 
         return message;
     }

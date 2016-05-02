@@ -40,6 +40,8 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private User owner;
     private Chat chat;
 
+    private boolean groupChat;
+
     private RealmResults<Message> messages;
     private boolean paused;
 
@@ -48,9 +50,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
     @Inject
     UserAccountManager userAccountManager;
-
-    @Inject
-    Repository repository;
 
     @Inject
     MessageRepository messageRepository;
@@ -63,6 +62,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         GSengerApplication.getApplicationComponent().inject(this);
         conversationView = view;
         realm = Realm.getDefaultInstance();
+        groupChat = friendId == -1;
         this.friendId = friendId;
         this.chatId = chatId;
     }
@@ -71,11 +71,18 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     public void onResume() {
         paused = false;
         owner = userAccountManager.getOwner();
-        friend = realm.where(User.class)
-                .equalTo("id", friendId)
-                .findFirst();
 
-        chat = chatRepository.getSingleConversationChatWith(friend);
+        if (groupChat) {
+            chat = realm.where(Chat.class)
+                    .equalTo("id", chatId)
+                    .findFirst();
+        } else {
+            friend = realm.where(User.class)
+                    .equalTo("id", friendId)
+                    .findFirst();
+
+            chat = chatRepository.getSingleConversationChatWith(friend);
+        }
 
         if (chat != null) {
             getMessages();
@@ -94,14 +101,18 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             setAllMessagesViewed();
         }
 
-        if (friend.isInContacts()) {
-            conversationView.displayUsername(friend.getUserName());
+        if (groupChat) {
+            conversationView.displayChatName(chat.getChatName());
         } else {
-            conversationView.displayUsername(friend.getPhoneNumber());
-        }
+            if (friend.isInContacts()) {
+                conversationView.displayChatName(friend.getUserName());
+            } else {
+                conversationView.displayChatName(String.valueOf(friend.getPhoneNumber()));
+            }
 
-        if (friend.getPhotoHash() != null) {
-            conversationView.displayUserImage(friend);
+            if (friend.getPhotoHash() != null) {
+                conversationView.displayChatImage(friend);
+            }
         }
     }
 
@@ -163,9 +174,11 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
-        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
-        chat.getMessages().add(message);
+        if (!groupChat) {
+            chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
+        }
+
+        Message message = messageRepository.createOutgoingMessageWithReceivers(chat);
 
         TextMessage textMessage = new TextMessage();
         textMessage.setText(text);

@@ -1,12 +1,11 @@
 package com.pgizka.gsenger.jobqueue.getContacts;
 
 
-import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
-public class GetContactsResponse extends BaseResponse {
+public class GetContactsResponse{
 
     private List<User> contacts;
 

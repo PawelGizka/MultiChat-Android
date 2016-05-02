@@ -2,6 +2,9 @@ package com.pgizka.gsenger.provider;
 
 
 import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.gcm.data.NewChatData;
+import com.pgizka.gsenger.jobqueue.chats.PutChatRequest;
+import com.pgizka.gsenger.jobqueue.chats.PutChatResponse;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.util.List;
@@ -12,10 +15,12 @@ import io.realm.RealmList;
 public class ChatRepository {
 
     private Repository repository;
+    private UserRepository userRepository;
     private UserAccountManager userAccountManager;
 
-    public ChatRepository(Repository repository, UserAccountManager userAccountManager) {
+    public ChatRepository(Repository repository, UserRepository userRepository, UserAccountManager userAccountManager) {
         this.repository = repository;
+        this.userRepository = userRepository;
         this.userAccountManager = userAccountManager;
     }
 
@@ -62,27 +67,59 @@ public class ChatRepository {
         return chat;
     }
 
-    public Chat createGroupChat(int chatServerId, String chatName, long startedDate, List<User> participants) {
+    public Chat createGroupChat(PutChatRequest request, PutChatResponse response, List<User> participants) {
         Realm realm = Realm.getDefaultInstance();
 
         Chat chat = new Chat();
         chat.setId(repository.getChatNextId());
-        chat.setServerId(chatServerId);
-        chat.setChatName(chatName);
-        chat.setStartedDate(startedDate);
+        chat.setServerId(response.getChatId());
+        chat.setChatName(request.getChatName());
+        chat.setStartedDate(request.getStartedDate());
         chat.setType(Chat.Type.GROUP.code);
+
+        chat = realm.copyToRealm(chat);
 
         RealmList<User> realmList = new RealmList<>();
         for (User participant : participants) {
             realmList.add(participant);
+            participant.getChats().add(chat);
         }
-        realmList.add(userAccountManager.getOwner());
 
         chat.setUsers(realmList);
 
-        realm.beginTransaction();
+
+        return chat;
+    }
+
+    public Chat createGroupChatFrom(NewChatData newChatData) {
+        Realm realm = Realm.getDefaultInstance();
+
+        int chatId = newChatData.getChatId();
+        Chat chat = realm.where(Chat.class)
+                .equalTo("serverId", chatId)
+                .findFirst();
+        boolean chatAlreadyExists = chat != null;
+        if (chatAlreadyExists) {
+            return chat;
+        }
+
+        chat = new Chat();
+        chat.setId(repository.getChatNextId());
+        chat.setServerId(newChatData.getChatId());
+        chat.setType(Chat.Type.GROUP.code);
+        chat.setChatName(newChatData.getName());
+        chat.setStartedDate(newChatData.getStartedDate());
+
         chat = realm.copyToRealm(chat);
-        realm.commitTransaction();
+
+        RealmList<User> participants = new RealmList<>();
+        for (User participant : newChatData.getParticipants()) {
+            User localParticipant = userRepository.getOrCreateLocalUser(participant);
+            participants.add(localParticipant);
+            localParticipant.getChats().add(chat);
+        }
+        chat.setUsers(participants);
+
 
         return chat;
     }

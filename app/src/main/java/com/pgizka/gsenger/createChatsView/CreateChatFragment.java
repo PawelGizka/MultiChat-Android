@@ -1,11 +1,10 @@
-package com.pgizka.gsenger.chatsView;
+package com.pgizka.gsenger.createChatsView;
 
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import com.pgizka.gsenger.mainView.friends.ContactsAdapter;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.SelectionManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

@@ -1,18 +1,14 @@
 package com.pgizka.gsenger.jobqueue.sendMessge;
 
 
-import com.pgizka.gsenger.api.BaseResponse;
-import com.pgizka.gsenger.api.ResultCode;
-
-public class PutMessageResponse extends BaseResponse {
+public class PutMessageResponse{
 
     private int messageServerId;
 
     public PutMessageResponse() {
     }
 
-    public PutMessageResponse(ResultCode resultCode, int messageServerId) {
-        super(resultCode.code);
+    public PutMessageResponse(int messageServerId) {
         this.messageServerId = messageServerId;
     }
 

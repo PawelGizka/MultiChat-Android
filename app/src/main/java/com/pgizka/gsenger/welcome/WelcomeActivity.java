@@ -24,7 +24,7 @@ public class WelcomeActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_basic);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +41,7 @@ public class WelcomeActivity extends AppCompatActivity  {
 
         // Wire up the fragment
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.welcome_activity_container, (Fragment) contentFragment);
+        fragmentTransaction.add(R.id.container, (Fragment) contentFragment);
         fragmentTransaction.commit();
     }
 

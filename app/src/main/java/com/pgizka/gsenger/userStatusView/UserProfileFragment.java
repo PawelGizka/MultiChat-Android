@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
@@ -99,7 +100,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_PHOTO_REQUEST) {
-            Intent cropIntent = imagePickerUtil.getCropImageIntent(data);
+            Intent cropIntent = imagePickerUtil.getCropImageIntent(data, getActivity());
             startActivityForResult(cropIntent, CROP_PHOTO_REQUEST);
         } else if (requestCode == CROP_PHOTO_REQUEST) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -130,5 +131,10 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
                     .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                     .into(mainImage);
         }
+    }
+
+    @Override
+    public void displayMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

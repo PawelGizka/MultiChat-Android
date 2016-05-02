@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.chatsView;
+package com.pgizka.gsenger.createChatsView;
 
 
 import com.pgizka.gsenger.provider.User;

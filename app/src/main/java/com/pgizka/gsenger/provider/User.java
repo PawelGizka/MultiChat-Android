@@ -17,10 +17,10 @@ public class User extends RealmObject {
     private String photoPath;
     private String photoHash;
 
-    private String phoneNumber;
+    private int phoneNumber;
     private boolean inContacts;
 
-    private RealmList<TextMessage> sentTextMessages;
+    private RealmList<Message> sentMessages;
     private RealmList<Receiver> receivers;
     private RealmList<Chat> chats;
 
@@ -109,11 +109,11 @@ public class User extends RealmObject {
         return photoHash;
     }
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -129,12 +129,12 @@ public class User extends RealmObject {
         this.photoHash = photoHash;
     }
 
-    public RealmList<TextMessage> getSentTextMessages() {
-        return sentTextMessages;
+    public RealmList<Message> getSentMessages() {
+        return sentMessages;
     }
 
-    public void setSentTextMessages(RealmList<TextMessage> sentTextMessages) {
-        this.sentTextMessages = sentTextMessages;
+    public void setSentMessages(RealmList<Message> sentMessages) {
+        this.sentMessages = sentMessages;
     }
 
     public RealmList<Receiver> getReceivers() {

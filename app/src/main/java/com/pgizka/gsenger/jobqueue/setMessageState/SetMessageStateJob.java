@@ -2,7 +2,6 @@ package com.pgizka.gsenger.jobqueue.setMessageState;
 
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
-import com.pgizka.gsenger.api.BaseResponse;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;

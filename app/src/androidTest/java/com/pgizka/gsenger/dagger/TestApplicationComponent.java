@@ -1,7 +1,7 @@
 package com.pgizka.gsenger.dagger;
 
 import com.pgizka.gsenger.api.ApiModule;
-import com.pgizka.gsenger.chatsView.CreateChatPresenterTest;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
 import com.pgizka.gsenger.converstation.ConversationPresenterTest;
 import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.dagger2.ApplicationComponent;

@@ -169,7 +169,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void displayUserImage(User user) {
+    public void displayChatImage(User user) {
         Glide.with(this)
                 .load(ApiModule.buildUserPhotoPath(user))
                 .signature(new StringSignature(user.getPhotoHash()))
@@ -178,7 +178,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void displayUsername(String userName) {
+    public void displayChatName(String userName) {
         usernameTextView.setText(userName);
     }
 

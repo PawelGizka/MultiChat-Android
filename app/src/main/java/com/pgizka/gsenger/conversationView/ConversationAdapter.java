@@ -160,7 +160,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             if (sender.isInContacts()) {
                 userName = sender.getUserName();
             } else {
-                userName = sender.getPhoneNumber();
+                userName = String.valueOf(sender.getPhoneNumber());
             }
             holder.infoText.setText(status + " " + sendDate + userName);
         }

@@ -4,7 +4,6 @@ package com.pgizka.gsenger.converstation;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
@@ -65,7 +64,7 @@ public class ConversationPresenterTest  {
         User owner = getOrCreateOwner();
 
         int messageServerId = 12;
-        PutMessageResponse putMessageResponse = new PutMessageResponse(ResultCode.OK, messageServerId);
+        PutMessageResponse putMessageResponse = new PutMessageResponse(messageServerId);
 
         int chatId = -1;
         conversationPresenter.onCreate(view, user.getId(), chatId);

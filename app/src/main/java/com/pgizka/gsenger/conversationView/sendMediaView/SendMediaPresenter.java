@@ -3,7 +3,6 @@ package com.pgizka.gsenger.conversationView.sendMediaView;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
@@ -35,6 +34,11 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     private int chatId;
     private int friendId;
 
+    private User friend;
+    private Chat chat;
+
+    private boolean groupChat;
+
     private SendMediaContract.View view;
 
     private Context context;
@@ -43,18 +47,27 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     public void onCreate(SendMediaContract.View view, Context context, int friendId, int chatId) {
         GSengerApplication.getApplicationComponent().inject(this);
         this.view = view;
+        this.context = context;
         this.friendId = friendId;
         this.chatId = chatId;
-        this.context = context;
+
+        this.groupChat = friendId == -1;
     }
 
     @Override
     public void onResume() {
         Realm realm = Realm.getDefaultInstance();
-        User friend = realm.where(User.class)
-                .equalTo("id", friendId)
-                .findFirst();
-        view.setToolbarSubtitle(friend.getUserName());
+        if (groupChat) {
+            chat = realm.where(Chat.class)
+                    .equalTo("id", chatId)
+                    .findFirst();
+            view.setToolbarSubtitle(chat.getChatName());
+        } else {
+            friend = realm.where(User.class)
+                    .equalTo("id", friendId)
+                    .findFirst();
+            view.setToolbarSubtitle(friend.getUserName());
+        }
     }
 
     @Override
@@ -103,13 +116,11 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        User friend = realm.where(User.class)
-                .equalTo("id", friendId)
-                .findFirst();
+        if (!groupChat) {
+            chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
+        }
 
-        Chat chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
-        Message message = messageRepository.createOutgoingMessageWithReceiver(chat, friend);
-        chat.getMessages().add(message);
+        Message message = messageRepository.createOutgoingMessageWithReceivers(chat);
 
         MediaMessage mediaMessage = new MediaMessage();
         mediaMessage.setMediaType(type);

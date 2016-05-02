@@ -6,6 +6,7 @@ import android.support.annotation.VisibleForTesting;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.StorageResolver;
 
 import io.realm.DynamicRealm;
@@ -31,18 +32,35 @@ public class GSengerApplication extends Application {
                         .addField("phoneNumber", String.class)
                         .addField("isInContacts", boolean.class);
                 oldVersion++;
+                oldVersion++;
             }
 
             if (oldVersion == 2 || oldVersion == 3) {
                 realmSchema.get("User")
                         .removeField("isInContacts")
                         .addField("inContacts", boolean.class);
+                oldVersion++;
+                oldVersion++;
+            }
+
+            if (oldVersion == 4) {
+                realmSchema.get("User")
+                        .removeField("phoneNumber")
+                        .addField("phoneNumber", int.class);
+                oldVersion++;
+            }
+
+            if (oldVersion == 5) {
+                realmSchema.get("User")
+                        .removeField("sentTextMessages")
+                        .addField("sentMessages", Message.class);
+                oldVersion++;
             }
 
         };
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
-                .schemaVersion(4)
+                .schemaVersion(6)
                 .migration(realmMigration)
                 .build());
 
