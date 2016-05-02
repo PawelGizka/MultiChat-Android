@@ -4,7 +4,6 @@ package com.pgizka.gsenger.converstation;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;

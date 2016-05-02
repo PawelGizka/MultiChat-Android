@@ -13,17 +13,17 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_basic);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle("Profile");
 
         if (savedInstanceState == null) {
             userProfileFragment = new UserProfileFragment();
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.user_status_container, userProfileFragment)
+                    .add(R.id.container, userProfileFragment)
                     .commit();
 
         }

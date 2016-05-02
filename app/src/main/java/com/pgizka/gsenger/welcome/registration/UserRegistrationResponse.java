@@ -1,15 +1,29 @@
 package com.pgizka.gsenger.welcome.registration;
 
-import com.pgizka.gsenger.api.BaseResponse;
-
-public class UserRegistrationResponse extends BaseResponse {
+public class UserRegistrationResponse {
 
     private int userId;
+    private int resultCode;
+
+    public enum ResultCode {
+
+        OK(0),
+        USER_ALREADY_EXIST(1),
+
+        UNEXPECTED_ERROR(1001);
+
+        public int code;
+
+        private ResultCode(int code) {
+            this.code = code;
+        }
+
+    }
 
     public UserRegistrationResponse() {}
 
     public UserRegistrationResponse(int resultCode) {
-        super(resultCode);
+        this.resultCode = resultCode;
     }
 
     public int getUserId() {
@@ -18,5 +32,13 @@ public class UserRegistrationResponse extends BaseResponse {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
     }
 }

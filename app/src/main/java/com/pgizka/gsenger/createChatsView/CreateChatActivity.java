@@ -11,16 +11,17 @@ public class CreateChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_chat);
+        setContentView(R.layout.activity_basic);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Create Chat");
 
         if (savedInstanceState == null) {
             CreateChatFragment createChatFragment = new CreateChatFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.create_chat_container, createChatFragment)
+                    .add(R.id.container, createChatFragment)
                     .commit();
         }
 
@@ -29,6 +30,6 @@ public class CreateChatActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        return super.onSupportNavigateUp();
+        return true;
     }
 }

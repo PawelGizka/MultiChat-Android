@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.ResultCode;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
