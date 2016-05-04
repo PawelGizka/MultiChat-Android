@@ -1,6 +1,5 @@
 package com.pgizka.gsenger.welcome.registration;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,25 +9,23 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.UserRestService;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
@@ -41,16 +38,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RegistrationFragment extends Fragment implements WelcomeActivity.WelcomeActivityContent {
     static final String TAG = RegistrationFragment.class.getSimpleName();
@@ -58,7 +49,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     private EditText userNameEditText;
     private EditText phoneNumberEditText;
     private Button loginButton;
-    private LoginButton facbookLoginButton;
+    private LoginButton facebookLoginButton;
 
     private ProgressDialog progressDialog;
 
@@ -92,7 +83,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         userNameEditText = (EditText) view.findViewById(R.id.registration_user_name);
         phoneNumberEditText = (EditText) view.findViewById(R.id.registration_phone_number);
         loginButton = (Button) view.findViewById(R.id.registration_sign_in_button);
-        facbookLoginButton = (LoginButton) view.findViewById(R.id.facbook_login_button);
+        facebookLoginButton = (LoginButton) view.findViewById(R.id.facbook_login_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,15 +92,15 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
             }
         });
 
-        facbookLoginButton.setFragment(this);
+        facebookLoginButton.setFragment(this);
         List<String> permissions = new ArrayList<>();
         permissions.add("user_friends");
         permissions.add("email");
         permissions.add("public_profile");
-        facbookLoginButton.setReadPermissions(permissions);
+        facebookLoginButton.setReadPermissions(permissions);
         callbackManager = CallbackManager.Factory.create();
 
-        facbookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.i(TAG, "On facebook success");
@@ -128,7 +119,33 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
             }
         });
 
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateInput();
+            }
+        };
+
+        userNameEditText.addTextChangedListener(textWatcher);
+        phoneNumberEditText.addTextChangedListener(textWatcher);
+
         return view;
+    }
+
+    private void validateInput() {
+        String username = userNameEditText.getText().toString();
+        String phoneNumber = phoneNumberEditText.getText().toString();
+
+        boolean enabled = username.length() >= 3 && phoneNumber.length() == 9;
+
+        facebookLoginButton.setEnabled(enabled);
+        loginButton.setEnabled(enabled);
     }
 
     @Override

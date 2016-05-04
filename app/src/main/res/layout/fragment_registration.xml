@@ -60,8 +60,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/registration_action_sign_in"
-                android:textStyle="bold"/>
+                android:text="Login"
+                android:textStyle="bold"
+                android:enabled="false"
+                />
 
         </LinearLayout>
     </ScrollView>
@@ -72,6 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        android:enabled="false"
+        />
 
 </LinearLayout>
