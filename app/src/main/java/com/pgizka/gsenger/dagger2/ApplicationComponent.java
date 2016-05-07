@@ -7,6 +7,7 @@ import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
+import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
@@ -67,6 +68,8 @@ public interface ApplicationComponent {
     void inject(NewMediaMessageCommand newMediaMessageCommand);
 
     void inject(NewGroupChatCommand newGroupChatCommand);
+
+    void inject(MessageStateChangedCommand messageStateChangedCommand);
 
     void inject(ContactsPresenter contactsPresenter);
 

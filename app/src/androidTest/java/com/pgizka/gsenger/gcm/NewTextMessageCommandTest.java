@@ -38,6 +38,9 @@ public class NewTextMessageCommandTest {
     @Inject
     MessageRestService messageRestService;
 
+    @Inject
+    Gson gson;
+
     @Mock
     ResponseBody responseBody;
 
@@ -62,7 +65,7 @@ public class NewTextMessageCommandTest {
         User sender = createUser();
 
         int messageServerId = 15;
-        String data = new Gson().getAdapter(NewTextMessageData.class).toJson(prepareTextMessageData(sender, messageServerId));
+        String data = gson.toJson(prepareTextMessageData(sender, messageServerId));
 
         when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
         textMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);

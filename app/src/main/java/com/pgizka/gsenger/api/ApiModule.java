@@ -33,9 +33,8 @@ public class ApiModule {
     }
 
     @Provides
-    @Singleton
-    public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
-        Gson gson = new GsonBuilder()
+    public Gson providesGson() {
+        return new GsonBuilder()
                 .setExclusionStrategies(new ExclusionStrategy() {
                     @Override
                     public boolean shouldSkipField(FieldAttributes f) {
@@ -48,7 +47,11 @@ public class ApiModule {
                     }
                 })
                 .create();
+    }
 
+    @Provides
+    @Singleton
+    public Retrofit provideRetrofit(OkHttpClient okHttpClient, Gson gson) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))

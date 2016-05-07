@@ -49,6 +49,9 @@ public class NewMediaMessageCommandTest {
     @Inject
     MessageRestService messageRestService;
 
+    @Inject
+    Gson gson;
+
     private NewMediaMessageCommand mediaMessageCommand;
     private GSengerApplication gSengerApplication;
 
@@ -70,7 +73,7 @@ public class NewMediaMessageCommandTest {
         User sender = TestUtils.createUser();
 
         int messageServerId = 15;
-        String data = new Gson().getAdapter(NewMediaMessageData.class).toJson(prepareMediaMessageData(sender, messageServerId));
+        String data = gson.toJson(prepareMediaMessageData(sender, messageServerId));
 
         when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
         mediaMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);

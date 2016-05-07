@@ -63,16 +63,8 @@ public class MessageRepository {
         return message;
     }
 
-    public Message handleIncomingMessage(String extraData) {
+    public Message handleIncomingMessage(NewMessageData messageData) {
         Realm realm = Realm.getDefaultInstance();
-        NewMessageData messageData;
-        try {
-            messageData = new Gson().getAdapter(NewMessageData.class).fromJson(extraData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
         User sender = userRepository.getOrCreateLocalUser(messageData.getSender());
 
         Chat chat;

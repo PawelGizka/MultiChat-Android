@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
 import com.pgizka.gsenger.gcm.data.NewChatData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
@@ -23,15 +24,16 @@ public class NewGroupChatCommand extends GCMCommand {
     @Inject
     ChatRepository chatRepository;
 
+    @Inject
+    Gson gson;
+
+    public NewGroupChatCommand() {
+        GSengerApplication.getApplicationComponent().inject(this);
+    }
+
     @Override
     public void execute(Context context, String action, String extraData) {
-        GSengerApplication.getApplicationComponent().inject(this);
-
-        try {
-            newChatData = new Gson().getAdapter(NewChatData.class).fromJson(extraData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        newChatData = gson.fromJson(extraData, NewChatData.class);
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();

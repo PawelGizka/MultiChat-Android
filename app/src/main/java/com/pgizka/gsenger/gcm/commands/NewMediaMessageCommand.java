@@ -35,23 +35,22 @@ public class NewMediaMessageCommand extends GCMCommand {
     @Inject
     MessageRepository messageRepository;
 
+    @Inject
+    Gson gson;
+
+    public NewMediaMessageCommand() {
+        GSengerApplication.getApplicationComponent().inject(this);
+    }
 
     @Override
     public void execute(Context context, String action, String extraData) {
-        GSengerApplication.getApplicationComponent().inject(this);
-
-        try {
-            messageData = new Gson().getAdapter(NewMediaMessageData.class).fromJson(extraData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        messageData = gson.fromJson(extraData, NewMediaMessageData.class);
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();
         realm.beginTransaction();
 
-        Message message = messageRepository.handleIncomingMessage(extraData);
+        Message message = messageRepository.handleIncomingMessage(messageData);
 
         message.setState(Message.State.WAITING_TO_DOWNLOAD.code);
 

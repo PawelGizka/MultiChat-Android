@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.realm.Realm;
 
 import static com.pgizka.gsenger.TestUtils.*;
@@ -29,12 +31,16 @@ public class NewGroupChatCommandTest {
 
     private GSengerApplication gSengerApplication;
 
+    @Inject
+    Gson gson;
+
     @Before
     public void setUp() throws IOException {
         setupRealm();
         gSengerApplication = getApplication();
         TestApplicationComponent applicationComponent = getTestApplicationComponent();
         GSengerApplication.setApplicationComponent(applicationComponent);
+        applicationComponent.inject(this);
 
         newGroupChatCommand = new NewGroupChatCommand();
         MockitoAnnotations.initMocks(this);
@@ -59,7 +65,7 @@ public class NewGroupChatCommandTest {
         participants.add(new User(participant2));
         chatData.setParticipants(participants);
 
-        String data = new Gson().getAdapter(NewChatData.class).toJson(chatData);
+        String data = gson.toJson(chatData);
         newGroupChatCommand.execute(gSengerApplication, NewChatData.ACTION, data);
 
         Realm realm = Realm.getDefaultInstance();

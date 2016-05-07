@@ -57,12 +57,9 @@ public class MessageRepositoryTest {
         createChatBetweenUsers(owner, sender);
 
         int messageServerId = 15;
-        String data = new Gson().getAdapter(NewMessageData.class).toJson(prepareMessageData(sender, messageServerId));
-
-        realm.refresh();
         realm.beginTransaction();
 
-        messageRepository.handleIncomingMessage(data);
+        messageRepository.handleIncomingMessage(prepareMessageData(sender, messageServerId));
 
         realm.commitTransaction();
 
@@ -75,12 +72,9 @@ public class MessageRepositoryTest {
         User sender = createUser();
 
         int messageServerId = 15;
-        String data = new Gson().getAdapter(NewMessageData.class).toJson(prepareMessageData(sender, messageServerId));
-
-        realm.refresh();
         realm.beginTransaction();
 
-        messageRepository.handleIncomingMessage(data);
+        messageRepository.handleIncomingMessage(prepareMessageData(sender, messageServerId));
 
         realm.commitTransaction();
 
@@ -93,12 +87,9 @@ public class MessageRepositoryTest {
         User sender = createNotPersistedUser();
 
         int messageServerId = 15;
-        String data = new Gson().getAdapter(NewMessageData.class).toJson(prepareMessageData(sender, messageServerId));
-
-        realm.refresh();
         realm.beginTransaction();
 
-        messageRepository.handleIncomingMessage(data);
+        messageRepository.handleIncomingMessage(prepareMessageData(sender, messageServerId));
 
         realm.commitTransaction();
 
@@ -124,12 +115,9 @@ public class MessageRepositoryTest {
 
         int messageServerId = 15;
 
-        String data = new Gson().getAdapter(NewMessageData.class).toJson(prepareMessageData(chat, user1, messageServerId));
-
-        realm.refresh();
         realm.beginTransaction();
 
-        messageRepository.handleIncomingMessage(data);
+        messageRepository.handleIncomingMessage(prepareMessageData(chat, user1, messageServerId));
 
         realm.commitTransaction();
 

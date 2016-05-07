@@ -4,12 +4,15 @@ package com.pgizka.gsenger.gcm.commands;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
 import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
 import com.pgizka.gsenger.provider.Receiver;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
 
@@ -20,14 +23,16 @@ public class MessageStateChangedCommand extends GCMCommand {
 
     MessageStateChangedData messageStateChangedData;
 
+    @Inject
+    Gson gson;
+
+    public MessageStateChangedCommand() {
+        GSengerApplication.getApplicationComponent().inject(this);
+    }
+
     @Override
     public void execute(Context context, String action, String extraData) {
-        try {
-            messageStateChangedData = new Gson().getAdapter(MessageStateChangedData.class).fromJson(extraData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        messageStateChangedData = gson.fromJson(extraData, MessageStateChangedData.class);
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();

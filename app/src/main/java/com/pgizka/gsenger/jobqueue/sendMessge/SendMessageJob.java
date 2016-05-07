@@ -41,6 +41,9 @@ public class SendMessageJob extends BaseJob {
     @Inject
     transient EventBus eventBus;
 
+    @Inject
+    transient Gson gson;
+
     public SendMessageJob(int messageId) {
         super(new Params(10).requireNetwork().persist().groupBy("message"));
         this.messageId = messageId;
@@ -140,7 +143,7 @@ public class SendMessageJob extends BaseJob {
             @Override
             public void writeTo(BufferedSink sink) throws IOException {
                 PutMediaMessageRequest putMediaMessageRequest = new PutMediaMessageRequest(message);
-                String metadata = new Gson().getAdapter(PutMediaMessageRequest.class).toJson(putMediaMessageRequest);
+                String metadata = gson.toJson(putMediaMessageRequest);
                 sink.writeUtf8(metadata);
             }
         };

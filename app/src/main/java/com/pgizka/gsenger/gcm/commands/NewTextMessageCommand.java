@@ -39,22 +39,22 @@ public class NewTextMessageCommand extends GCMCommand {
     @Inject
     MessageRepository messageRepository;
 
+    @Inject
+    Gson gson;
+
+    public NewTextMessageCommand() {
+        GSengerApplication.getApplicationComponent().inject(this);
+    }
+
     @Override
     public void execute(Context context, String action, String extraData) {
-        GSengerApplication.getApplicationComponent().inject(this);
-
-        try {
-            messageData = new Gson().getAdapter(NewTextMessageData.class).fromJson(extraData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        messageData = gson.fromJson(extraData, NewTextMessageData.class);
 
         Realm realm = Realm.getDefaultInstance();
         realm.refresh();
         realm.beginTransaction();
 
-        Message message = messageRepository.handleIncomingMessage(extraData);
+        Message message = messageRepository.handleIncomingMessage(messageData);
 
         TextMessage textMessage = new TextMessage();
         textMessage.setText(messageData.getText());
