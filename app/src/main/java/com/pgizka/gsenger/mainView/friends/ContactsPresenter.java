@@ -53,7 +53,7 @@ public class ContactsPresenter implements ContactsContract.Presenter {
         getUsers();
         contactsView.displayContactsList(users);
 
-        users.addChangeListener(() -> {
+        users.addChangeListener(element -> {
             getUsers();
             contactsView.displayContactsList(users);
         });

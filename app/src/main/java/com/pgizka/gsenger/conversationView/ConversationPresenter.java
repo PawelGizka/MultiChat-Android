@@ -88,8 +88,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             getMessages();
             conversationView.displayConversationItems(messages);
         } else {
-            realm.where(Chat.class).findAll().addChangeListener(() -> {
-                Log.i(TAG, "on chats change called");
+            realm.where(Chat.class).findAll().addChangeListener(element -> {
                 chat = chatRepository.getSingleConversationChatWith(friend);
                 if (chat != null) {
                     getMessages();
@@ -130,11 +129,9 @@ public class ConversationPresenter implements ConversationContract.Presenter {
                 .equalTo("chat.id", chat.getId())
                 .findAll();
 
-        messages.addChangeListener(() -> {
+        messages.addChangeListener(element -> {
             Log.i(TAG, "on messages change called");
-            messages = realm.where(Message.class)
-                    .equalTo("chat.id", chat.getId())
-                    .findAll();
+            messages = element;
             conversationView.displayConversationItems(messages);
             setAllMessagesViewed();
         });
