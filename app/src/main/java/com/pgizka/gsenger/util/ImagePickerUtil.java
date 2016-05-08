@@ -30,9 +30,8 @@ import java.util.List;
 public class ImagePickerUtil {
 
     private static final String TAG = "ImagePicker";
-    private static final String TEMP_IMAGE_NAME = "tempImage";
 
-    public Intent getPickOrTakeImageIntent(Context context) {
+    public Intent getPickOrTakeImageIntent(Context context, File tempPhotoFile) {
         Intent chooserIntent = null;
 
         List<Intent> intentList = new ArrayList<>();
@@ -41,7 +40,7 @@ public class ImagePickerUtil {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePhotoIntent.putExtra("return-data", true);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempPhotoFile));
         intentList = addIntentsToList(context, intentList, pickIntent);
         intentList = addIntentsToList(context, intentList, takePhotoIntent);
 
@@ -65,27 +64,19 @@ public class ImagePickerUtil {
         return list;
     }
 
-    public Intent getCropImageIntent(Intent imageReturnedIntent, Context context) {
-        Uri uri = imageReturnedIntent.getData();
+    public Intent getCropImageIntent(Uri uri) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(uri, "image/*");
         cropIntent.putExtra("crop", "true");
         cropIntent.putExtra("return-data", true);
-        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         cropIntent.putExtra("aspectX", 1);
         cropIntent.putExtra("aspectY", 1);
         cropIntent.putExtra("scale", "true");
         return cropIntent;
     }
 
-
-    public static File getTempFile(Context context) {
-        File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
-        return imageFile;
-    }
-
     public static File createImageFile()  {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(

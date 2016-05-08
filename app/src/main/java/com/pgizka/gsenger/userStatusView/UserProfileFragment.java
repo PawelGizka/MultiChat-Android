@@ -1,9 +1,11 @@
 package com.pgizka.gsenger.userStatusView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +50,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     ImagePickerUtil imagePickerUtil;
 
     private Uri updatedUserPhoto;
+    private File tempPhotoFile;
 
     public UserProfileFragment() {
     }
@@ -76,7 +79,8 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
 
     @OnClick(R.id.user_profile_change_photo_button)
     public void onChangePhotoButtonClicked() {
-        Intent intent = imagePickerUtil.getPickOrTakeImageIntent(getActivity());
+        tempPhotoFile = imagePickerUtil.createImageFile();
+        Intent intent = imagePickerUtil.getPickOrTakeImageIntent(getActivity(), tempPhotoFile);
         startActivityForResult(intent, PICK_PHOTO_REQUEST);
     }
 
@@ -99,12 +103,21 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (data == null || data.getData() == null) {
+            updatedUserPhoto = Uri.fromFile(tempPhotoFile);
+        } else {
+            updatedUserPhoto = data.getData();
+        }
+
         if (requestCode == PICK_PHOTO_REQUEST) {
-            Intent cropIntent = imagePickerUtil.getCropImageIntent(data, getActivity());
+            Intent cropIntent = imagePickerUtil.getCropImageIntent(updatedUserPhoto);
             startActivityForResult(cropIntent, CROP_PHOTO_REQUEST);
         } else if (requestCode == CROP_PHOTO_REQUEST) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                updatedUserPhoto = data.getData();
                 Glide.with(this)
                         .load(updatedUserPhoto)
                         .into(mainImage);
