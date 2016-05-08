@@ -26,16 +26,4 @@ public class RegistrationEvent {
     public void setMessage(@StringRes int message) {
         this.message = message;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RegistrationEvent that = (RegistrationEvent) o;
-
-        if (success != that.success) return false;
-        return message == that.message;
-
-    }
 }

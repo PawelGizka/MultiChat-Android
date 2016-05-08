@@ -32,6 +32,7 @@ import com.pgizka.gsenger.dagger2.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
 import com.pgizka.gsenger.util.UserAccountManager;
+import com.pgizka.gsenger.welcome.GcmTokenObtainedEvent;
 import com.pgizka.gsenger.welcome.WelcomeActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,29 +44,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnTextChanged;
+
 public class RegistrationFragment extends Fragment implements WelcomeActivity.WelcomeActivityContent {
     static final String TAG = RegistrationFragment.class.getSimpleName();
 
-    private EditText userNameEditText;
-    private EditText phoneNumberEditText;
-    private Button loginButton;
-    private LoginButton facebookLoginButton;
+    @Bind(R.id.registration_user_name) EditText userNameEditText;
+    @Bind(R.id.registration_phone_number) EditText phoneNumberEditText;
+    @Bind(R.id.registration_sign_in_button) Button loginButton;
+    @Bind(R.id.facbook_login_button) LoginButton facebookLoginButton;
+
+    @Inject
+    UserAccountManager userAccountManager;
 
     private ProgressDialog progressDialog;
 
-    private UserAccountManager userAccountManager;
-
     private CallbackManager callbackManager;
-
-    @Inject
-    UserRestService userRestService;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         GSengerApplication.getApplicationComponent().inject(this);
-        userAccountManager = new UserAccountManager(getActivity());
     }
 
     @Override
@@ -79,19 +83,12 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
+        ButterKnife.bind(this, view);
+        setupFacebookLogin();
+        return view;
+    }
 
-        userNameEditText = (EditText) view.findViewById(R.id.registration_user_name);
-        phoneNumberEditText = (EditText) view.findViewById(R.id.registration_phone_number);
-        loginButton = (Button) view.findViewById(R.id.registration_sign_in_button);
-        facebookLoginButton = (LoginButton) view.findViewById(R.id.facbook_login_button);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onLoginButtonClicked(null);
-            }
-        });
-
+    private void setupFacebookLogin() {
         facebookLoginButton.setFragment(this);
         List<String> permissions = new ArrayList<>();
         permissions.add("user_friends");
@@ -104,8 +101,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.i(TAG, "On facebook success");
-                AccessToken accessToken = loginResult.getAccessToken();
-                onLoginButtonClicked(accessToken.getToken());
+                onLoginButtonClicked();
             }
 
             @Override
@@ -118,27 +114,11 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
                 Log.i(TAG, "On facebook error", error);
             }
         });
-
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                validateInput();
-            }
-        };
-
-        userNameEditText.addTextChangedListener(textWatcher);
-        phoneNumberEditText.addTextChangedListener(textWatcher);
-
-        return view;
     }
 
-    private void validateInput() {
+    @OnTextChanged(value = {R.id.registration_user_name, R.id.registration_phone_number},
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void validateInput() {
         String username = userNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
 
@@ -162,10 +142,19 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         return !userAccountManager.isUserRegistered();
     }
 
-    private void onLoginButtonClicked(String facebookToken) {
+    @OnClick(R.id.registration_sign_in_button)
+    public void onLoginButtonClicked() {
+        String token = GCMUTil.getRegistrationToken(getContext());
+        boolean tokenObtained = token != null;
+        if (!tokenObtained) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle(R.string.waitingForGoogleCloudMessagingToken);
+            progressDialog.show();
+            return;
+        }
+
         String userName = userNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
-        String token = GCMUTil.getRegistrationToken(getContext());
         long parsedPhoneNumber = 0;
 
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -179,8 +168,13 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         request.setUserName(userName);
         request.setPhoneNumber((int) parsedPhoneNumber);
         request.setGcmToken(token);
-        if (facebookToken != null) {
-            request.setFacebookToken(facebookToken);
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if (accessToken != null) {
+            String facebookToken = accessToken.getToken();
+            if (facebookToken != null) {
+                request.setFacebookToken(facebookToken);
+            }
         }
 
         new RegistrationTask(request).execute();
@@ -188,8 +182,14 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         loginButton.setEnabled(false);
 
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Registering");
+        progressDialog.setTitle(R.string.registering);
         progressDialog.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(GcmTokenObtainedEvent tokenObtainedEvent) {
+        progressDialog.dismiss();
+        onLoginButtonClicked();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -197,13 +197,10 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         progressDialog.dismiss();
         loginButton.setEnabled(true);
         if(registrationEvent.isSuccess()) {
-            showResultDialog(R.string.success, R.string.registration_successfully_registered, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
+            showResultDialog(R.string.success, R.string.registration_successfully_registered, (dialog, which) -> {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             });
         } else {
             showResultDialog(R.string.failure, registrationEvent.getMessage(), null);
