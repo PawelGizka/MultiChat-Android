@@ -57,10 +57,17 @@ public class GSengerApplication extends Application {
                 oldVersion++;
             }
 
+            if (oldVersion == 6) {
+                realmSchema.get("User")
+                        .addField("fromPhoneNumbers", boolean.class)
+                        .addField("fromFacebook", boolean.class);
+                oldVersion++;
+            }
+
         };
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
-                .schemaVersion(6)
+                .schemaVersion(7)
                 .migration(realmMigration)
                 .build());
 

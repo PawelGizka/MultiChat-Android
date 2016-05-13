@@ -20,6 +20,9 @@ public class User extends RealmObject {
     private int phoneNumber;
     private boolean inContacts;
 
+    private boolean fromPhoneNumbers;
+    private boolean fromFacebook;
+
     private RealmList<Message> sentMessages;
     private RealmList<Receiver> receivers;
     private RealmList<Chat> chats;
@@ -123,6 +126,22 @@ public class User extends RealmObject {
 
     public void setInContacts(boolean inContacts) {
         this.inContacts = inContacts;
+    }
+
+    public boolean isFromPhoneNumbers() {
+        return fromPhoneNumbers;
+    }
+
+    public void setFromPhoneNumbers(boolean fromPhoneNumbers) {
+        this.fromPhoneNumbers = fromPhoneNumbers;
+    }
+
+    public boolean isFromFacebook() {
+        return fromFacebook;
+    }
+
+    public void setFromFacebook(boolean fromFacebook) {
+        this.fromFacebook = fromFacebook;
     }
 
     public void setPhotoHash(String photoHash) {
