@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.util.ImagePickerUtil;
 
 import java.io.File;

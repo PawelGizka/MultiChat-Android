@@ -4,14 +4,13 @@ import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Receiver;
-import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.Message;

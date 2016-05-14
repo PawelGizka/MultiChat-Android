@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.setMessageState;
+package com.pgizka.gsenger.api.dtos.messages;
 
 
 public class MessageStateChangedRequest {

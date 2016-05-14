@@ -1,13 +1,10 @@
 package com.pgizka.gsenger.api;
 
-import com.pgizka.gsenger.jobqueue.sendMessge.PutMessageResponse;
-import com.pgizka.gsenger.jobqueue.sendMessge.PutTextMessageRequest;
-import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationRequest;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse;
+import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
+import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
+import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

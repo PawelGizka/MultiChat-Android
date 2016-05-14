@@ -1,9 +1,7 @@
-package com.pgizka.gsenger.dagger2;
+package com.pgizka.gsenger.config;
 
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
-import com.path.android.jobqueue.di.DependencyInjector;
 import com.pgizka.gsenger.createChatsView.CreateChatContract;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationContract;

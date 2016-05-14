@@ -26,7 +26,7 @@ import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaActivity;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 

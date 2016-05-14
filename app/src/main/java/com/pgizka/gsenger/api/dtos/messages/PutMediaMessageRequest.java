@@ -1,9 +1,8 @@
-package com.pgizka.gsenger.jobqueue.sendMessge;
+package com.pgizka.gsenger.api.dtos.messages;
 
 
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.TextMessage;
 
 public class PutMediaMessageRequest extends PutMessageRequest {
 

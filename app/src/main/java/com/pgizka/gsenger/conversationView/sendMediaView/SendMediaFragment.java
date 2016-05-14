@@ -17,12 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.util.ImagePickerUtil;
 import com.pgizka.gsenger.util.StorageResolver;
 

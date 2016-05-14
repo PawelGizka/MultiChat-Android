@@ -4,7 +4,7 @@ package com.pgizka.gsenger.jobqueue.updateUser;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.UserRestService;
-import com.pgizka.gsenger.dagger2.ApplicationComponent;
+import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;

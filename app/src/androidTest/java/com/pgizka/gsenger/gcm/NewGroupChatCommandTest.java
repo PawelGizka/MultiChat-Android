@@ -3,9 +3,8 @@ package com.pgizka.gsenger.gcm;
 
 import com.google.gson.Gson;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
-import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.data.NewChatData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;

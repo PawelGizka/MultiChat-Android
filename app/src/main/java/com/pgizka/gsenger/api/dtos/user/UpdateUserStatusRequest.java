@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.updateUser;
+package com.pgizka.gsenger.api.dtos.user;
 
 
 public class UpdateUserStatusRequest {

@@ -5,9 +5,10 @@ import android.util.Log;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.UserRestService;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.api.dtos.user.UserRegistrationRequest;
+import com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.util.UserAccountManager;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse.ResultCode;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,7 +19,7 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.pgizka.gsenger.welcome.registration.UserRegistrationResponse.ResultCode.*;
+import static com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse.ResultCode.*;
 
 public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     static final String TAG = RegistrationTask.class.getSimpleName();

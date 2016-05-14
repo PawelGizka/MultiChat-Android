@@ -9,8 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +25,8 @@ import com.facebook.login.widget.LoginButton;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.api.UserRestService;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.api.dtos.user.UserRegistrationRequest;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -47,7 +45,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
 
 public class RegistrationFragment extends Fragment implements WelcomeActivity.WelcomeActivityContent {

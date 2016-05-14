@@ -5,19 +5,14 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
 import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
-import com.pgizka.gsenger.gcm.data.NewMessageData;
-import com.pgizka.gsenger.gcm.data.NewTextMessageData;
 import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
-import com.pgizka.gsenger.provider.TextMessage;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 

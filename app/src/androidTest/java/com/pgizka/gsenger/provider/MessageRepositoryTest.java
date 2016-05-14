@@ -3,11 +3,9 @@ package com.pgizka.gsenger.provider;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.gson.Gson;
 import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.gcm.data.NewMessageData;
+import com.pgizka.gsenger.config.GSengerApplication;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +13,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;

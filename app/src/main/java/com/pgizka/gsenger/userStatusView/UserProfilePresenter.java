@@ -1,10 +1,9 @@
 package com.pgizka.gsenger.userStatusView;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
 import com.pgizka.gsenger.provider.User;

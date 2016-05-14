@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.mainView.friends.ContactsAdapter;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.SelectionManager;

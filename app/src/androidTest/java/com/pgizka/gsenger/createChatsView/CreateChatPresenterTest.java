@@ -4,9 +4,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.ChatRestService;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.jobqueue.chats.PutChatRequest;
-import com.pgizka.gsenger.jobqueue.chats.PutChatResponse;
+import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
+import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;
 

@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome.registration;
+package com.pgizka.gsenger.api.dtos.user;
 
 public class UserRegistrationResponse {
 

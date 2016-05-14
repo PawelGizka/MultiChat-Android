@@ -1,21 +1,17 @@
-package com.pgizka.gsenger.dagger2;
+package com.pgizka.gsenger.config;
 
 import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 
-import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.StorageResolver;
 
-import io.realm.DynamicRealm;
-import io.realm.FieldAttribute;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmMigration;
 import io.realm.RealmSchema;
-import okhttp3.OkHttpClient;
 
 public class GSengerApplication extends Application {
     private static ApplicationComponent applicationComponent;

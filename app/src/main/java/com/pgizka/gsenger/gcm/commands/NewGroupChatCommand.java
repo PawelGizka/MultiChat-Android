@@ -4,14 +4,10 @@ package com.pgizka.gsenger.gcm.commands;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
-import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
 import com.pgizka.gsenger.gcm.data.NewChatData;
-import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 

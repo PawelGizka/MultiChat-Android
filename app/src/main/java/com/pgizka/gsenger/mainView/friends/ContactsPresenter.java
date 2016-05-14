@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.conversationView.ConversationActivity;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsFinishedEvent;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.provider.User;
@@ -16,7 +16,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class ContactsPresenter implements ContactsContract.Presenter {

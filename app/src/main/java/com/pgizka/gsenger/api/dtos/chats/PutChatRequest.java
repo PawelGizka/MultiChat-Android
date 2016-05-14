@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.chats;
+package com.pgizka.gsenger.api.dtos.chats;
 
 
 import com.pgizka.gsenger.provider.User;

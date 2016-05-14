@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.dagger2;
+package com.pgizka.gsenger.config;
 
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.createChatsView.CreateChatFragment;

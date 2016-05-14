@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.path.android.jobqueue.Params;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.dagger2.ApplicationComponent;
+import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;

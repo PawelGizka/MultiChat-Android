@@ -4,9 +4,9 @@ package com.pgizka.gsenger.createChatsView;
 import android.text.TextUtils;
 
 import com.pgizka.gsenger.api.ChatRestService;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
-import com.pgizka.gsenger.jobqueue.chats.PutChatRequest;
-import com.pgizka.gsenger.jobqueue.chats.PutChatResponse;
+import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
+import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;

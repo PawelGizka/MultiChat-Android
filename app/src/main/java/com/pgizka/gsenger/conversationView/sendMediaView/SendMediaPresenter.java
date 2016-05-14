@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.dagger2.GSengerApplication;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;

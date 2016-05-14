@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.getContacts;
+package com.pgizka.gsenger.api.dtos.contacts;
 
 
 import com.pgizka.gsenger.provider.User;

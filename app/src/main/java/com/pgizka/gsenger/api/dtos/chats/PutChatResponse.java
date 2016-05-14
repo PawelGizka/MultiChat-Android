@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.jobqueue.chats;
+package com.pgizka.gsenger.api.dtos.chats;
 
 
 public class PutChatResponse {

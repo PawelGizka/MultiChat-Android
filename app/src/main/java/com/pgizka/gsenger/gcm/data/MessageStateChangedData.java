@@ -1,8 +1,5 @@
 package com.pgizka.gsenger.gcm.data;
 
-
-import com.pgizka.gsenger.jobqueue.setMessageState.MessageStateChangedRequest;
-
 public class MessageStateChangedData {
     public static final String MESSAGE_DELIVERED_ACTION = "MESSAGE_DELIVERED_ACTION";
     public static final String MESSAGE_VIEWED_ACTION = "MESSAGE_VIEWED_ACTION";
@@ -12,12 +9,6 @@ public class MessageStateChangedData {
     private long date;
 
     public MessageStateChangedData() {
-    }
-
-    public MessageStateChangedData(MessageStateChangedRequest request) {
-        this.messageId = request.getMessageId();
-        this.receiverId = request.getReceiverId();
-        this.date = request.getDate();
     }
 
     public int getMessageId() {

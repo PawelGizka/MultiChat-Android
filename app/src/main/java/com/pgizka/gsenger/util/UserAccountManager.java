@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 
 import com.pgizka.gsenger.provider.User;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationRequest;
-import com.pgizka.gsenger.welcome.registration.UserRegistrationResponse;
+import com.pgizka.gsenger.api.dtos.user.UserRegistrationRequest;
+import com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
