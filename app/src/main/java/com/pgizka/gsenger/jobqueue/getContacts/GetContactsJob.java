@@ -12,6 +12,7 @@ import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.ContactsUtil;
+import com.pgizka.gsenger.util.UserAccountManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,6 +47,9 @@ public class GetContactsJob extends BaseJob {
 
     @Inject
     transient Repository repository;
+
+    @Inject
+    transient UserAccountManager userAccountManager;
 
     public GetContactsJob() {
         super(new Params(1).requireNetwork().addTags("getContacts"));
@@ -92,6 +96,7 @@ public class GetContactsJob extends BaseJob {
         }
 
         GetContactsRequest getContactsRequest = new GetContactsRequest();
+        getContactsRequest.setUserId(userAccountManager.getOwner().getServerId());
         getContactsRequest.setPhoneNumbers(phoneNumbers);
         getContactsRequest.setUserIds(userIds);
         return getContactsRequest;
