@@ -21,20 +21,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class ContactsFragment extends Fragment implements ContactsContract.View {
 
     @Inject
     ContactsContract.Presenter presenter;
 
-    private RecyclerView recyclerView;
-    private TextView emptyTextView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.contacts_recycler_view) RecyclerView recyclerView;
+    @Bind(R.id.contacts_empty_text_view) TextView emptyTextView;
+    @Bind(R.id.contacts_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     private ContactsAdapter contactsAdapter;
 
 
     public ContactsFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -55,22 +57,13 @@ public class ContactsFragment extends Fragment implements ContactsContract.View 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.contacts_recycler_view);
-        emptyTextView = (TextView) view.findViewById(R.id.contacts_empty_text_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.contacts_swipe_to_refresh);
+        ButterKnife.bind(this, view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(contactsAdapter);
 
-        contactsAdapter.setOnContactClickListener(new ContactsAdapter.OnContactClickListener() {
-            @Override
-            public void onContactClicked(int position, User user) {
-                presenter.friendClicked(position, user);
-            }
-        });
-
+        contactsAdapter.setOnContactClickListener((position, user) -> presenter.friendClicked(position, user));
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.refreshFriends());
 
         return view;

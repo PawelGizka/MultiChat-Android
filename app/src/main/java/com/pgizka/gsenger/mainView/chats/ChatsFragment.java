@@ -20,14 +20,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class ChatsFragment extends Fragment implements ChatsContract.View {
 
     @Inject
     ChatsContract.Presenter presenter;
 
-    private RecyclerView recyclerView;
-    private TextView emptyTextView;
+    @Bind(R.id.chats_recycler_view) RecyclerView recyclerView;
+    @Bind(R.id.chats_empty_text_view) TextView emptyTextView;
 
     private ChatsAdapter chatsAdapter;
 
@@ -47,20 +50,13 @@ public class ChatsFragment extends Fragment implements ChatsContract.View {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-
-        emptyTextView = (TextView) view.findViewById(R.id.chats_empty_text_view);
-        recyclerView = (RecyclerView) view.findViewById(R.id.chats_recycler_view);
+        ButterKnife.bind(this, view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(chatsAdapter);
 
-        chatsAdapter.setOnChatClickListener(new ChatsAdapter.OnChatClickListener() {
-            @Override
-            public void onChatClicked(Chat chat) {
-                presenter.chatClicked(chat);
-            }
-        });
+        chatsAdapter.setOnChatClickListener(chat -> presenter.chatClicked(chat));
 
         return view;
     }

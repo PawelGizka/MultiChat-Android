@@ -8,7 +8,6 @@ import com.pgizka.gsenger.gcm.GCMUTil;
 import com.pgizka.gsenger.mainView.MainActivity;
 
 public class BootStrapActivity extends AppCompatActivity {
-    static final String TAG = BootStrapActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

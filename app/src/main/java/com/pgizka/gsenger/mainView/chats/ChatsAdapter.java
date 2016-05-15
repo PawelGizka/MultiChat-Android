@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.RealmList;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
@@ -40,18 +42,15 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        public ImageView mainImageView;
-        public TextView chatNameTextView;
-        public TextView descriptionTextView;
-        public TextView dateTextView;
+        @Bind(R.id.chat_item_main_image) ImageView mainImageView;
+        @Bind(R.id.chat_item_chat_name_text) TextView chatNameTextView;
+        @Bind(R.id.chat_item_description_text) TextView descriptionTextView;
+        @Bind(R.id.chat_item_date_text) TextView dateTextView;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            this.mainImageView = (ImageView) view.findViewById(R.id.chat_item_main_image);
-            this.chatNameTextView = (TextView) view.findViewById(R.id.chat_item_chat_name_text);
-            this.descriptionTextView = (TextView) view.findViewById(R.id.chat_item_description_text);
-            this.dateTextView = (TextView) view.findViewById(R.id.chat_item_date_text);
+            ButterKnife.bind(this, view);
         }
     }
 
