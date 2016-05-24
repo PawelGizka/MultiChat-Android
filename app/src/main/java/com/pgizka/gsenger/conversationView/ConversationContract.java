@@ -11,11 +11,7 @@ public interface ConversationContract {
 
     interface View {
 
-        AppCompatActivity getHoldingActivity();
-
         void displayConversationItems(List<Message> conversationItems);
-
-        void displayErrorMessage(String message);
 
         void displayChatImage(User user);
 
@@ -23,13 +19,17 @@ public interface ConversationContract {
 
         void setPresenter(ConversationContract.Presenter presenter);
 
+        void navigateToMediaDetailView(int messageId);
+
     }
 
     interface Presenter {
 
+        void onCreate(View view, int friendId, int chatId);
+
         void sendMessage(String text);
 
-        void onCreate(View view, int friendId, int chatId);
+        void messageClicked(Message message);
 
         void onResume();
 

@@ -22,12 +22,13 @@ import com.pgizka.gsenger.R;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ImagePickerUtil {
+public class ImageUtil {
 
     private static final String TAG = "ImagePicker";
 
@@ -88,6 +89,30 @@ public class ImagePickerUtil {
             e.printStackTrace();
         }
         return image;
+    }
+
+    /**
+     * On Android we cannot operate on Bitmaps larger than 4096 x 4096,
+     * so we scale image to 4096 x 4096 by setting size multiplier in Glide
+     * @param pathToImage
+     * @return
+     */
+    public static float getImageSizeMultiplier(String pathToImage) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(pathToImage, options);
+
+        float multiplier = 1.0f;
+
+        int maxDimension = options.outHeight > options.outWidth ? options.outHeight : options.outWidth;
+        if (maxDimension > 4096) {
+            multiplier = 4096f / maxDimension;
+        }
+
+        BigDecimal bd = new BigDecimal(Float.toString(multiplier));
+        bd = bd.setScale(1, BigDecimal.ROUND_FLOOR);
+
+        return bd.floatValue();
     }
 
 }

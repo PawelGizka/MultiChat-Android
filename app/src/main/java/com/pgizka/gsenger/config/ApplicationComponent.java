@@ -1,6 +1,7 @@
 package com.pgizka.gsenger.config;
 
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailFragment;
 import com.pgizka.gsenger.createChatsView.CreateChatFragment;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
@@ -93,4 +94,5 @@ public interface ApplicationComponent {
 
     void inject(CreateChatPresenter createChatPresenter);
 
+    void inject(MediaDetailFragment mediaDetailFragment);
 }

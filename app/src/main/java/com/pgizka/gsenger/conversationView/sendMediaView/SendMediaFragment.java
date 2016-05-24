@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.util.ImagePickerUtil;
+import com.pgizka.gsenger.util.ImageUtil;
 import com.pgizka.gsenger.util.StorageResolver;
 
 import java.io.File;
@@ -125,7 +125,7 @@ public class SendMediaFragment extends Fragment implements SendMediaContract.Vie
             intent.setType("image/*");
             startActivityForResult(intent, PICK_PHOTO_REQUEST);
         } else if (action.equals(TAKE_PHOTO_ACTION)) {
-            mediaTempFile = ImagePickerUtil.createImageFile();
+            mediaTempFile = ImageUtil.createImageFile();
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mediaTempFile));
             intent.putExtra("return-data", true);

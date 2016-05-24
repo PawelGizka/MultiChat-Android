@@ -48,6 +48,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     private Fragment fragment;
 
+    private OnMessageClickListener onMessageClickListener;
+
     public ConversationAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
@@ -98,6 +100,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         holder.image.setVisibility(View.GONE);
         holder.imageFrameLayout.setVisibility(View.GONE);
         holder.headerRelativeLayout.setVisibility(View.GONE);
+
+        holder.view.setOnClickListener(v -> {
+            if (onMessageClickListener != null) {
+                onMessageClickListener.onMessageClicked(message);
+            }
+        });
 
         if(message.getType() == Message.Type.TEXT_MESSAGE.code) {
             TextMessage textMessage = message.getTextMessage();
@@ -180,7 +188,6 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             return "Delivered";
         }
 
-
         int state = message.getState();
         if (state == WAITING_TO_SEND.code) {
             return "Waiting to send";
@@ -224,5 +231,13 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public interface OnMessageClickListener {
+        void onMessageClicked(Message message);
+    }
+
+    public void setOnMessageClickListener(OnMessageClickListener onMessageClickListener) {
+        this.onMessageClickListener = onMessageClickListener;
     }
 }

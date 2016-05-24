@@ -25,13 +25,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-
         <meta-data
             android:name="com.pgizka.gsenger.config.MyGlideModule"
             android:value="GlideModule"/>
@@ -83,13 +82,15 @@
         </activity>
         <activity android:name=".createChatsView.CreateChatActivity">
         </activity>
-
-        <activity android:name="com.facebook.FacebookActivity"
-                  android:configChanges=
-                      "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
-
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".conversationView.mediaView.MediaDetailActivity">
+        </activity>
+        <activity android:name=".conversationView.mediaView.MediaDetailPlayVideoActivity">
+        </activity>
     </application>
 
 </manifest>

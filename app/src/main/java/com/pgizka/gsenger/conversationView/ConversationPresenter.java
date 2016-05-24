@@ -9,6 +9,7 @@ import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.TextMessage;
@@ -186,6 +187,18 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         realm.commitTransaction();
 
         jobManager.addJob(new SendMessageJob(message.getId()));
+    }
+
+    @Override
+    public void messageClicked(Message message) {
+        if (message.getType() == Message.Type.MEDIA_MESSAGE.code) {
+            MediaMessage mediaMessage = message.getMediaMessage();
+            int type = mediaMessage.getMediaType();
+            if (type == MediaMessage.Type.PHOTO.code || type == MediaMessage.Type.VIDEO.code) {
+                conversationView.navigateToMediaDetailView(message.getId());
+            }
+
+        }
     }
 
     @VisibleForTesting

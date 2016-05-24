@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.util.ImagePickerUtil;
+import com.pgizka.gsenger.util.ImageUtil;
 
 import java.io.File;
 
@@ -46,7 +46,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     UserProfileContract.Presenter presenter;
 
     @Inject
-    ImagePickerUtil imagePickerUtil;
+    ImageUtil imageUtil;
 
     private Uri updatedUserPhoto;
     private File tempPhotoFile;
@@ -78,8 +78,8 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
 
     @OnClick(R.id.user_profile_change_photo_button)
     public void onChangePhotoButtonClicked() {
-        tempPhotoFile = imagePickerUtil.createImageFile();
-        Intent intent = imagePickerUtil.getPickOrTakeImageIntent(getActivity(), tempPhotoFile);
+        tempPhotoFile = imageUtil.createImageFile();
+        Intent intent = imageUtil.getPickOrTakeImageIntent(getActivity(), tempPhotoFile);
         startActivityForResult(intent, PICK_PHOTO_REQUEST);
     }
 
@@ -113,7 +113,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
         }
 
         if (requestCode == PICK_PHOTO_REQUEST) {
-            Intent cropIntent = imagePickerUtil.getCropImageIntent(updatedUserPhoto);
+            Intent cropIntent = imageUtil.getCropImageIntent(updatedUserPhoto);
             startActivityForResult(cropIntent, CROP_PHOTO_REQUEST);
         } else if (requestCode == CROP_PHOTO_REQUEST) {
             if (resultCode == AppCompatActivity.RESULT_OK) {

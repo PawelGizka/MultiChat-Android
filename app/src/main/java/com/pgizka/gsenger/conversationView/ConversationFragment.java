@@ -24,6 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailActivity;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaActivity;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.config.GSengerApplication;
@@ -81,6 +82,8 @@ public class ConversationFragment extends Fragment implements ConversationContra
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(conversationAdapter);
+
+        conversationAdapter.setOnMessageClickListener(message -> presenter.messageClicked(message));
 
         return view;
     }
@@ -183,17 +186,14 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void displayErrorMessage(String message) {
-
+    public void navigateToMediaDetailView(int messageId) {
+        Intent intent = new Intent(getActivity(), MediaDetailActivity.class);
+        intent.putExtra(MediaDetailActivity.MESSAGE_ID_ARGUMENT, messageId);
+        startActivity(intent);
     }
 
     @Override
     public void setPresenter(ConversationContract.Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public AppCompatActivity getHoldingActivity() {
-        return (AppCompatActivity) getActivity();
     }
 }

@@ -2,6 +2,8 @@ package com.pgizka.gsenger.config;
 
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailContract;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailPresenter;
 import com.pgizka.gsenger.createChatsView.CreateChatContract;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationContract;
@@ -20,7 +22,7 @@ import com.pgizka.gsenger.provider.UserRepository;
 import com.pgizka.gsenger.userStatusView.UserProfileContract;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.ContactsUtil;
-import com.pgizka.gsenger.util.ImagePickerUtil;
+import com.pgizka.gsenger.util.ImageUtil;
 import com.pgizka.gsenger.util.StorageResolver;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -101,8 +103,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public ImagePickerUtil providesImagePickerUtil() {
-        return new ImagePickerUtil();
+    public ImageUtil providesImagePickerUtil() {
+        return new ImageUtil();
     }
 
     @Provides
@@ -145,6 +147,12 @@ public class ApplicationModule {
     @Singleton
     public CreateChatContract.Presenter providesCreateChatPresenter() {
         return new CreateChatPresenter();
+    }
+
+    @Provides
+    @Singleton
+    public MediaDetailContract.Presenter providesMediaDetailPresenter() {
+        return new MediaDetailPresenter();
     }
 
 }
