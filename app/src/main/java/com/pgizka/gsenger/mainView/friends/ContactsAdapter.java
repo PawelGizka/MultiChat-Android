@@ -80,6 +80,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                     .load(ApiModule.buildUserPhotoPath(user))
                     .signature(new StringSignature(userPhotoHash))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.defult_contact_image)
                     .into(holder.contactImage);
         }
 
