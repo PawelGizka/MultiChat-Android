@@ -62,6 +62,8 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
     private CallbackManager callbackManager;
 
+    private boolean waitingForRegistration = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +146,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
         String token = GCMUTil.getRegistrationToken(getContext());
         boolean tokenObtained = token != null;
         if (!tokenObtained) {
+            waitingForRegistration = true;
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle(R.string.waitingForGoogleCloudMessagingToken);
             progressDialog.show();
@@ -186,7 +189,9 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(GcmTokenObtainedEvent tokenObtainedEvent) {
         progressDialog.dismiss();
-        onLoginButtonClicked();
+        if (waitingForRegistration) {
+            onLoginButtonClicked();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

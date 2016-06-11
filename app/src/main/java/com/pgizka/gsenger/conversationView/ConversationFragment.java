@@ -113,7 +113,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         MenuItem menuItem = menu.findItem(R.id.add_users_to_chat_action);
-        boolean isVisible = chat.getType() == Chat.Type.GROUP.code;
+        boolean isVisible = chat != null && chat.getType() == Chat.Type.GROUP.code;
         menuItem.setVisible(isVisible);
     }
 
