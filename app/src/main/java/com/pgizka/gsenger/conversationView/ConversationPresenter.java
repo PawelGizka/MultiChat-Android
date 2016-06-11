@@ -10,11 +10,11 @@ import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MediaMessage;
+import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
-import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.util.ArrayList;
@@ -83,6 +83,8 @@ public class ConversationPresenter implements ConversationContract.Presenter {
 
             chat = chatRepository.getSingleConversationChatWith(friend);
         }
+
+        conversationView.setChat(chat);
 
         if (chat != null) {
             getMessages();

@@ -1,10 +1,11 @@
 package com.pgizka.gsenger.mainView.friends;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import com.path.android.jobqueue.JobManager;
-import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsFinishedEvent;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.provider.User;

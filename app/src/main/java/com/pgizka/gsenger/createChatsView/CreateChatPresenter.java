@@ -4,9 +4,9 @@ package com.pgizka.gsenger.createChatsView;
 import android.text.TextUtils;
 
 import com.pgizka.gsenger.api.ChatRestService;
-import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
 import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
@@ -78,7 +78,6 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
                 if (response.isSuccess()) {
                     PutChatResponse putChatResponse = response.body();
                     Realm realm = Realm.getDefaultInstance();
-                    realm.refresh();
                     realm.beginTransaction();
                     chatRepository.createGroupChat(putChatRequest, putChatResponse, participants);
                     realm.commitTransaction();

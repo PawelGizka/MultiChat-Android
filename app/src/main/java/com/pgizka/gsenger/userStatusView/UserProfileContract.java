@@ -1,7 +1,6 @@
 package com.pgizka.gsenger.userStatusView;
 
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 import java.io.File;

@@ -19,7 +19,9 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse.ResultCode.*;
+import static com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse.ResultCode.OK;
+import static com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse.ResultCode.UNEXPECTED_ERROR;
+import static com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse.ResultCode.USER_ALREADY_EXIST;
 
 public class RegistrationTask extends AsyncTask<Void, Void, Void> {
     static final String TAG = RegistrationTask.class.getSimpleName();

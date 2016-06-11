@@ -32,7 +32,6 @@ public class NewGroupChatCommand extends GCMCommand {
         newChatData = gson.fromJson(extraData, NewChatData.class);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         realm.beginTransaction();
         chatRepository.createGroupChatFrom(newChatData);

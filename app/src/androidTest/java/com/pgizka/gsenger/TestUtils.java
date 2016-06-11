@@ -4,11 +4,11 @@ package com.pgizka.gsenger;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 
+import com.pgizka.gsenger.config.ApplicationModule;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
 import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.config.ApplicationModule;
-import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
@@ -59,7 +59,6 @@ public class TestUtils {
 
     public static User getOrCreateOwner() {
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         User owner = realm.where(User.class)
                 .equalTo("id", 0)
@@ -83,7 +82,6 @@ public class TestUtils {
 
     public static User createUser() {
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         User user = createNotPersistedUser();
         realm.beginTransaction();
@@ -107,7 +105,6 @@ public class TestUtils {
     public static Chat createChatBetweenUsers(User firstUser, User secondUser) {
         ChatRepository chatRepository = GSengerApplication.getApplicationComponent().chatRepository();
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         realm.beginTransaction();
         Chat chat = chatRepository.createSingleConversationChatBetweenUsers(firstUser, secondUser);
         realm.commitTransaction();

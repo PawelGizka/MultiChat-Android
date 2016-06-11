@@ -58,7 +58,6 @@ public class SetMessageStateJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         User owner = userAccountManager.getOwner();
         Message message = realm.where(Message.class)

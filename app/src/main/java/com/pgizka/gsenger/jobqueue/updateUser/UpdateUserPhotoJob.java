@@ -48,8 +48,6 @@ public class UpdateUserPhotoJob extends BaseJob {
 
     @Override
     public void onRun() throws Throwable {
-        Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         User owner = userAccountManager.getOwner();
 
         RequestBody requestBody = getRequestBody();

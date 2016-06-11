@@ -1,13 +1,15 @@
 package com.pgizka.gsenger.config;
 
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatFragment;
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatPresenter;
 import com.pgizka.gsenger.api.ApiModule;
-import com.pgizka.gsenger.conversationView.mediaView.MediaDetailFragment;
-import com.pgizka.gsenger.createChatsView.CreateChatFragment;
-import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationFragment;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
+import com.pgizka.gsenger.createChatsView.CreateChatFragment;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
@@ -95,4 +97,8 @@ public interface ApplicationComponent {
     void inject(CreateChatPresenter createChatPresenter);
 
     void inject(MediaDetailFragment mediaDetailFragment);
+
+    void inject(AddUsersToChatFragment addUsersToChatFragment);
+
+    void inject(AddUsersToChatPresenter addUsersToChatPresenter);
 }

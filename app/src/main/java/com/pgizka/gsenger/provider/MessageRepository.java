@@ -1,11 +1,9 @@
 package com.pgizka.gsenger.provider;
 
 
-import com.google.gson.Gson;
 import com.pgizka.gsenger.gcm.data.NewMessageData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
-import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;

@@ -12,7 +12,6 @@ import com.pgizka.gsenger.util.UserAccountManager;
 
 import javax.inject.Inject;
 
-
 import io.realm.Realm;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,8 +43,6 @@ public class UpdateUserStatusJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         User owner = userAccountManager.getOwner();
-        Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         UpdateUserStatusRequest updateUserStatusRequest = prepareRequest(owner);
 

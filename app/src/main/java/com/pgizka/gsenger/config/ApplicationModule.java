@@ -2,14 +2,16 @@ package com.pgizka.gsenger.config;
 
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
-import com.pgizka.gsenger.conversationView.mediaView.MediaDetailContract;
-import com.pgizka.gsenger.conversationView.mediaView.MediaDetailPresenter;
-import com.pgizka.gsenger.createChatsView.CreateChatContract;
-import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatContract;
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatPresenter;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailContract;
+import com.pgizka.gsenger.conversationView.mediaView.MediaDetailPresenter;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
+import com.pgizka.gsenger.createChatsView.CreateChatContract;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.mainView.chats.ChatsContract;
 import com.pgizka.gsenger.mainView.chats.ChatsPresenter;
@@ -153,6 +155,12 @@ public class ApplicationModule {
     @Singleton
     public MediaDetailContract.Presenter providesMediaDetailPresenter() {
         return new MediaDetailPresenter();
+    }
+
+    @Provides
+    @Singleton
+    public AddUsersToChatContract.Presenter providesAddUsersToChatPresenter() {
+        return new AddUsersToChatPresenter();
     }
 
 }

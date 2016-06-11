@@ -4,8 +4,8 @@ package com.pgizka.gsenger.provider;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.TestUtils;
-import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.dagger.TestApplicationComponent;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,14 +19,16 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-import static com.pgizka.gsenger.TestUtils.*;
 import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
+import static com.pgizka.gsenger.TestUtils.createGroupChat;
+import static com.pgizka.gsenger.TestUtils.createNotPersistedUser;
+import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getApplication;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.prepareMessageData;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
 import static junit.framework.Assert.assertNotNull;
-import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 public class MessageRepositoryTest {
@@ -123,7 +125,6 @@ public class MessageRepositoryTest {
 
     private void verifyNewMessageHandledCorrectly(int messageServerId) throws Exception {
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", messageServerId)
                 .findFirst();

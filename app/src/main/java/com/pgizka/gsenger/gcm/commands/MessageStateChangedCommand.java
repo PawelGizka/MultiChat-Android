@@ -32,7 +32,6 @@ public class MessageStateChangedCommand extends GCMCommand {
         messageStateChangedData = gson.fromJson(extraData, MessageStateChangedData.class);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         Receiver receiver = realm.where(Receiver.class)
                 .equalTo("user.serverId", messageStateChangedData.getReceiverId())
@@ -48,7 +47,6 @@ public class MessageStateChangedCommand extends GCMCommand {
         }
 
         realm.commitTransaction();
-        realm.refresh();
     }
 
 }

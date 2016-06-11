@@ -19,7 +19,7 @@ import com.pgizka.gsenger.util.SelectionManager;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
@@ -38,12 +38,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        @Bind(R.id.contact_item_main_image) ImageView contactImage;
-        @Bind(R.id.contact_item_user_name_text) TextView userNameText;
-        @Bind(R.id.contact_item_status_text) TextView statusText;
-        @Bind(R.id.contact_item_checkbox) CheckBox checkBox;
-        @Bind(R.id.contact_item_facebook_label) ImageView facebookLabelImage;
-        @Bind(R.id.contact_item_phone_label) TextView phoneLabelText;
+        @BindView(R.id.contact_item_main_image) ImageView contactImage;
+        @BindView(R.id.contact_item_user_name_text) TextView userNameText;
+        @BindView(R.id.contact_item_status_text) TextView statusText;
+        @BindView(R.id.contact_item_checkbox) CheckBox checkBox;
+        @BindView(R.id.contact_item_facebook_label) ImageView facebookLabelImage;
+        @BindView(R.id.contact_item_phone_label) TextView phoneLabelText;
 
         public ViewHolder(View view) {
             super(view);
@@ -127,7 +127,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         this.multiselectionMode = multiselectionMode;
         notifyDataSetChanged();
     }
-
 
     public void setOnContactClickListener(OnContactClickListener onContactClickListener) {
         this.onContactClickListener = onContactClickListener;

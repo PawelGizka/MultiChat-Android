@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -29,8 +29,8 @@ public class ChatsFragment extends Fragment implements ChatsContract.View {
     @Inject
     ChatsContract.Presenter presenter;
 
-    @Bind(R.id.chats_recycler_view) RecyclerView recyclerView;
-    @Bind(R.id.chats_empty_text_view) TextView emptyTextView;
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.empty_text_view) TextView emptyTextView;
 
     private ChatsAdapter chatsAdapter;
 
@@ -49,8 +49,10 @@ public class ChatsFragment extends Fragment implements ChatsContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+        View view = inflater.inflate(R.layout.fragment_basic_list, container, false);
         ButterKnife.bind(this, view);
+
+        emptyTextView.setText("You do not have any chats");
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);

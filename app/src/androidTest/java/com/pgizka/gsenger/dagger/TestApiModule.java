@@ -5,9 +5,6 @@ import com.pgizka.gsenger.api.ChatRestService;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.UserRestService;
 
-import org.mockito.Mockito;
-
-import dagger.Module;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 

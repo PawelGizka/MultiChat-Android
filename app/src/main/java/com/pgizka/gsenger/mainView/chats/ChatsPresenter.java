@@ -7,7 +7,6 @@ import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.provider.Chat;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class ChatsPresenter implements ChatsContract.Presenter {

@@ -1,6 +1,5 @@
 package com.pgizka.gsenger.mainView.chats;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,17 +14,16 @@ import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.Chat;
-import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
-
+import com.pgizka.gsenger.provider.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmList;
 
@@ -42,10 +40,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        @Bind(R.id.chat_item_main_image) ImageView mainImageView;
-        @Bind(R.id.chat_item_chat_name_text) TextView chatNameTextView;
-        @Bind(R.id.chat_item_description_text) TextView descriptionTextView;
-        @Bind(R.id.chat_item_date_text) TextView dateTextView;
+        @BindView(R.id.chat_item_main_image) ImageView mainImageView;
+        @BindView(R.id.chat_item_chat_name_text) TextView chatNameTextView;
+        @BindView(R.id.chat_item_description_text) TextView descriptionTextView;
+        @BindView(R.id.chat_item_date_text) TextView dateTextView;
 
         public ViewHolder(View view) {
             super(view);

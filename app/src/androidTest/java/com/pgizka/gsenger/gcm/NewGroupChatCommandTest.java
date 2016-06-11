@@ -2,8 +2,8 @@ package com.pgizka.gsenger.gcm;
 
 
 import com.google.gson.Gson;
-import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.data.NewChatData;
 import com.pgizka.gsenger.provider.Chat;
@@ -21,8 +21,14 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-import static com.pgizka.gsenger.TestUtils.*;
-import static org.junit.Assert.*;
+import static com.pgizka.gsenger.TestUtils.createNotPersistedUser;
+import static com.pgizka.gsenger.TestUtils.createUser;
+import static com.pgizka.gsenger.TestUtils.getApplication;
+import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
+import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class NewGroupChatCommandTest {
 
@@ -68,7 +74,6 @@ public class NewGroupChatCommandTest {
         newGroupChatCommand.execute(gSengerApplication, NewChatData.ACTION, data);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         Chat chat = realm.where(Chat.class)
                 .equalTo("serverId", chatId)

@@ -42,7 +42,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -50,10 +50,10 @@ import butterknife.OnTextChanged;
 public class RegistrationFragment extends Fragment implements WelcomeActivity.WelcomeActivityContent {
     static final String TAG = RegistrationFragment.class.getSimpleName();
 
-    @Bind(R.id.registration_user_name) EditText userNameEditText;
-    @Bind(R.id.registration_phone_number) EditText phoneNumberEditText;
-    @Bind(R.id.registration_sign_in_button) Button loginButton;
-    @Bind(R.id.facbook_login_button) LoginButton facebookLoginButton;
+    @BindView(R.id.registration_user_name) EditText userNameEditText;
+    @BindView(R.id.registration_phone_number) EditText phoneNumberEditText;
+    @BindView(R.id.registration_sign_in_button) Button loginButton;
+    @BindView(R.id.facbook_login_button) LoginButton facebookLoginButton;
 
     @Inject
     UserAccountManager userAccountManager;

@@ -1,11 +1,11 @@
 package com.pgizka.gsenger.dagger;
 
 import com.pgizka.gsenger.api.ApiModule;
-import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
-import com.pgizka.gsenger.converstation.ConversationPresenterTest;
-import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.config.ApplicationModule;
+import com.pgizka.gsenger.converstation.ConversationPresenterTest;
+import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
+import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
 import com.pgizka.gsenger.gcm.NewGroupChatCommandTest;
 import com.pgizka.gsenger.gcm.NewMediaMessageCommandTest;
 import com.pgizka.gsenger.gcm.NewTextMessageCommandTest;

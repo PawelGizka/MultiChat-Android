@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +22,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.pgizka.gsenger.R;
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatActivity;
 import com.pgizka.gsenger.api.ApiModule;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.conversationView.mediaView.MediaDetailActivity;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaActivity;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
-import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 
@@ -36,22 +37,24 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
 public class ConversationFragment extends Fragment implements ConversationContract.View {
 
     @Inject
     ConversationContract.Presenter presenter;
 
-    @Bind(R.id.conversation_recycler_view) RecyclerView recyclerView;
-    @Bind(R.id.conversation_empty_text_view) TextView emptyTextView;
-    @Bind(R.id.conversation_main_edit_text) EditText messageText;
+    @BindView(R.id.conversation_recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.conversation_empty_text_view) TextView emptyTextView;
+    @BindView(R.id.conversation_main_edit_text) EditText messageText;
     private TextView usernameTextView;
     private ImageView userImageView;
 
     private List<Message> messages = new ArrayList<>();
+    private Chat chat;
 
     private ConversationAdapter conversationAdapter;
 
@@ -107,11 +110,23 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem menuItem = menu.findItem(R.id.add_users_to_chat_action);
+        boolean isVisible = chat.getType() == Chat.Type.GROUP.code;
+        menuItem.setVisible(isVisible);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.show_attachment_menu_action: {
                 showAttachmentPopupMenu();
+                return true;
+            }
+            case R.id.add_users_to_chat_action: {
+                navigateToAddUsersToChatView();
                 return true;
             }
         }
@@ -149,6 +164,12 @@ public class ConversationFragment extends Fragment implements ConversationContra
             startActivity(intent);
             return true;
         });
+    }
+
+    private void navigateToAddUsersToChatView() {
+        Intent intent = new Intent(getActivity(), AddUsersToChatActivity.class);
+        intent.putExtra(AddUsersToChatActivity.CHAT_ID_ARGUMENT, chatId);
+        startActivity(intent);
     }
 
     @OnClick(R.id.conversation_send_message_floating_button)
@@ -190,6 +211,11 @@ public class ConversationFragment extends Fragment implements ConversationContra
         Intent intent = new Intent(getActivity(), MediaDetailActivity.class);
         intent.putExtra(MediaDetailActivity.MESSAGE_ID_ARGUMENT, messageId);
         startActivity(intent);
+    }
+
+    @Override
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 
     @Override

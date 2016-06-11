@@ -1,9 +1,7 @@
 package com.pgizka.gsenger.gcm.data;
 
-import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

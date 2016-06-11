@@ -3,10 +3,10 @@ package com.pgizka.gsenger.userStatusView;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +28,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -37,10 +37,10 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     static final int PICK_PHOTO_REQUEST = 0;
     static final int CROP_PHOTO_REQUEST = 1;
 
-    @Bind(R.id.user_profile_main_image) ImageView mainImage;
-    @Bind(R.id.user_profile_username_edit_text) EditText userNameEditText;
-    @Bind(R.id.user_profile_status_edit_text) EditText statusEditText;
-    @Bind(R.id.user_profile_change_photo_button) FloatingActionButton changePhotoButton;
+    @BindView(R.id.user_profile_main_image) ImageView mainImage;
+    @BindView(R.id.user_profile_username_edit_text) EditText userNameEditText;
+    @BindView(R.id.user_profile_status_edit_text) EditText statusEditText;
+    @BindView(R.id.user_profile_change_photo_button) FloatingActionButton changePhotoButton;
 
     @Inject
     UserProfileContract.Presenter presenter;

@@ -1,17 +1,13 @@
 package com.pgizka.gsenger.conversationView.mediaView;
 
 
-import android.app.job.JobScheduler;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +24,6 @@ import com.pgizka.gsenger.util.DepthPageTransformer;
 import com.pgizka.gsenger.util.ImageUtil;
 import com.pgizka.gsenger.util.TouchImageView;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

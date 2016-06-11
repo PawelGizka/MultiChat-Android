@@ -1,8 +1,5 @@
 package com.pgizka.gsenger.conversationView;
 
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.pgizka.gsenger.provider.Message.State.CANNOT_SEND;
@@ -56,15 +53,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
-        @Bind(R.id.message_info_text) TextView infoText;
-        @Bind(R.id.message_progress_bar) ProgressBar progressBar;
-        @Bind(R.id.message_file_name_text) TextView fileNameText;
-        @Bind(R.id.message_file_path_text) TextView filePathText;
-        @Bind(R.id.message_image_view) ImageView image;
-        @Bind(R.id.message_video_image_view) ImageView videoImage;
-        @Bind(R.id.message_text_view) TextView messageText;
-        @Bind(R.id.message_image_frame_layout) FrameLayout imageFrameLayout;
-        @Bind(R.id.header) RelativeLayout headerRelativeLayout;
+        @BindView(R.id.message_info_text) TextView infoText;
+        @BindView(R.id.message_progress_bar) ProgressBar progressBar;
+        @BindView(R.id.message_file_name_text) TextView fileNameText;
+        @BindView(R.id.message_file_path_text) TextView filePathText;
+        @BindView(R.id.message_image_view) ImageView image;
+        @BindView(R.id.message_video_image_view) ImageView videoImage;
+        @BindView(R.id.message_text_view) TextView messageText;
+        @BindView(R.id.message_image_frame_layout) FrameLayout imageFrameLayout;
+        @BindView(R.id.header) RelativeLayout headerRelativeLayout;
 
         public ViewHolder(View view) {
             super(view);

@@ -1,9 +1,9 @@
 package com.pgizka.gsenger.provider;
 
 
-import com.pgizka.gsenger.gcm.data.NewChatData;
 import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
 import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
+import com.pgizka.gsenger.gcm.data.NewChatData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.util.List;
@@ -121,6 +121,17 @@ public class ChatRepository {
 
 
         return chat;
+    }
+
+    public void addUsersToChat(Chat chat, List<User> users) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        chat.getUsers().addAll(users);
+        for (User user : users) {
+            user.getChats().add(chat);
+        }
+        realm.commitTransaction();
     }
 
 }

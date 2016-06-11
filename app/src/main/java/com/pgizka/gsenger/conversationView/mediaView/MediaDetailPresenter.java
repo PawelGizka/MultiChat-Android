@@ -4,10 +4,7 @@ import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MediaDetailPresenter implements MediaDetailContract.Presenter {

@@ -42,7 +42,6 @@ public class NewMediaMessageCommand extends GCMCommand {
         messageData = gson.fromJson(extraData, NewMediaMessageData.class);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         realm.beginTransaction();
 
         Message message = messageRepository.handleIncomingMessage(messageData);
@@ -59,7 +58,6 @@ public class NewMediaMessageCommand extends GCMCommand {
         message.setMediaMessage(mediaMessage);
 
         realm.commitTransaction();
-        realm.refresh();
 
         jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
         jobManager.addJob(new GetMediaMessageDataJob(message.getId()));

@@ -1,7 +1,6 @@
 package com.pgizka.gsenger.conversationView;
 
-import android.support.v7.app.AppCompatActivity;
-
+import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
 
@@ -16,6 +15,8 @@ public interface ConversationContract {
         void displayChatImage(User user);
 
         void displayChatName(String userName);
+
+        void setChat(Chat chat);
 
         void setPresenter(ConversationContract.Presenter presenter);
 

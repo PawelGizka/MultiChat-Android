@@ -5,12 +5,12 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.gson.Gson;
 import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.dagger.TestApplicationComponent;
+import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
@@ -95,7 +95,6 @@ public class NewMediaMessageCommandTest {
         verify(messageRestService, timeout(2000)).getMediaMessageData(messageServerId);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", messageServerId)
                 .findFirst();

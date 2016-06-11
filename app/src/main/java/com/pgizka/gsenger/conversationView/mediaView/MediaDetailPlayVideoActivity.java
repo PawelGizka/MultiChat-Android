@@ -1,8 +1,7 @@
 package com.pgizka.gsenger.conversationView.mediaView;
 
-import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.MediaController;

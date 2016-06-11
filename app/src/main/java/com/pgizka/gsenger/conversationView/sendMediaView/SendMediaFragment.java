@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,10 +51,10 @@ public class SendMediaFragment extends Fragment implements SendMediaContract.Vie
     private static final int TAKE_VIDEO_REQUEST = 3;
     private static final int PICK_FILE_REQUEST = 4;
 
-    @Bind(R.id.send_media_main_image) ImageView mainImageView;
-    @Bind(R.id.send_media_description_edit_text) EditText descriptionEditText;
-    @Bind(R.id.send_media_file_path_text) TextView filePathText;
-    @Bind(R.id.send_media_file_size_text) TextView fileSizeText;
+    @BindView(R.id.send_media_main_image) ImageView mainImageView;
+    @BindView(R.id.send_media_description_edit_text) EditText descriptionEditText;
+    @BindView(R.id.send_media_file_path_text) TextView filePathText;
+    @BindView(R.id.send_media_file_size_text) TextView fileSizeText;
     private Toolbar toolbar;
 
     @Inject

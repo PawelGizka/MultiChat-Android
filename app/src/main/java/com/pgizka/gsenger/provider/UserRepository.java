@@ -1,8 +1,6 @@
 package com.pgizka.gsenger.provider;
 
 
-import com.pgizka.gsenger.util.UserAccountManager;
-
 import io.realm.Realm;
 
 public class UserRepository {

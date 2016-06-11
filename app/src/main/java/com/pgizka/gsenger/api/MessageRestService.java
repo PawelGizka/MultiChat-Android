@@ -1,8 +1,8 @@
 package com.pgizka.gsenger.api;
 
+import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
 import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;

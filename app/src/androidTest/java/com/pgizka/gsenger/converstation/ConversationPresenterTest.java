@@ -4,13 +4,13 @@ package com.pgizka.gsenger.converstation;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.MessageRestService;
+import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
+import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
+import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
-import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
@@ -30,8 +30,17 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import okhttp3.ResponseBody;
 
-import static com.pgizka.gsenger.TestUtils.*;
-import static org.mockito.Mockito.*;
+import static com.pgizka.gsenger.TestUtils.createCall;
+import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
+import static com.pgizka.gsenger.TestUtils.createMessage;
+import static com.pgizka.gsenger.TestUtils.createUser;
+import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
+import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ConversationPresenterTest  {
@@ -78,7 +87,6 @@ public class ConversationPresenterTest  {
 
         verify(messageRestService, after(2000)).sendTextMessage(Matchers.<PutTextMessageRequest>any());
 
-        realm.refresh();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", messageServerId)
                 .findFirst();

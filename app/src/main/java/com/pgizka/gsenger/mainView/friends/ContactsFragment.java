@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ContactsFragment extends Fragment implements ContactsContract.View {
@@ -29,9 +29,9 @@ public class ContactsFragment extends Fragment implements ContactsContract.View 
     @Inject
     ContactsContract.Presenter presenter;
 
-    @Bind(R.id.contacts_recycler_view) RecyclerView recyclerView;
-    @Bind(R.id.contacts_empty_text_view) TextView emptyTextView;
-    @Bind(R.id.contacts_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.contacts_recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.contacts_empty_text_view) TextView emptyTextView;
+    @BindView(R.id.contacts_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
     private ContactsAdapter contactsAdapter;
 

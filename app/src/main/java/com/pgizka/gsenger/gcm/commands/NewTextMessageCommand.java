@@ -41,7 +41,6 @@ public class NewTextMessageCommand extends GCMCommand {
         messageData = gson.fromJson(extraData, NewTextMessageData.class);
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         realm.beginTransaction();
 
         Message message = messageRepository.handleIncomingMessage(messageData);
@@ -54,7 +53,6 @@ public class NewTextMessageCommand extends GCMCommand {
         message.setTextMessage(textMessage);
 
         realm.commitTransaction();
-        realm.refresh();
 
         jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
     }

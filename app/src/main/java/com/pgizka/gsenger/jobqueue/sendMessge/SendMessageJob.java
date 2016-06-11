@@ -63,7 +63,6 @@ public class SendMessageJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         realm = Realm.getDefaultInstance();
-        realm.refresh();
 
         message = realm.where(Message.class)
                 .equalTo("id", messageId)

@@ -6,11 +6,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
+import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
+import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaContract;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
@@ -33,11 +33,11 @@ import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class SendMediaPresenterTest {
@@ -87,7 +87,6 @@ public class SendMediaPresenterTest {
 
         verify(messageRestService, after(2000)).sendMediaMessage(Matchers.<RequestBody>any(), Matchers.<RequestBody>any());
 
-        realm.refresh();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", 12)
                 .findFirst();

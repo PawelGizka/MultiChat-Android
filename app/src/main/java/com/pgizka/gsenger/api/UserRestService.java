@@ -1,10 +1,10 @@
 package com.pgizka.gsenger.api;
 
-import com.pgizka.gsenger.api.dtos.contacts.GetContactsResponse;
 import com.pgizka.gsenger.api.dtos.contacts.GetContactsRequest;
+import com.pgizka.gsenger.api.dtos.contacts.GetContactsResponse;
+import com.pgizka.gsenger.api.dtos.user.UpdateUserStatusRequest;
 import com.pgizka.gsenger.api.dtos.user.UserRegistrationRequest;
 import com.pgizka.gsenger.api.dtos.user.UserRegistrationResponse;
-import com.pgizka.gsenger.api.dtos.user.UpdateUserStatusRequest;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;

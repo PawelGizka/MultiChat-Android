@@ -5,11 +5,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.dagger.TestApplicationComponent;
+import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.gcm.data.NewTextMessageData;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
@@ -28,9 +28,17 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import okhttp3.ResponseBody;
 
-import static com.pgizka.gsenger.TestUtils.*;
-import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
+import static com.pgizka.gsenger.TestUtils.createCall;
+import static com.pgizka.gsenger.TestUtils.createUser;
+import static com.pgizka.gsenger.TestUtils.getApplication;
+import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
+import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.prepareMessageData;
+import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class NewTextMessageCommandTest {
@@ -84,7 +92,6 @@ public class NewTextMessageCommandTest {
         verify(messageRestService, timeout(2000)).setMessageDelivered(Mockito.<MessageStateChangedRequest>any());
 
         Realm realm = Realm.getDefaultInstance();
-        realm.refresh();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", messageServerId)
                 .findFirst();
