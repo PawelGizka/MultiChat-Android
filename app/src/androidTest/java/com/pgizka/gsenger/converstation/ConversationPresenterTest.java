@@ -87,9 +87,11 @@ public class ConversationPresenterTest  {
 
         verify(messageRestService, after(2000)).sendTextMessage(Matchers.<PutTextMessageRequest>any());
 
+        realm.beginTransaction();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", messageServerId)
                 .findFirst();
+        realm.commitTransaction();
 
         Assert.assertNotNull(message);
         Assert.assertEquals(Message.State.SENT.code, message.getState());

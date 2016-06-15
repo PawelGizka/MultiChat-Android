@@ -87,9 +87,11 @@ public class SendMediaPresenterTest {
 
         verify(messageRestService, after(2000)).sendMediaMessage(Matchers.<RequestBody>any(), Matchers.<RequestBody>any());
 
+        realm.beginTransaction();
         Message message = realm.where(Message.class)
                 .equalTo("serverId", 12)
                 .findFirst();
+        realm.commitTransaction();
 
         assertNotNull(message);
         assertEquals(Message.State.SENT.code, message.getState());
