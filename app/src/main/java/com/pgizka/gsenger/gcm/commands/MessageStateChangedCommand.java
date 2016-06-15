@@ -33,12 +33,11 @@ public class MessageStateChangedCommand extends GCMCommand {
 
         Realm realm = Realm.getDefaultInstance();
 
+        realm.beginTransaction();
         Receiver receiver = realm.where(Receiver.class)
                 .equalTo("user.serverId", messageStateChangedData.getReceiverId())
                 .equalTo("message.serverId", messageStateChangedData.getMessageId())
                 .findFirst();
-
-        realm.beginTransaction();
 
         if (action.equals(MESSAGE_DELIVERED_ACTION)) {
             receiver.setDelivered(messageStateChangedData.getDate());

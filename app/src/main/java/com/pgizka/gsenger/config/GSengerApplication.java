@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.util.StorageResolver;
+//import com.squareup.leakcanary.LeakCanary;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -19,6 +20,7 @@ public class GSengerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+//        LeakCanary.install(this);
 
         RealmMigration realmMigration = (realm, oldVersion, newVersion) -> {
             RealmSchema realmSchema = realm.getSchema();

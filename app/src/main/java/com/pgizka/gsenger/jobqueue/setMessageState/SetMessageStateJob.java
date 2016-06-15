@@ -59,6 +59,7 @@ public class SetMessageStateJob extends BaseJob {
     public void onRun() throws Throwable {
         realm = Realm.getDefaultInstance();
 
+        realm.beginTransaction();
         User owner = userAccountManager.getOwner();
         Message message = realm.where(Message.class)
                 .equalTo("id", messageId)
@@ -68,6 +69,7 @@ public class SetMessageStateJob extends BaseJob {
                 .equalTo("user.id", owner.getId())
                 .equalTo("message.id", message.getId())
                 .findFirst();
+        realm.commitTransaction();
 
         MessageStateChangedRequest messageStateChangedRequest = new MessageStateChangedRequest();
         messageStateChangedRequest.setMessageId(message.getServerId());
