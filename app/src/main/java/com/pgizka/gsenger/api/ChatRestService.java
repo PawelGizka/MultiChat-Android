@@ -4,6 +4,7 @@ import com.pgizka.gsenger.api.dtos.chats.AddUsersToChatRequest;
 import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
 import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -16,6 +17,6 @@ public interface ChatRestService {
     Call<PutChatResponse> createChat(@Body PutChatRequest putChatRequest);
 
     @POST("chat/addUsers")
-    Call<Response> addUsersToChat(@Body AddUsersToChatRequest addUsersToChatRequest);
+    Call<ResponseBody> addUsersToChat(@Body AddUsersToChatRequest addUsersToChatRequest);
 
 }

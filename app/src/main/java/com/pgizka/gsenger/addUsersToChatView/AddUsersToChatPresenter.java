@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +30,6 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     private AddUsersToChatContract.View view;
 
     private Chat chat;
-    private int chatId;
     private List<User> availableUsers;
 
     public AddUsersToChatPresenter() {
@@ -39,7 +39,9 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     @Override
     public void onCreate(AddUsersToChatContract.View view, int chatId) {
         this.view = view;
-        this.chatId = chatId;
+
+        Realm realm = Realm.getDefaultInstance();
+        chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
     }
 
     @Override
@@ -50,7 +52,6 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
 
     private void getAvailableUsers() {
         Realm realm = Realm.getDefaultInstance();
-        chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
 
         RealmList<User> usersAlreadyInChat = chat.getUsers();
 
@@ -75,12 +76,12 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     @Override
     public void addUsers(List<User> users) {
         AddUsersToChatRequest addUsersToChatRequest = new AddUsersToChatRequest(chat, users);
-        Call<Response> call = chatRestService.addUsersToChat(addUsersToChatRequest);
+        Call<ResponseBody> call = chatRestService.addUsersToChat(addUsersToChatRequest);
 
         view.showProgressDialog();
-        call.enqueue(new Callback<Response>() {
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Response> call, Response<Response> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 view.dismissProgressDialog();
                 if (response.isSuccess()) {
                     chatRepository.addUsersToChat(chat, users);
@@ -91,7 +92,7 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
             }
 
             @Override
-            public void onFailure(Call<Response> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 view.dismissProgressDialog();
                 view.displayErrorMessage("Could not add selected users to chat");
             }

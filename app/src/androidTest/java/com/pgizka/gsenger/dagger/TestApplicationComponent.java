@@ -1,5 +1,6 @@
 package com.pgizka.gsenger.dagger;
 
+import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatPresenterTest;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.config.ApplicationModule;
@@ -32,5 +33,7 @@ public interface TestApplicationComponent extends ApplicationComponent {
     void inject(NewGroupChatCommandTest newGroupChatCommandTest);
 
     void inject(CreateChatPresenterTest createChatPresenterTest);
+
+    void inject(AddUsersToChatPresenterTest addUsersToChatPresenterTest);
 
 }
