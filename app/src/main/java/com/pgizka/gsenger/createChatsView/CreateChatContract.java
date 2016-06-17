@@ -25,6 +25,8 @@ public interface CreateChatContract {
 
         void onCreate(View view);
 
+        void onDestroy();
+
         void onResume();
 
         void createChat(String chatName, List<User> participants);

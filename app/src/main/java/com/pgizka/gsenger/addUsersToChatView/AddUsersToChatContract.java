@@ -25,6 +25,8 @@ public interface AddUsersToChatContract {
 
         void onCreate(View view, int chatId);
 
+        void onDestroy();
+
         void onResume();
 
         void addUsers(List<User> users);

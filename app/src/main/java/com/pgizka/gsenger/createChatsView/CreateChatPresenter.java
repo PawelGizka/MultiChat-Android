@@ -44,6 +44,11 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
     }
 
     @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
     public void onResume() {
         //get all users in contacts except owner of this phone
         List<User> users = realm.where(User.class)

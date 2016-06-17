@@ -71,6 +71,12 @@ public class MediaDetailFragment extends Fragment implements MediaDetailContract
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();

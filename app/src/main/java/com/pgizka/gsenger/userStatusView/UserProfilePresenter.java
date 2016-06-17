@@ -33,6 +33,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
     public void onResume() {
         view.setUserName(owner.getUserName());
         view.setStatus(owner.getStatus());

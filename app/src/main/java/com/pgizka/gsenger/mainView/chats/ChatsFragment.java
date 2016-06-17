@@ -64,6 +64,12 @@ public class ChatsFragment extends Fragment implements ChatsContract.View {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         presenter.onStart();

@@ -9,6 +9,18 @@ import java.util.List;
 
 public interface ContactsContract {
 
+    interface View {
+
+        AppCompatActivity getHoldingActivity();
+
+        void displayContactsList(List<User> users);
+
+        void displayErrorMessage(AlertDialog alertDialog);
+
+        void dismissRefreshing();
+
+    }
+
     interface Presenter {
 
         void onCreate(View view);
@@ -20,18 +32,6 @@ public interface ContactsContract {
         void friendClicked(int position, User user);
 
         void refreshFriends();
-    }
-
-    interface View {
-
-        AppCompatActivity getHoldingActivity();
-
-        void displayContactsList(List<User> users);
-
-        void displayErrorMessage(AlertDialog alertDialog);
-
-        void dismissRefreshing();
-
     }
 
 }

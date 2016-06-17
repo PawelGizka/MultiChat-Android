@@ -12,7 +12,7 @@ import io.realm.RealmResults;
 public class ChatsPresenter implements ChatsContract.Presenter {
 
 
-    private ChatsContract.View chatsView;
+    private ChatsContract.View view;
     private AppCompatActivity activity;
     private RealmResults<Chat> chats;
 
@@ -20,19 +20,24 @@ public class ChatsPresenter implements ChatsContract.Presenter {
 
     @Override
     public void onCreate(ChatsContract.View view) {
-        chatsView = view;
+        this.view = view;
         realm = Realm.getDefaultInstance();
-        activity = chatsView.getHoldingActivity();
+        activity = this.view.getHoldingActivity();
+    }
+
+    @Override
+    public void onDestroy() {
+        view = null;
     }
 
     @Override
     public void onStart() {
         chats = realm.where(Chat.class).findAll();
-        chatsView.displayChatsList(chats);
+        view.displayChatsList(chats);
 
         chats.addChangeListener(element -> {
             chats = element;
-            chatsView.displayChatsList(chats);
+            view.displayChatsList(chats);
         });
     }
 

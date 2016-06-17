@@ -21,7 +21,7 @@ import io.realm.RealmResults;
 
 public class ContactsPresenter implements ContactsContract.Presenter {
 
-    private ContactsContract.View contactsView;
+    private ContactsContract.View view;
     private AppCompatActivity activity;
 
     private Realm realm;
@@ -36,26 +36,27 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Override
     public void onCreate(ContactsContract.View view) {
-        contactsView = view;
+        this.view = view;
         GSengerApplication.getApplicationComponent().inject(this);
         realm = Realm.getDefaultInstance();
         eventBus.register(this);
-        activity = contactsView.getHoldingActivity();
+        activity = this.view.getHoldingActivity();
     }
 
     @Override
     public void onDestroy() {
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override
     public void onStart() {
         getUsers();
-        contactsView.displayContactsList(users);
+        view.displayContactsList(users);
 
         users.addChangeListener(element -> {
             getUsers();
-            contactsView.displayContactsList(users);
+            view.displayContactsList(users);
         });
     }
 
@@ -81,7 +82,7 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(GetContactsFinishedEvent friendsFinishedEvent) {
-        contactsView.dismissRefreshing();
+        view.dismissRefreshing();
     }
 
 

@@ -19,6 +19,8 @@ public interface MediaDetailContract {
 
         void onCreate(View view, int messageId, int savedPosition);
 
+        void onDestroy();
+
         void onResume();
 
     }

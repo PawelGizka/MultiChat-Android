@@ -93,6 +93,12 @@ public class SendMediaFragment extends Fragment implements SendMediaContract.Vie
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         setActionBarTitle();

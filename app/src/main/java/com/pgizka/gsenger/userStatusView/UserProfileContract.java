@@ -8,6 +8,7 @@ import java.io.File;
 public interface UserProfileContract {
 
     interface View {
+
         void setUserName(String userName);
 
         void setStatus(String status);
@@ -18,7 +19,10 @@ public interface UserProfileContract {
     }
 
     interface Presenter {
+
         void onCreate(View view);
+
+        void onDestroy();
 
         void onResume();
 

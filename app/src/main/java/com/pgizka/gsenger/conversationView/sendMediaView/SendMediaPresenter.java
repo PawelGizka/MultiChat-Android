@@ -55,6 +55,11 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     }
 
     @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
     public void onResume() {
         Realm realm = Realm.getDefaultInstance();
         if (groupChat) {

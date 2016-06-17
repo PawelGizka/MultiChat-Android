@@ -28,6 +28,8 @@ public interface ConversationContract {
 
         void onCreate(View view, int friendId, int chatId);
 
+        void onDestroy();
+
         void sendMessage(String text);
 
         void messageClicked(Message message);

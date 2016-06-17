@@ -36,6 +36,11 @@ public class MediaDetailPresenter implements MediaDetailContract.Presenter {
     }
 
     @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
     public void onResume() {
         getMessages();
         view.displayMessages(messages);

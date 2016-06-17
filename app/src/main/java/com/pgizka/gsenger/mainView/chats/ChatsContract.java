@@ -23,6 +23,8 @@ public interface ChatsContract {
 
         void onCreate(View view);
 
+        void onDestroy();
+
         void onStart();
 
         void chatClicked(Chat chat);

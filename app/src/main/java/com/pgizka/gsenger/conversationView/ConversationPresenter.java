@@ -68,6 +68,11 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     }
 
     @Override
+    public void onDestroy() {
+        conversationView = null;
+    }
+
+    @Override
     public void onResume() {
         paused = false;
         owner = userAccountManager.getOwner();

@@ -72,11 +72,10 @@ public class AddUsersToChatFragment extends Fragment implements AddUsersToChatCo
         return view;
     }
 
-    private void setToolbarTitle(int chatId) {
-        Realm realm = Realm.getDefaultInstance();
-        Chat chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
-        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        toolbar.setTitle("Add to " + chat.getChatName());
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override
@@ -99,6 +98,14 @@ public class AddUsersToChatFragment extends Fragment implements AddUsersToChatCo
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void setToolbarTitle(int chatId) {
+        Realm realm = Realm.getDefaultInstance();
+        Chat chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setTitle("Add to " + chat.getChatName());
     }
 
     @Override

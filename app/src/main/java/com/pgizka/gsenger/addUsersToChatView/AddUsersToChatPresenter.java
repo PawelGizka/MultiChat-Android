@@ -45,6 +45,11 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     }
 
     @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
     public void onResume() {
         getAvailableUsers();
         view.displayUsersList(availableUsers);

@@ -60,8 +60,13 @@ public class CreateChatFragment extends Fragment implements CreateChatContract.V
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(contactsAdapter);
 
-
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override

@@ -20,6 +20,8 @@ public interface SendMediaContract {
 
         void onCreate(View view, Context context, int friendId, int chatId);
 
+        void onDestroy();
+
         void onResume();
 
         void sendPhoto(Uri photoUri, String description);
