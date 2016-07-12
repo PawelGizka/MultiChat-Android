@@ -1,13 +1,14 @@
-package com.pgizka.gsenger.gcm.data;
+package com.pgizka.gsenger.api.dtos.chats;
 
 import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
 
-public class NewChatData {
-
-    public static final transient String ACTION = "NEW_GROUP_CHAT_ACTION";
+public class ChatData {
+    public static final transient String NEW_GROUP_CHAT_ACTION = "NEW_GROUP_CHAT_ACTION";
+    public static final transient String USERS_ADDED_TO_CHAT_ACTION = "USERS_ADDED_TO_CHAT_ACTION";
+    public static final transient String ADDED_TO_CHAT_ACTION = "ADDED_TO_CHAT_ACTION";
 
     private int chatId;
     private String name;
@@ -15,7 +16,7 @@ public class NewChatData {
 
     private List<User> participants;
 
-    public NewChatData() {
+    public ChatData() {
     }
 
     public int getChatId() {

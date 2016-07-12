@@ -9,7 +9,7 @@ import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
-import com.pgizka.gsenger.gcm.data.NewTextMessageData;
+import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
@@ -76,13 +76,13 @@ public class NewTextMessageCommandTest {
         String data = gson.toJson(prepareTextMessageData(sender, messageServerId));
 
         when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
-        textMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);
+        textMessageCommand.execute(gSengerApplication, TextMessageData.ACTION, data);
 
         verifyNewTextMessageHandledCorrectly(messageServerId);
     }
 
-    private NewTextMessageData prepareTextMessageData(User sender, int messageServerId) {
-        NewTextMessageData textMessageData = new NewTextMessageData();
+    private TextMessageData prepareTextMessageData(User sender, int messageServerId) {
+        TextMessageData textMessageData = new TextMessageData();
         textMessageData.setText("MessageText");
         prepareMessageData(textMessageData, sender, messageServerId);
         return textMessageData;

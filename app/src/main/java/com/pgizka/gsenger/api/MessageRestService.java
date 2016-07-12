@@ -1,5 +1,6 @@
 package com.pgizka.gsenger.api;
 
+import com.pgizka.gsenger.api.dtos.messages.MessageBatchResponse;
 import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
 import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
@@ -34,5 +35,8 @@ public interface MessageRestService {
 
     @POST("message/viewed")
     Call<ResponseBody> setMessageViewed(@Body MessageStateChangedRequest messageStateChangedRequest);
+
+    @GET("message/chatMessages/{chatId}")
+    Call<MessageBatchResponse> getMessagesForChat(@Path("chatId") String chatId);
 
 }

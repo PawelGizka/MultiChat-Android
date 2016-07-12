@@ -10,12 +10,15 @@ import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaFragment;
 import com.pgizka.gsenger.conversationView.sendMediaView.SendMediaPresenter;
 import com.pgizka.gsenger.createChatsView.CreateChatFragment;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
+import com.pgizka.gsenger.gcm.commands.AddUsersToGroupChatCommand;
+import com.pgizka.gsenger.gcm.commands.AddedToChatCommand;
 import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
+import com.pgizka.gsenger.jobqueue.getMessages.GetMessagesJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
@@ -64,6 +67,8 @@ public interface ApplicationComponent {
 
     void inject(GetMediaMessageDataJob getMediaMessageDataJob);
 
+    void inject(GetMessagesJob getMessagesJob);
+
     void inject(RegistrationTask registrationTask);
 
     void inject(NewTextMessageCommand newTextMessageCommand);
@@ -73,6 +78,10 @@ public interface ApplicationComponent {
     void inject(NewGroupChatCommand newGroupChatCommand);
 
     void inject(MessageStateChangedCommand messageStateChangedCommand);
+
+    void inject(AddedToChatCommand addedToChatCommand);
+
+    void inject(AddUsersToGroupChatCommand addUsersToGroupChatCommand);
 
     void inject(ContactsPresenter contactsPresenter);
 

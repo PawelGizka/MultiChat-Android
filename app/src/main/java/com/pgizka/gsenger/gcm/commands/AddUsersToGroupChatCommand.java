@@ -4,16 +4,16 @@ package com.pgizka.gsenger.gcm.commands;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.GCMCommand;
-import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.provider.ChatRepository;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
 
-public class NewGroupChatCommand extends GCMCommand {
+public class AddUsersToGroupChatCommand extends GCMCommand{
 
     @Inject
     ChatRepository chatRepository;
@@ -23,7 +23,7 @@ public class NewGroupChatCommand extends GCMCommand {
 
     private ChatData chatData;
 
-    public NewGroupChatCommand() {
+    public AddUsersToGroupChatCommand() {
         GSengerApplication.getApplicationComponent().inject(this);
     }
 
@@ -34,7 +34,7 @@ public class NewGroupChatCommand extends GCMCommand {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        chatRepository.createGroupChat(chatData);
+        chatRepository.addUsersToGroupChat(chatData);
         realm.commitTransaction();
     }
 }

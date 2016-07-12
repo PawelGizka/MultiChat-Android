@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
-import com.pgizka.gsenger.gcm.data.NewChatData;
+import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.User;
 
@@ -60,7 +60,7 @@ public class NewGroupChatCommandTest {
 
         int chatId = 15;
         String chatName = "Sample Chat";
-        NewChatData chatData = new NewChatData();
+        ChatData chatData = new ChatData();
         chatData.setName(chatName);
         chatData.setStartedDate(System.currentTimeMillis());
         chatData.setChatId(chatId);
@@ -71,7 +71,7 @@ public class NewGroupChatCommandTest {
         chatData.setParticipants(participants);
 
         String data = gson.toJson(chatData);
-        newGroupChatCommand.execute(gSengerApplication, NewChatData.ACTION, data);
+        newGroupChatCommand.execute(gSengerApplication, ChatData.NEW_GROUP_CHAT_ACTION, data);
 
         Realm realm = Realm.getDefaultInstance();
 

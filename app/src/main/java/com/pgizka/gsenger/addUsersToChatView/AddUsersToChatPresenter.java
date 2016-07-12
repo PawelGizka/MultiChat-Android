@@ -89,7 +89,10 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 view.dismissProgressDialog();
                 if (response.isSuccess()) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
                     chatRepository.addUsersToChat(chat, users);
+                    realm.commitTransaction();
                     view.closeWindow();
                 } else {
                     view.displayErrorMessage("Could not add selected users to chat");

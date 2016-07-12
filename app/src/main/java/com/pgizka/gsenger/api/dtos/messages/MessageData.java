@@ -1,18 +1,18 @@
-package com.pgizka.gsenger.gcm.data;
+package com.pgizka.gsenger.api.dtos.messages;
 
 import com.pgizka.gsenger.provider.User;
 
 import java.util.List;
 
-public class NewMessageData {
+public class MessageData {
 
     private int messageId;
     private long sendDate;
     private User sender;
     private long chatId;
-    private List<Integer> receiversIds;
+    private List<ReceiverData> receiversData;
 
-    public NewMessageData() {
+    public MessageData() {
     }
 
     public int getMessageId() {
@@ -47,11 +47,11 @@ public class NewMessageData {
         this.chatId = chatId;
     }
 
-    public List<Integer> getReceiversIds() {
-        return receiversIds;
+    public List<ReceiverData> getReceiversData() {
+        return receiversData;
     }
 
-    public void setReceiversIds(List<Integer> receiversIds) {
-        this.receiversIds = receiversIds;
+    public void setReceiversData(List<ReceiverData> receiversData) {
+        this.receiversData = receiversData;
     }
 }

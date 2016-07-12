@@ -1,14 +1,14 @@
-package com.pgizka.gsenger.gcm.data;
+package com.pgizka.gsenger.api.dtos.messages;
 
 
-public class NewMediaMessageData extends NewMessageData {
+public class MediaMessageData extends MessageData {
     public static final transient String ACTION = "NEW_MEDIA_MESSAGE_ACTION";
 
     private String description;
     private String fileName;
     private int type;
 
-    public NewMediaMessageData() {
+    public MediaMessageData() {
     }
 
     public String getDescription() {

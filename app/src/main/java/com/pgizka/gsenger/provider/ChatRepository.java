@@ -1,9 +1,11 @@
 package com.pgizka.gsenger.provider;
 
 
+import android.util.Log;
+
 import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
 import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
-import com.pgizka.gsenger.gcm.data.NewChatData;
+import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
 import java.util.List;
@@ -90,13 +92,12 @@ public class ChatRepository {
         return chat;
     }
 
-    public Chat createGroupChatFrom(NewChatData newChatData) {
+    public Chat createGroupChat(ChatData chatData) {
         Realm realm = Realm.getDefaultInstance();
 
-        int chatId = newChatData.getChatId();
-        Chat chat = realm.where(Chat.class)
-                .equalTo("serverId", chatId)
-                .findFirst();
+        int chatId = chatData.getChatId();
+        Chat chat = realm.where(Chat.class).equalTo("serverId", chatId).findFirst();
+
         boolean chatAlreadyExists = chat != null;
         if (chatAlreadyExists) {
             return chat;
@@ -104,34 +105,48 @@ public class ChatRepository {
 
         chat = new Chat();
         chat.setId(repository.getChatNextId());
-        chat.setServerId(newChatData.getChatId());
+        chat.setServerId(chatData.getChatId());
         chat.setType(Chat.Type.GROUP.code);
-        chat.setChatName(newChatData.getName());
-        chat.setStartedDate(newChatData.getStartedDate());
+        chat.setChatName(chatData.getName());
+        chat.setStartedDate(chatData.getStartedDate());
 
         chat = realm.copyToRealm(chat);
 
         RealmList<User> participants = new RealmList<>();
-        for (User participant : newChatData.getParticipants()) {
+        for (User participant : chatData.getParticipants()) {
             User localParticipant = userRepository.getOrCreateLocalUser(participant);
             participants.add(localParticipant);
             localParticipant.getChats().add(chat);
         }
         chat.setUsers(participants);
 
-
         return chat;
+    }
+
+    public Chat addUsersToGroupChat(ChatData chatData) {
+        Realm realm = Realm.getDefaultInstance();
+
+        Chat chat = realm.where(Chat.class).equalTo("serverId", chatData.getChatId()).findFirst();
+        if (chat == null) {
+            Log.i("ChatRepository", "chat with server id: " + chatData.getChatId());
+            return null;
+        }
+
+        addUsersToChat(chat, chatData.getParticipants());
+
+        return null;
     }
 
     public void addUsersToChat(Chat chat, List<User> users) {
         Realm realm = Realm.getDefaultInstance();
 
-        realm.beginTransaction();
-        chat.getUsers().addAll(users);
         for (User user : users) {
-            user.getChats().add(chat);
+            User alreadyAddedUser = realm.where(User.class).equalTo("chats.serverId", chat.getServerId()).findFirst();
+            if (alreadyAddedUser == null) {
+                user.getChats().add(chat);
+                chat.getUsers().add(user);
+            }
         }
-        realm.commitTransaction();
     }
 
 }

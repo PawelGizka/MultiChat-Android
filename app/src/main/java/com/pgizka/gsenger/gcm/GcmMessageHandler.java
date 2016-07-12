@@ -4,14 +4,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.pgizka.gsenger.gcm.commands.AddedToChatCommand;
 import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
-import com.pgizka.gsenger.gcm.data.MessageStateChangedData;
-import com.pgizka.gsenger.gcm.data.NewChatData;
-import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
-import com.pgizka.gsenger.gcm.data.NewTextMessageData;
+import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
+import com.pgizka.gsenger.api.dtos.chats.ChatData;
+import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
+import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
+import com.pgizka.gsenger.provider.Chat;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,13 +26,12 @@ public class GcmMessageHandler extends GcmListenerService {
     static {
         // Known messages and their GCM message receivers
         Map <String, GCMCommand> receivers = new HashMap<>();
-        MessageStateChangedCommand messageStateChangedCommand = new MessageStateChangedCommand();
 
-        receivers.put(NewTextMessageData.ACTION, new NewTextMessageCommand());
-        receivers.put(NewMediaMessageData.ACTION, new NewMediaMessageCommand());
-        receivers.put(MessageStateChangedData.MESSAGE_DELIVERED_ACTION, messageStateChangedCommand);
-        receivers.put(MessageStateChangedData.MESSAGE_VIEWED_ACTION, messageStateChangedCommand);
-        receivers.put(NewChatData.ACTION, new NewGroupChatCommand());
+        receivers.put(TextMessageData.ACTION, new NewTextMessageCommand());
+        receivers.put(MediaMessageData.ACTION, new NewMediaMessageCommand());
+        receivers.put(ReceiverData.UPDATE_RECEIVER_ACTION, new MessageStateChangedCommand());
+        receivers.put(ChatData.NEW_GROUP_CHAT_ACTION, new NewGroupChatCommand());
+        receivers.put(ChatData.ADDED_TO_CHAT_ACTION, new AddedToChatCommand());
 
         MESSAGE_RECEIVERS = Collections.unmodifiableMap(receivers);
     }

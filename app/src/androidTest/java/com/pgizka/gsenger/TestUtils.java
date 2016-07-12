@@ -9,7 +9,7 @@ import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
 import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
-import com.pgizka.gsenger.gcm.data.NewMessageData;
+import com.pgizka.gsenger.api.dtos.messages.MessageData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
@@ -171,8 +171,8 @@ public class TestUtils {
         return chat;
     }
 
-    public static NewMessageData prepareMessageData(Chat chat, User sender, int messageServerId) {
-        NewMessageData messageData = new NewMessageData();
+    public static MessageData prepareMessageData(Chat chat, User sender, int messageServerId) {
+        MessageData messageData = new MessageData();
 
         User user = new User(sender);
         messageData.setSender(user);
@@ -183,13 +183,13 @@ public class TestUtils {
         return messageData;
     }
 
-    public static NewMessageData prepareMessageData(User sender, int messageServerId) {
-        NewMessageData messageData = new NewMessageData();
+    public static MessageData prepareMessageData(User sender, int messageServerId) {
+        MessageData messageData = new MessageData();
         prepareMessageData(messageData, sender, messageServerId);
         return messageData;
     }
 
-    public static void prepareMessageData(NewMessageData messageData, User sender, int messageServerId) {
+    public static void prepareMessageData(MessageData messageData, User sender, int messageServerId) {
         User user = new User(sender);
         messageData.setSender(user);
         messageData.setSendDate(System.currentTimeMillis());

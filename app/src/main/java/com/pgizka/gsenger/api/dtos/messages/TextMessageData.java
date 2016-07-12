@@ -1,11 +1,11 @@
-package com.pgizka.gsenger.gcm.data;
+package com.pgizka.gsenger.api.dtos.messages;
 
-public class NewTextMessageData extends NewMessageData {
+public class TextMessageData extends MessageData {
     public static final String ACTION = "NEW_TEXT_MESSAGE_ACTION";
 
     private String text;
 
-    public NewTextMessageData() {
+    public TextMessageData() {
     }
 
     public String getText() {

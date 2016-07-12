@@ -9,8 +9,8 @@ import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
-import com.pgizka.gsenger.gcm.data.NewMediaMessageData;
-import com.pgizka.gsenger.gcm.data.NewTextMessageData;
+import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
+import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.User;
@@ -76,13 +76,13 @@ public class NewMediaMessageCommandTest {
         String data = gson.toJson(prepareMediaMessageData(sender, messageServerId));
 
         when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
-        mediaMessageCommand.execute(gSengerApplication, NewTextMessageData.ACTION, data);
+        mediaMessageCommand.execute(gSengerApplication, TextMessageData.ACTION, data);
 
         verifyNewMediaMessageHandledCorrectly(messageServerId);
     }
 
-    private NewMediaMessageData prepareMediaMessageData(User sender, int messageServerId) {
-        NewMediaMessageData mediaMessageData = new NewMediaMessageData();
+    private MediaMessageData prepareMediaMessageData(User sender, int messageServerId) {
+        MediaMessageData mediaMessageData = new MediaMessageData();
         mediaMessageData.setFileName("fileName");
         mediaMessageData.setType(MediaMessage.Type.PHOTO.code);
         mediaMessageData.setDescription("description");

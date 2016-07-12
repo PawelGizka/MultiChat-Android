@@ -59,9 +59,7 @@ public class GetMediaMessageDataJob extends BaseJob {
         realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        message = realm.where(Message.class)
-                .equalTo("id", messageId)
-                .findFirst();
+        message = realm.where(Message.class).equalTo("id", messageId).findFirst();
 
         if (message == null) {
             //message is not available, maybe it was deleted, skip it
@@ -99,8 +97,10 @@ public class GetMediaMessageDataJob extends BaseJob {
             mediaMessage.setPath(file.getPath());
             message.setState(Message.State.RECEIVED.code);
             realm.commitTransaction();
+        } else {
+            realm.commitTransaction();
+            throw new Exception();
         }
-
     }
 
     @Override
