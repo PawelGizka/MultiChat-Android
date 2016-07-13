@@ -27,7 +27,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.api.dtos.user.UserRegistrationRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMUTil;
+import com.pgizka.gsenger.gcm.GcmUtil;
 import com.pgizka.gsenger.mainView.MainActivity;
 import com.pgizka.gsenger.util.UserAccountManager;
 import com.pgizka.gsenger.welcome.GcmTokenObtainedEvent;
@@ -143,7 +143,7 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
     @OnClick(R.id.registration_sign_in_button)
     public void onLoginButtonClicked() {
-        String token = GCMUTil.getRegistrationToken(getContext());
+        String token = GcmUtil.getRegistrationToken(getContext());
         boolean tokenObtained = token != null;
         if (!tokenObtained) {
             waitingForRegistration = true;

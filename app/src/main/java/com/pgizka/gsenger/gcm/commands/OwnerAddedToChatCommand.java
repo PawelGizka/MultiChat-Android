@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.GcmCommand;
 import com.pgizka.gsenger.jobqueue.getMessages.GetMessagesJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import io.realm.Realm;
 
 
-public class OwnerAddedToChatCommand extends GCMCommand {
+public class OwnerAddedToChatCommand implements GcmCommand {
 
     @Inject
     ChatRepository chatRepository;

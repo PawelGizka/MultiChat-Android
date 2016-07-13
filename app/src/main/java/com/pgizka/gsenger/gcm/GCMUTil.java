@@ -15,8 +15,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
-public class GCMUTil {
-    public static final String TAG = GCMUTil.class.getSimpleName();
+public class GcmUtil {
+    public static final String TAG = GcmUtil.class.getSimpleName();
 
     private static final String GCM_PREFERENCES = "gcmPreferences";
     private static final String GCM_TOKEN = "gcmToken";

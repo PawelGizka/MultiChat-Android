@@ -7,6 +7,7 @@ import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -26,6 +27,40 @@ public class MessageRepository {
         this.userAccountManager = userAccountManager;
         this.chatRepository = chatRepository;
     }
+
+    public Message createOutgoingTextMessageWithReceivers(Chat chat, String text) {
+        Realm realm = Realm.getDefaultInstance();
+
+        Message message = createOutgoingMessageWithReceivers(chat);
+
+        TextMessage textMessage = new TextMessage();
+        textMessage.setText(text);
+        textMessage = realm.copyToRealm(textMessage);
+
+        message.setType(Message.Type.TEXT_MESSAGE.code);
+        message.setTextMessage(textMessage);
+
+        return message;
+    }
+
+    public Message createOutgoingMediaMessageWithReceivers(Chat chat, int type, String fileName, String path, String description) {
+        Realm realm = Realm.getDefaultInstance();
+
+        Message message = createOutgoingMessageWithReceivers(chat);
+
+        MediaMessage mediaMessage = new MediaMessage();
+        mediaMessage.setMediaType(type);
+        mediaMessage.setFileName(fileName);
+        mediaMessage.setPath(path);
+        mediaMessage.setDescription(description);
+        mediaMessage = realm.copyToRealm(mediaMessage);
+
+        message.setType(Message.Type.MEDIA_MESSAGE.code);
+        message.setMediaMessage(mediaMessage);
+
+        return message;
+    }
+
 
     public Message createOutgoingMessageWithReceivers(Chat chat) {
         Realm realm = Realm.getDefaultInstance();
@@ -109,6 +144,8 @@ public class MessageRepository {
         }
 
         Message message = createIncomingMessageWithReceivers(messageData, sender, chat);
+        setMessagesDelivered(chat.getId());
+
         return message;
     }
 
@@ -165,12 +202,6 @@ public class MessageRepository {
                 continue;
             }
             Receiver receiver = new Receiver();
-
-            boolean isOwner = participant.getId() == 0;
-            if (isOwner) {
-                receiver.setDelivered(System.currentTimeMillis());
-            }
-
             receiver = realm.copyToRealm(receiver);
 
             receiver.setMessage(message);
@@ -179,5 +210,62 @@ public class MessageRepository {
             participant.getReceivers().add(receiver);
         }
     }
+
+    public void updateMessagesState(ReceiverData receiverData) {
+        Realm realm = Realm.getDefaultInstance();
+
+        for (int messageId : receiverData.getMessagesIds()) {
+            Receiver receiver = realm.where(Receiver.class)
+                    .equalTo("user.serverId", receiverData.getReceiverId())
+                    .equalTo("message.serverId", messageId)
+                    .findFirst();
+
+            if (receiver != null) {
+                receiver.setDelivered(receiverData.getDeliveredDate());
+                receiver.setViewed(receiverData.getViewedDate());
+            }
+        }
+    }
+
+    public List<Message> setMessagesViewed(int chatId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        List<Receiver> receivers = realm.where(Receiver.class)
+                .equalTo("message.chat.id", chatId)
+                .equalTo("user.id", userAccountManager.getOwner().getId())
+                .equalTo("viewed", 0)
+                .findAll();
+
+        List<Message> messages = new ArrayList<>(receivers.size());
+
+        long viewedTime = System.currentTimeMillis();
+        for (Receiver receiver : receivers) {
+            receiver.setViewed(viewedTime);
+            messages.add(receiver.getMessage());
+        }
+
+        return messages;
+    }
+
+    public List<Message> setMessagesDelivered(int chatId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        List<Receiver> receivers = realm.where(Receiver.class)
+                .equalTo("message.chat.id", chatId)
+                .equalTo("user.id", userAccountManager.getOwner().getId())
+                .equalTo("delivered", 0)
+                .findAll();
+
+        List<Message> messages = new ArrayList<>(receivers.size());
+
+        long deliverTime = System.currentTimeMillis();
+        for (Receiver receiver : receivers) {
+            receiver.setDelivered(deliverTime);
+            messages.add(receiver.getMessage());
+        }
+
+        return messages;
+    }
+
 
 }

@@ -12,7 +12,7 @@ import com.pgizka.gsenger.createChatsView.CreateChatFragment;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
 import com.pgizka.gsenger.gcm.commands.AddOtherUsersToChatCommand;
 import com.pgizka.gsenger.gcm.commands.OwnerAddedToChatCommand;
-import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
+import com.pgizka.gsenger.gcm.commands.MessageStateUpdatedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
@@ -20,7 +20,7 @@ import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
 import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
 import com.pgizka.gsenger.jobqueue.getMessages.GetMessagesJob;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserPhotoJob;
 import com.pgizka.gsenger.jobqueue.updateUser.UpdateUserStatusJob;
 import com.pgizka.gsenger.mainView.chats.ChatsFragment;
@@ -59,7 +59,7 @@ public interface ApplicationComponent {
 
     void inject(SendMessageJob sendMessageJob);
 
-    void inject(SetMessageStateJob setMessageStateJob);
+    void inject(UpdateMessageStateJob updateMessageStateJob);
 
     void inject(UpdateUserStatusJob updateUserStatusJob);
 
@@ -77,7 +77,7 @@ public interface ApplicationComponent {
 
     void inject(NewGroupChatCommand newGroupChatCommand);
 
-    void inject(MessageStateChangedCommand messageStateChangedCommand);
+    void inject(MessageStateUpdatedCommand messageStateUpdatedCommand);
 
     void inject(OwnerAddedToChatCommand ownerAddedToChatCommand);
 

@@ -6,11 +6,10 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.GcmCommand;
 import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
 import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
-import com.pgizka.gsenger.provider.MediaMessage;
+import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
 
@@ -18,9 +17,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_DELIVERED;
-
-public class NewMediaMessageCommand extends GCMCommand {
+public class NewMediaMessageCommand implements GcmCommand {
 
     private MediaMessageData messageData;
 
@@ -47,7 +44,7 @@ public class NewMediaMessageCommand extends GCMCommand {
         Message message = messageRepository.handleIncomingMediaMessage(messageData);
         realm.commitTransaction();
 
-        jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
+        jobManager.addJob(new UpdateMessageStateJob(message.getId()));
         jobManager.addJob(new GetMediaMessageDataJob(message.getId()));
     }
 

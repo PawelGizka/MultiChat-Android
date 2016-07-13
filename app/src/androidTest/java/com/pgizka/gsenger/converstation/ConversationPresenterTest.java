@@ -4,7 +4,7 @@ package com.pgizka.gsenger.converstation;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
+import com.pgizka.gsenger.api.dtos.messages.MessagesStateChangedRequest;
 import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
 import com.pgizka.gsenger.api.dtos.messages.PutTextMessageRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
@@ -110,10 +110,10 @@ public class ConversationPresenterTest  {
         conversationPresenter.setFriend(user);
         conversationPresenter.setChat(chat);
 
-        when(messageRestService.setMessageViewed(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
+        when(messageRestService.updateMessageState(Mockito.<MessagesStateChangedRequest>any())).thenReturn(createCall(responseBody));
         conversationPresenter.setAllMessagesViewed();
 
-        verify(messageRestService, timeout(4000).times(2)).setMessageViewed(Mockito.<MessageStateChangedRequest>any());
+        verify(messageRestService, timeout(4000).times(1)).updateMessageState(Mockito.<MessagesStateChangedRequest>any());
     }
 
 }

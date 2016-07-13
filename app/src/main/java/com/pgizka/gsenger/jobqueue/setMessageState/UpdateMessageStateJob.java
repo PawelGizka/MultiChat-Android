@@ -3,13 +3,16 @@ package com.pgizka.gsenger.jobqueue.setMessageState;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
+import com.pgizka.gsenger.api.dtos.messages.MessagesStateChangedRequest;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.Receiver;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,18 +21,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_DELIVERED;
-import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
+public class UpdateMessageStateJob extends BaseJob {
 
-public class SetMessageStateJob extends BaseJob {
-
-    public enum Type {
-        SET_DELIVERED,
-        SET_VIEWED;
-    }
-
-    private int messageId;
-    private Type type;
+    private List<Integer> messagesIds;
 
     private transient Realm realm;
 
@@ -39,10 +33,15 @@ public class SetMessageStateJob extends BaseJob {
     @Inject
     transient MessageRestService messageRestService;
 
-    public SetMessageStateJob(int messageId, Type type) {
+    public UpdateMessageStateJob(int messageId) {
         super(new Params(5).requireNetwork().persist().groupBy("message_state"));
-        this.messageId = messageId;
-        this.type = type;
+        this.messagesIds = new ArrayList<>(1);
+        this.messagesIds.add(messageId);
+    }
+
+    public UpdateMessageStateJob(List<Integer> messagesIds) {
+        super(new Params(5).requireNetwork().persist().groupBy("message_state"));
+        this.messagesIds = messagesIds;
     }
 
     @Override
@@ -61,29 +60,29 @@ public class SetMessageStateJob extends BaseJob {
 
         realm.beginTransaction();
         User owner = userAccountManager.getOwner();
+
         Message message = realm.where(Message.class)
-                .equalTo("id", messageId)
+                .equalTo("id", messagesIds.get(0))
                 .findFirst();
 
         Receiver receiver = realm.where(Receiver.class)
                 .equalTo("user.id", owner.getId())
                 .equalTo("message.id", message.getId())
                 .findFirst();
+
+        List<Integer> messagesServerIds = new ArrayList<>(messagesIds.size());
+        for (int messageId : messagesIds) {
+            messagesServerIds.add(realm.where(Message.class).equalTo("id", messageId).findFirst().getServerId());
+        }
         realm.commitTransaction();
 
-        MessageStateChangedRequest messageStateChangedRequest = new MessageStateChangedRequest();
-        messageStateChangedRequest.setMessageId(message.getServerId());
-        messageStateChangedRequest.setReceiverId(owner.getServerId());
+        MessagesStateChangedRequest messagesStateChangedRequest = new MessagesStateChangedRequest();
+        messagesStateChangedRequest.setMessagesIds(messagesServerIds);
+        messagesStateChangedRequest.setReceiverId(owner.getServerId());
+        messagesStateChangedRequest.setDeliveredDate(receiver.getDelivered());
+        messagesStateChangedRequest.setViewedDate(receiver.getViewed());
 
-        Call<ResponseBody> call = null;
-
-        if (type == SET_DELIVERED) {
-            messageStateChangedRequest.setDate(receiver.getDelivered());
-            call = messageRestService.setMessageDelivered(messageStateChangedRequest);
-        } else if (type == SET_VIEWED) {
-            messageStateChangedRequest.setDate(receiver.getViewed());
-            call = messageRestService.setMessageViewed(messageStateChangedRequest);
-        }
+        Call<ResponseBody> call = messageRestService.updateMessageState(messagesStateChangedRequest);
 
         Response<ResponseBody> response = call.execute();
 

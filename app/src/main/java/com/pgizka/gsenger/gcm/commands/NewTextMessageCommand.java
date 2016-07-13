@@ -6,20 +6,18 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.GcmCommand;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
-import com.pgizka.gsenger.provider.TextMessage;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
 
-import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_DELIVERED;
 
-public class NewTextMessageCommand extends GCMCommand {
+public class NewTextMessageCommand implements GcmCommand {
 
     private TextMessageData messageData;
 
@@ -46,7 +44,7 @@ public class NewTextMessageCommand extends GCMCommand {
         Message message = messageRepository.handleIncomingTextMessage(messageData);
         realm.commitTransaction();
 
-        jobManager.addJob(new SetMessageStateJob(message.getId(), SET_DELIVERED));
+        jobManager.addJob(new UpdateMessageStateJob(message.getId()));
     }
 
 }

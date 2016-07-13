@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.pgizka.gsenger.gcm.commands.AddOtherUsersToChatCommand;
 import com.pgizka.gsenger.gcm.commands.OwnerAddedToChatCommand;
-import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
+import com.pgizka.gsenger.gcm.commands.MessageStateUpdatedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
@@ -22,14 +22,14 @@ import java.util.Map;
 public class GcmMessageHandler extends GcmListenerService {
     static final String TAG = GcmMessageHandler.class.getSimpleName();
 
-    private static final Map<String, GCMCommand> MESSAGE_RECEIVERS;
+    private static final Map<String, GcmCommand> MESSAGE_RECEIVERS;
     static {
         // Known messages and their GCM message receivers
-        Map <String, GCMCommand> receivers = new HashMap<>();
+        Map <String, GcmCommand> receivers = new HashMap<>();
 
         receivers.put(TextMessageData.ACTION, new NewTextMessageCommand());
         receivers.put(MediaMessageData.ACTION, new NewMediaMessageCommand());
-        receivers.put(ReceiverData.UPDATE_RECEIVER_ACTION, new MessageStateChangedCommand());
+        receivers.put(ReceiverData.UPDATE_RECEIVER_ACTION, new MessageStateUpdatedCommand());
         receivers.put(ChatData.NEW_GROUP_CHAT_ACTION, new NewGroupChatCommand());
         receivers.put(ChatData.ADDED_TO_CHAT_ACTION, new OwnerAddedToChatCommand());
         receivers.put(ChatData.USERS_ADDED_TO_CHAT_ACTION, new AddOtherUsersToChatCommand());
@@ -49,7 +49,7 @@ public class GcmMessageHandler extends GcmListenerService {
             return;
         }
 
-        GCMCommand command = MESSAGE_RECEIVERS.get(action);
+        GcmCommand command = MESSAGE_RECEIVERS.get(action);
         if (command == null) {
             Log.e(TAG, "Unknown command received: " + action);
         } else {

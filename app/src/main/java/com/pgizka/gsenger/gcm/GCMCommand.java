@@ -2,6 +2,8 @@ package com.pgizka.gsenger.gcm;
 
 import android.content.Context;
 
-public abstract class GCMCommand {
-    public abstract void execute(Context context, String action, String extraData);
+public interface GcmCommand {
+
+    void execute(Context context, String action, String extraData);
+
 }

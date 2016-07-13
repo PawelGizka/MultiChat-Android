@@ -6,14 +6,12 @@ import android.util.Log;
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
-import com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
-import com.pgizka.gsenger.provider.Receiver;
-import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -24,8 +22,6 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-
-import static com.pgizka.gsenger.jobqueue.setMessageState.SetMessageStateJob.Type.SET_VIEWED;
 
 public class ConversationPresenter implements ConversationContract.Presenter {
     static final String TAG = ConversationPresenter.class.getSimpleName();
@@ -149,48 +145,29 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         if (paused) {
             return;
         }
-        List<SetMessageStateJob> setMessageStateJobs = new ArrayList<>();
 
         realm.beginTransaction();
-        while (true) {
-            Receiver receiver = realm.where(Receiver.class)
-                    .equalTo("message.chat.id", chat.getId())
-                    .equalTo("user.id", owner.getId())
-                    .equalTo("viewed", 0)
-                    .findFirst();
-
-            if (receiver == null) {
-                break;
-            }
-
-            receiver.setViewed(System.currentTimeMillis());
-            setMessageStateJobs.add(new SetMessageStateJob(receiver.getMessage().getId(), SET_VIEWED));
-        }
+        List<Message> messages = messageRepository.setMessagesViewed(chat.getId());
         realm.commitTransaction();
 
-        for (SetMessageStateJob job : setMessageStateJobs) {
-            jobManager.addJobInBackground(job);
+        List<Integer> messagesIds = new ArrayList<>(messages.size());
+        for (Message message : messages) {
+            messagesIds.add(message.getId());
         }
+
+        jobManager.addJobInBackground(new UpdateMessageStateJob(messagesIds));
     }
 
     @Override
     public void sendMessage(String text) {
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
 
+        realm.beginTransaction();
         if (!groupChat) {
             chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
         }
 
-        Message message = messageRepository.createOutgoingMessageWithReceivers(chat);
-
-        TextMessage textMessage = new TextMessage();
-        textMessage.setText(text);
-        textMessage = realm.copyToRealm(textMessage);
-
-        message.setType(Message.Type.TEXT_MESSAGE.code);
-        message.setTextMessage(textMessage);
-
+        Message message = messageRepository.createOutgoingTextMessageWithReceivers(chat, text);
         realm.commitTransaction();
 
         jobManager.addJob(new SendMessageJob(message.getId()));

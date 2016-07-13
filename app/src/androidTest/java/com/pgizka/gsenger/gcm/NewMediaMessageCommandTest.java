@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.gson.Gson;
 import com.pgizka.gsenger.TestUtils;
 import com.pgizka.gsenger.api.MessageRestService;
-import com.pgizka.gsenger.api.dtos.messages.MessageStateChangedRequest;
+import com.pgizka.gsenger.api.dtos.messages.MessagesStateChangedRequest;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
@@ -75,7 +75,7 @@ public class NewMediaMessageCommandTest {
         int messageServerId = 15;
         String data = gson.toJson(prepareMediaMessageData(sender, messageServerId));
 
-        when(messageRestService.setMessageDelivered(Mockito.<MessageStateChangedRequest>any())).thenReturn(createCall(responseBody));
+        when(messageRestService.updateMessageState(Mockito.<MessagesStateChangedRequest>any())).thenReturn(createCall(responseBody));
         mediaMessageCommand.execute(gSengerApplication, TextMessageData.ACTION, data);
 
         verifyNewMediaMessageHandledCorrectly(messageServerId);
@@ -91,7 +91,7 @@ public class NewMediaMessageCommandTest {
     }
 
     private void verifyNewMediaMessageHandledCorrectly(int messageServerId) throws Exception {
-        verify(messageRestService, timeout(2000)).setMessageDelivered(Mockito.<MessageStateChangedRequest>any());
+        verify(messageRestService, timeout(2000)).updateMessageState(Mockito.<MessagesStateChangedRequest>any());
         verify(messageRestService, timeout(2000)).getMediaMessageData(messageServerId);
 
         Realm realm = Realm.getDefaultInstance();

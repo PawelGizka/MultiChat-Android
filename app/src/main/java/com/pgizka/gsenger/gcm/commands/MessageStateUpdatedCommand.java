@@ -5,22 +5,25 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.GcmCommand;
 import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
-import com.pgizka.gsenger.provider.Receiver;
+import com.pgizka.gsenger.provider.MessageRepository;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
 
-public class MessageStateChangedCommand extends GCMCommand {
+public class MessageStateUpdatedCommand implements GcmCommand {
 
     ReceiverData receiverData;
 
     @Inject
     Gson gson;
 
-    public MessageStateChangedCommand() {
+    @Inject
+    MessageRepository messageRepository;
+
+    public MessageStateUpdatedCommand() {
         GSengerApplication.getApplicationComponent().inject(this);
     }
 
@@ -31,16 +34,7 @@ public class MessageStateChangedCommand extends GCMCommand {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        Receiver receiver = realm.where(Receiver.class)
-                .equalTo("user.serverId", receiverData.getReceiverId())
-                .equalTo("message.serverId", receiverData.getMessageId())
-                .findFirst();
-
-        if (receiver != null) {
-            receiver.setDelivered(receiverData.getDeliveredDate());
-            receiver.setViewed(receiverData.getViewedDate());
-        }
-
+        messageRepository.updateMessagesState(receiverData);
         realm.commitTransaction();
     }
 

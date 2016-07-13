@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.gcm.GCMCommand;
+import com.pgizka.gsenger.gcm.GcmCommand;
 import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.provider.ChatRepository;
 
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 
-public class NewGroupChatCommand extends GCMCommand {
+public class NewGroupChatCommand implements GcmCommand {
 
     @Inject
     ChatRepository chatRepository;

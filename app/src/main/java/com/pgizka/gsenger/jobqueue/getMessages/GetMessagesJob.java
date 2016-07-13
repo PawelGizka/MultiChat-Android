@@ -3,6 +3,7 @@ package com.pgizka.gsenger.jobqueue.getMessages;
 
 import android.util.Log;
 
+import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.Params;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
@@ -10,13 +11,14 @@ import com.pgizka.gsenger.api.dtos.messages.MessageBatchResponse;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
 import com.pgizka.gsenger.provider.MessageRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.ExemptionMechanismException;
 import javax.inject.Inject;
 
 import io.realm.Realm;
@@ -36,6 +38,9 @@ public class GetMessagesJob extends BaseJob {
     @Inject
     transient MessageRepository messageRepository;
 
+    @Inject
+    transient JobManager jobManager;
+
     public GetMessagesJob(int chatId) {
         super(new Params(5).requireNetwork().persist());
         this.chatId = chatId;
@@ -48,9 +53,7 @@ public class GetMessagesJob extends BaseJob {
     }
 
     @Override
-    public void onAdded() {
-
-    }
+    public void onAdded() {}
 
     @Override
     public void onRun() throws Throwable {
@@ -71,14 +74,20 @@ public class GetMessagesJob extends BaseJob {
         Response<MessageBatchResponse> response = call.execute();
         if (response.isSuccess()) {
             MessageBatchResponse messageBatchResponse = response.body();
+            int size = messageBatchResponse.getTextMessages().size() + messageBatchResponse.getMediaMessages().size();
+            List<Integer> deliveredMessagesIds = new ArrayList<>(size);
 
             for (TextMessageData textMessageData : messageBatchResponse.getTextMessages()) {
-                messageRepository.handleIncomingTextMessage(textMessageData);
+                Message insertedMessage = messageRepository.handleIncomingTextMessage(textMessageData);
+                deliveredMessagesIds.add(insertedMessage.getId());
             }
 
             for (MediaMessageData mediaMessageData : messageBatchResponse.getMediaMessages()) {
-                messageRepository.handleIncomingMediaMessage(mediaMessageData);
+                Message insertedMessage = messageRepository.handleIncomingMediaMessage(mediaMessageData);
+                deliveredMessagesIds.add(insertedMessage.getId());
             }
+
+            jobManager.addJob(new UpdateMessageStateJob(deliveredMessagesIds));
 
             realm.commitTransaction();
         } else {

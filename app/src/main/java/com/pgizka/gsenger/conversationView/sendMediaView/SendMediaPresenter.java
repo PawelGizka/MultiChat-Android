@@ -119,23 +119,13 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
 
     public void sendMediaMessage(int type, String fileName, String path, String description) {
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
 
+        realm.beginTransaction();
         if (!groupChat) {
             chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
         }
 
-        Message message = messageRepository.createOutgoingMessageWithReceivers(chat);
-
-        MediaMessage mediaMessage = new MediaMessage();
-        mediaMessage.setMediaType(type);
-        mediaMessage.setFileName(fileName);
-        mediaMessage.setPath(path);
-        mediaMessage.setDescription(description);
-        mediaMessage = realm.copyToRealm(mediaMessage);
-
-        message.setType(Message.Type.MEDIA_MESSAGE.code);
-        message.setMediaMessage(mediaMessage);
+        Message message = messageRepository.createOutgoingMediaMessageWithReceivers(chat, type, fileName, path, description);
 
         realm.commitTransaction();
 

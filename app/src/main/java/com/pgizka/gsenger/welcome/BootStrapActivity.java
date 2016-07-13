@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.pgizka.gsenger.gcm.GCMUTil;
+import com.pgizka.gsenger.gcm.GcmUtil;
 import com.pgizka.gsenger.mainView.MainActivity;
 
 public class BootStrapActivity extends AppCompatActivity {
@@ -13,8 +13,8 @@ public class BootStrapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!GCMUTil.isRegistered(this)) {
-            GCMUTil.register(this);
+        if(!GcmUtil.isRegistered(this)) {
+            GcmUtil.register(this);
         }
 
         if(WelcomeActivity.shouldDisplay(this)) {
