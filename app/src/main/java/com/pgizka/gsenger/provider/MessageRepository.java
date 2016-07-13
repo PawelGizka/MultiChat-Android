@@ -128,10 +128,11 @@ public class MessageRepository {
         chat.getMessages().add(message);
 
         List<ReceiverData> receiversData = messageData.getReceiversData();
-        if (receiversData == null || receiversData.isEmpty()) {
-            createReceivers(message, sender, chat);
-        } else {
+        boolean isMessageWithReceiversData = receiversData != null & !receiversData.isEmpty();
+        if (isMessageWithReceiversData) {
             insertExistingReceivers(receiversData, message);
+        } else {
+            createReceivers(message, sender, chat);
         }
 
         return message;

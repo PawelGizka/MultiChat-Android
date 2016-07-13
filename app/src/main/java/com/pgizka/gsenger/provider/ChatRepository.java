@@ -123,25 +123,28 @@ public class ChatRepository {
         return chat;
     }
 
-    public Chat addUsersToGroupChat(ChatData chatData) {
+    public Chat addUsersToChat(ChatData chatData) {
         Realm realm = Realm.getDefaultInstance();
 
         Chat chat = realm.where(Chat.class).equalTo("serverId", chatData.getChatId()).findFirst();
         if (chat == null) {
-            Log.i("ChatRepository", "chat with server id: " + chatData.getChatId());
+            Log.i("ChatRepository", "chat with server id: " + chatData.getChatId() + " does not exist");
             return null;
         }
 
         addUsersToChat(chat, chatData.getParticipants());
 
-        return null;
+        return chat;
     }
 
     public void addUsersToChat(Chat chat, List<User> users) {
         Realm realm = Realm.getDefaultInstance();
 
         for (User user : users) {
-            User alreadyAddedUser = realm.where(User.class).equalTo("chats.serverId", chat.getServerId()).findFirst();
+            User alreadyAddedUser = realm.where(User.class)
+                    .equalTo("serverId", user.getServerId())
+                    .equalTo("chats.serverId", chat.getServerId())
+                    .findFirst();
             if (alreadyAddedUser == null) {
                 user.getChats().add(chat);
                 chat.getUsers().add(user);

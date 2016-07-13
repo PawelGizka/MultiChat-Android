@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.pgizka.gsenger.gcm.commands.AddedToChatCommand;
+import com.pgizka.gsenger.gcm.commands.AddOtherUsersToChatCommand;
+import com.pgizka.gsenger.gcm.commands.OwnerAddedToChatCommand;
 import com.pgizka.gsenger.gcm.commands.MessageStateChangedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
@@ -13,7 +14,6 @@ import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
 import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
-import com.pgizka.gsenger.provider.Chat;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +31,8 @@ public class GcmMessageHandler extends GcmListenerService {
         receivers.put(MediaMessageData.ACTION, new NewMediaMessageCommand());
         receivers.put(ReceiverData.UPDATE_RECEIVER_ACTION, new MessageStateChangedCommand());
         receivers.put(ChatData.NEW_GROUP_CHAT_ACTION, new NewGroupChatCommand());
-        receivers.put(ChatData.ADDED_TO_CHAT_ACTION, new AddedToChatCommand());
+        receivers.put(ChatData.ADDED_TO_CHAT_ACTION, new OwnerAddedToChatCommand());
+        receivers.put(ChatData.USERS_ADDED_TO_CHAT_ACTION, new AddOtherUsersToChatCommand());
 
         MESSAGE_RECEIVERS = Collections.unmodifiableMap(receivers);
     }

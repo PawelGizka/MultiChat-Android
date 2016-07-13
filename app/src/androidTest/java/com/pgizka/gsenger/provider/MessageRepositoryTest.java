@@ -28,7 +28,7 @@ import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.prepareMessageData;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class MessageRepositoryTest {
@@ -36,14 +36,12 @@ public class MessageRepositoryTest {
     @Inject
     MessageRepository messageRepository;
 
-    private GSengerApplication gSengerApplication;
     private Realm realm;
 
     @Before
     public void setUp() throws IOException {
         setupRealm();
         realm = Realm.getDefaultInstance();
-        gSengerApplication = getApplication();
         TestApplicationComponent applicationComponent = getTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
@@ -52,7 +50,7 @@ public class MessageRepositoryTest {
     @Test
     public void testReceivingMessage_whenChatAndUsersExists() throws Exception {
         User owner = getOrCreateOwner();
-        User sender = TestUtils.createUser();
+        User sender = createUser();
         createChatBetweenUsers(owner, sender);
 
         int messageServerId = 15;

@@ -10,6 +10,8 @@ import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
 import com.pgizka.gsenger.gcm.NewGroupChatCommandTest;
 import com.pgizka.gsenger.gcm.NewMediaMessageCommandTest;
 import com.pgizka.gsenger.gcm.NewTextMessageCommandTest;
+import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.provider.ChatRepositoryTest;
 import com.pgizka.gsenger.provider.MessageRepositoryTest;
 
 import javax.inject.Singleton;
@@ -35,5 +37,7 @@ public interface TestApplicationComponent extends ApplicationComponent {
     void inject(CreateChatPresenterTest createChatPresenterTest);
 
     void inject(AddUsersToChatPresenterTest addUsersToChatPresenterTest);
+
+    void inject(ChatRepositoryTest chatRepositoryTest);
 
 }
