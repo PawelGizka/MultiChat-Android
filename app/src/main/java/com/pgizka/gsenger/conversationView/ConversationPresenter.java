@@ -147,15 +147,17 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         }
 
         realm.beginTransaction();
-        List<Message> messages = messageRepository.setMessagesViewed(chat.getId());
+        List<Message> viewedMessages = messageRepository.setMessagesViewed(chat.getId());
         realm.commitTransaction();
 
-        List<Integer> messagesIds = new ArrayList<>(messages.size());
-        for (Message message : messages) {
+        List<Integer> messagesIds = new ArrayList<>(viewedMessages.size());
+        for (Message message : viewedMessages) {
             messagesIds.add(message.getId());
         }
 
-        jobManager.addJobInBackground(new UpdateMessageStateJob(messagesIds));
+        if (!messagesIds.isEmpty()) {
+            jobManager.addJobInBackground(new UpdateMessageStateJob(messagesIds));
+        }
     }
 
     @Override

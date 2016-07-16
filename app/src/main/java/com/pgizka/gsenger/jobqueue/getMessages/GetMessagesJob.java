@@ -60,19 +60,20 @@ public class GetMessagesJob extends BaseJob {
         realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-
         Chat chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
+        realm.commitTransaction();
 
         if (chat == null) {
             //chat is not available, maybe it was deleted, skip it
             Log.i(TAG, "Chat with id " + chat + " does not exist, skipping it");
-            realm.commitTransaction();
             return;
         }
 
         Call<MessageBatchResponse> call = messageRestService.getMessagesForChat(String.valueOf(chat.getServerId()));
         Response<MessageBatchResponse> response = call.execute();
         if (response.isSuccess()) {
+            realm.beginTransaction();
+
             MessageBatchResponse messageBatchResponse = response.body();
             int size = messageBatchResponse.getTextMessages().size() + messageBatchResponse.getMediaMessages().size();
             List<Integer> deliveredMessagesIds = new ArrayList<>(size);
@@ -91,7 +92,6 @@ public class GetMessagesJob extends BaseJob {
 
             realm.commitTransaction();
         } else {
-            realm.commitTransaction();
             throw new Exception();
         }
     }

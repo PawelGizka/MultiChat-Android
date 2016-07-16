@@ -165,7 +165,7 @@ public class MessageRepository {
         chat.getMessages().add(message);
 
         List<ReceiverData> receiversData = messageData.getReceiversData();
-        boolean isMessageWithReceiversData = receiversData != null & !receiversData.isEmpty();
+        boolean isMessageWithReceiversData = receiversData != null && !receiversData.isEmpty();
         if (isMessageWithReceiversData) {
             insertExistingReceivers(receiversData, message);
         } else {
@@ -228,44 +228,37 @@ public class MessageRepository {
     }
 
     public List<Message> setMessagesViewed(int chatId) {
-        Realm realm = Realm.getDefaultInstance();
-
-        List<Receiver> receivers = realm.where(Receiver.class)
-                .equalTo("message.chat.id", chatId)
-                .equalTo("user.id", userAccountManager.getOwner().getId())
-                .equalTo("viewed", 0)
-                .findAll();
-
-        List<Message> messages = new ArrayList<>(receivers.size());
-
-        long viewedTime = System.currentTimeMillis();
-        for (Receiver receiver : receivers) {
-            receiver.setViewed(viewedTime);
-            messages.add(receiver.getMessage());
-        }
-
-        return messages;
+        return setMessagesState("viewed", chatId);
     }
 
     public List<Message> setMessagesDelivered(int chatId) {
+        return setMessagesState("delivered", chatId);
+    }
+
+    public List<Message> setMessagesState(String method, int chatId) {
         Realm realm = Realm.getDefaultInstance();
 
         List<Receiver> receivers = realm.where(Receiver.class)
                 .equalTo("message.chat.id", chatId)
                 .equalTo("user.id", userAccountManager.getOwner().getId())
-                .equalTo("delivered", 0)
+                .equalTo(method, 0)
                 .findAll();
 
         List<Message> messages = new ArrayList<>(receivers.size());
 
-        long deliverTime = System.currentTimeMillis();
+        long updateTime = System.currentTimeMillis();
         for (Receiver receiver : receivers) {
-            receiver.setDelivered(deliverTime);
+
+            if (method.equals("delivered")) {
+                receiver.setDelivered(updateTime);
+            } else if (method.equals("viewed")) {
+                receiver.setViewed(updateTime);
+            }
+
             messages.add(receiver.getMessage());
         }
 
         return messages;
     }
-
 
 }

@@ -98,7 +98,6 @@ public class GetMediaMessageDataJob extends BaseJob {
             message.setState(Message.State.RECEIVED.code);
             realm.commitTransaction();
         } else {
-            realm.commitTransaction();
             throw new Exception();
         }
     }

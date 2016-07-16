@@ -1,5 +1,7 @@
 package com.pgizka.gsenger.jobqueue.setMessageState;
 
+import android.util.Log;
+
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.MessageRestService;
@@ -22,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class UpdateMessageStateJob extends BaseJob {
+    static final String TAG = UpdateMessageStateJob.class.getSimpleName();
 
     private List<Integer> messagesIds;
 
@@ -57,6 +60,10 @@ public class UpdateMessageStateJob extends BaseJob {
     @Override
     public void onRun() throws Throwable {
         realm = Realm.getDefaultInstance();
+
+        if (messagesIds.isEmpty()) {
+            return;
+        }
 
         realm.beginTransaction();
         User owner = userAccountManager.getOwner();
@@ -96,6 +103,10 @@ public class UpdateMessageStateJob extends BaseJob {
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
+        throwable.printStackTrace();
+        if (realm.isInTransaction()) {
+            realm.cancelTransaction();
+        }
         if (runCount <= 3) {
             return RetryConstraint.RETRY;
         } else {
