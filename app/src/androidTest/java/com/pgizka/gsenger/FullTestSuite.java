@@ -5,6 +5,7 @@ import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.gcm.NewGroupChatCommandTest;
 import com.pgizka.gsenger.gcm.NewMediaMessageCommandTest;
 import com.pgizka.gsenger.gcm.NewTextMessageCommandTest;
+import com.pgizka.gsenger.provider.ChatRepositoryTest;
 import com.pgizka.gsenger.provider.MessageRepositoryTest;
 
 import org.junit.runner.RunWith;
@@ -18,5 +19,6 @@ import org.junit.runners.Suite;
         NewTextMessageCommandTest.class,
         NewMediaMessageCommandTest.class,
         NewGroupChatCommandTest.class,
-        MessageRepositoryTest.class})
+        MessageRepositoryTest.class,
+        ChatRepositoryTest.class})
 public class FullTestSuite {}

@@ -145,7 +145,9 @@ public class ChatRepository {
                     .equalTo("serverId", user.getServerId())
                     .equalTo("chats.serverId", chat.getServerId())
                     .findFirst();
+
             if (alreadyAddedUser == null) {
+                user = realm.copyToRealmOrUpdate(user);
                 user.getChats().add(chat);
                 chat.getUsers().add(user);
             }
