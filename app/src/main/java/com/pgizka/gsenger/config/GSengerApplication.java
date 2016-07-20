@@ -22,51 +22,9 @@ public class GSengerApplication extends Application {
         super.onCreate();
 //        LeakCanary.install(this);
 
-        RealmMigration realmMigration = (realm, oldVersion, newVersion) -> {
-            RealmSchema realmSchema = realm.getSchema();
-
-            if (oldVersion == 0 || oldVersion == 1) {
-                realmSchema.get("User")
-                        .addField("phoneNumber", String.class)
-                        .addField("isInContacts", boolean.class);
-                oldVersion++;
-                oldVersion++;
-            }
-
-            if (oldVersion == 2 || oldVersion == 3) {
-                realmSchema.get("User")
-                        .removeField("isInContacts")
-                        .addField("inContacts", boolean.class);
-                oldVersion++;
-                oldVersion++;
-            }
-
-            if (oldVersion == 4) {
-                realmSchema.get("User")
-                        .removeField("phoneNumber")
-                        .addField("phoneNumber", int.class);
-                oldVersion++;
-            }
-
-            if (oldVersion == 5) {
-                realmSchema.get("User")
-                        .removeField("sentTextMessages")
-                        .addField("sentMessages", Message.class);
-                oldVersion++;
-            }
-
-            if (oldVersion == 6) {
-                realmSchema.get("User")
-                        .addField("fromPhoneNumbers", boolean.class)
-                        .addField("fromFacebook", boolean.class);
-                oldVersion++;
-            }
-
-        };
-
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this)
                 .schemaVersion(7)
-                .migration(realmMigration)
+                .deleteRealmIfMigrationNeeded()
                 .build());
 
         applicationComponent = DaggerApplicationComponent.builder()

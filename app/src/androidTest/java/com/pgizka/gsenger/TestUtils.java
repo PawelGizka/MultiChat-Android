@@ -11,6 +11,7 @@ import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
 import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.api.dtos.messages.MessageData;
+import com.pgizka.gsenger.dagger.TestApplicationModule;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
@@ -54,7 +55,7 @@ public class TestUtils {
 
     public static TestApplicationComponent getTestApplicationComponent() {
         return DaggerTestApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(getApplication()))
+                .applicationModule(new TestApplicationModule(getApplication()))
                 .apiModule(new TestApiModule())
                 .build();
     }

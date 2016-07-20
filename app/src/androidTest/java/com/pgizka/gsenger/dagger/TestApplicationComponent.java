@@ -8,9 +8,7 @@ import com.pgizka.gsenger.converstation.ConversationPresenterTest;
 import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
 import com.pgizka.gsenger.gcm.NewGroupChatCommandTest;
-import com.pgizka.gsenger.gcm.NewMediaMessageCommandTest;
-import com.pgizka.gsenger.gcm.NewTextMessageCommandTest;
-import com.pgizka.gsenger.provider.ChatRepository;
+import com.pgizka.gsenger.gcm.NewMessageCommandTest;
 import com.pgizka.gsenger.provider.ChatRepositoryTest;
 import com.pgizka.gsenger.provider.MessageRepositoryTest;
 
@@ -26,11 +24,9 @@ public interface TestApplicationComponent extends ApplicationComponent {
 
     void inject(SendMediaPresenterTest sendMediaPresenterTest);
 
-    void inject(NewTextMessageCommandTest newTextMessageCommandTest);
+    void inject(NewMessageCommandTest newMessageCommandTest);
 
     void inject(MessageRepositoryTest messageRepositoryTest);
-
-    void inject(NewMediaMessageCommandTest newMediaMessageCommandTest);
 
     void inject(NewGroupChatCommandTest newGroupChatCommandTest);
 
