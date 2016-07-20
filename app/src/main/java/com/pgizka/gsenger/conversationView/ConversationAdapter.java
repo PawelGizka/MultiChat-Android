@@ -17,7 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.provider.MediaMessage;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.Receiver;
+import com.pgizka.gsenger.provider.ReceiverInfo;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
@@ -177,11 +177,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     }
 
     private String getStatus(Message message) {
-        Receiver receiver = message.getReceivers().first();
+        ReceiverInfo receiverInfo = message.getReceiverInfos().first();
 
-        if (receiver.getViewed() > 0) {
+        if (receiverInfo.getViewed() > 0) {
             return "Viewed";
-        } else if (receiver.getDelivered() > 0) {
+        } else if (receiverInfo.getDelivered() > 0) {
             return "Delivered";
         }
 

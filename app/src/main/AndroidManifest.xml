@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <receiver
+        <receiverInfo
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -61,7 +61,7 @@
 
                 <category android:name="com.codepath.gcmquickstart"/>
             </intent-filter>
-        </receiver>
+        </receiverInfo>
 
         <service
             android:name=".gcm.GcmMessageHandler"

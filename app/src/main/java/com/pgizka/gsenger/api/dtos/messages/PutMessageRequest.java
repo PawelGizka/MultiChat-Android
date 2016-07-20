@@ -23,7 +23,7 @@ public abstract class PutMessageRequest {
             this.chatId = chat.getServerId();
             this.receiverId = -1;
         } else {
-            this.receiverId = message.getReceivers().get(0).getUser().getServerId();
+            this.receiverId = message.getReceiverInfos().get(0).getUser().getServerId();
             this.chatId = -1;
         }
     }

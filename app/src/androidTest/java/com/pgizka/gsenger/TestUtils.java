@@ -4,6 +4,7 @@ package com.pgizka.gsenger;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 
+import com.pgizka.gsenger.api.dtos.messages.ReceiverInfoData;
 import com.pgizka.gsenger.config.ApplicationModule;
 import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
@@ -13,12 +14,13 @@ import com.pgizka.gsenger.api.dtos.messages.MessageData;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.Receiver;
+import com.pgizka.gsenger.provider.ReceiverInfo;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.TextMessage;
 import com.pgizka.gsenger.provider.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -111,41 +113,6 @@ public class TestUtils {
         return chat;
     }
 
-    public static Message createMessage(User sender, Chat chat) {
-        Repository repository = GSengerApplication.getApplicationComponent().repository();
-        Realm realm = Realm.getDefaultInstance();
-        User owner = getOrCreateOwner();
-
-        realm.beginTransaction();
-
-        TextMessage textMessage = new TextMessage();
-        textMessage.setText("SampleText");
-        textMessage = realm.copyToRealm(textMessage);
-
-        Message message = new Message();
-        message.setId(repository.getMessageNextId());
-        message.setServerId(repository.getMessageNextId());
-        message.setSendDate(System.currentTimeMillis());
-        message.setState(Message.State.RECEIVED.code);
-        message = realm.copyToRealm(message);
-
-        message.setSender(sender);
-        message.setChat(chat);
-        message.setType(Message.Type.TEXT_MESSAGE.code);
-        message.setTextMessage(textMessage);
-        chat.getMessages().add(message);
-
-        Receiver receiver = new Receiver();
-        receiver.setDelivered(System.currentTimeMillis());
-        receiver = realm.copyToRealm(receiver);
-        receiver.setMessage(message);
-        receiver.setUser(owner);
-        message.getReceivers().add(receiver);
-
-        realm.commitTransaction();
-        return message;
-    }
-
     public static Chat createGroupChat(List<User> participants) {
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -171,15 +138,38 @@ public class TestUtils {
         return chat;
     }
 
+    public static Message createMessageWithReceiverInfo(Chat chat, User sender, User receiver) {
+        Repository repository = GSengerApplication.getApplicationComponent().repository();
+        Realm realm = Realm.getDefaultInstance();
+        User owner = getOrCreateOwner();
+
+        realm.beginTransaction();
+
+        Message message = new Message();
+        message.setId(repository.getMessageNextId());
+        message.setServerId(repository.getMessageNextId());
+        message.setSendDate(System.currentTimeMillis());
+        message.setState(Message.State.RECEIVED.code);
+        message = realm.copyToRealm(message);
+
+        message.setSender(sender);
+        message.setChat(chat);
+        chat.getMessages().add(message);
+
+        ReceiverInfo receiverInfo = new ReceiverInfo();
+        receiverInfo.setDelivered(System.currentTimeMillis());
+        receiverInfo = realm.copyToRealm(receiverInfo);
+        receiverInfo.setMessage(message);
+        receiverInfo.setUser(owner);
+        message.getReceiverInfos().add(receiverInfo);
+
+        realm.commitTransaction();
+        return message;
+    }
+
     public static MessageData prepareMessageData(Chat chat, User sender, int messageServerId) {
-        MessageData messageData = new MessageData();
-
-        User user = new User(sender);
-        messageData.setSender(user);
-        messageData.setSendDate(System.currentTimeMillis());
-        messageData.setMessageId(messageServerId);
+        MessageData messageData = prepareMessageData(sender, messageServerId);
         messageData.setChatId(chat.getServerId());
-
         return messageData;
     }
 
@@ -195,6 +185,22 @@ public class TestUtils {
         messageData.setSendDate(System.currentTimeMillis());
         messageData.setMessageId(messageServerId);
         messageData.setChatId(-1);
+    }
+
+    public static List<ReceiverInfoData> prepareReceiversInfoData(int messageServerId, List<User> receivers, long deliveredDate) {
+        List<ReceiverInfoData> receiversData = new ArrayList<>();
+        for (User receiver : receivers) {
+            ReceiverInfoData receiverInfoData = new ReceiverInfoData();
+            receiverInfoData.setReceiverId(receiver.getServerId());
+            receiverInfoData.setDeliveredDate(deliveredDate);
+
+            List<Integer> messagesIds = new ArrayList<>();
+            messagesIds.add(messageServerId);
+            receiverInfoData.setMessagesIds(messagesIds);
+
+            receiversData.add(receiverInfoData);
+        }
+        return receiversData;
     }
 
     public static <T> Call<T> createCall(T response) {

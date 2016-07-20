@@ -51,8 +51,8 @@ public class ChatRepositoryTest {
         participants.add(owner);
         Chat chat = createGroupChat(participants);
 
-        createMessage(owner, chat);
-        createMessage(user1, chat);
+        createMessageWithReceiverInfo(chat, user2, owner);
+        createMessageWithReceiverInfo(chat, user1, owner);
 
         //data after adding user
         User addedUser = createUser();

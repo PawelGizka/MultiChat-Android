@@ -10,7 +10,7 @@ public class MessageData {
     private long sendDate;
     private User sender;
     private long chatId;
-    private List<ReceiverData> receiversData;
+    private List<ReceiverInfoData> receiversData;
 
     public MessageData() {
     }
@@ -47,11 +47,11 @@ public class MessageData {
         this.chatId = chatId;
     }
 
-    public List<ReceiverData> getReceiversData() {
+    public List<ReceiverInfoData> getReceiversData() {
         return receiversData;
     }
 
-    public void setReceiversData(List<ReceiverData> receiversData) {
+    public void setReceiversInfoData(List<ReceiverInfoData> receiversData) {
         this.receiversData = receiversData;
     }
 }

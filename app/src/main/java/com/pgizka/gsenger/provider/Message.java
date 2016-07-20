@@ -15,7 +15,7 @@ public class Message extends RealmObject {
 
     private User sender;
     private Chat chat;
-    private RealmList<Receiver> receivers;
+    private RealmList<ReceiverInfo> receiverInfos;
 
     private TextMessage textMessage;
     private MediaMessage mediaMessage;
@@ -107,12 +107,12 @@ public class Message extends RealmObject {
         this.chat = chat;
     }
 
-    public RealmList<Receiver> getReceivers() {
-        return receivers;
+    public RealmList<ReceiverInfo> getReceiverInfos() {
+        return receiverInfos;
     }
 
-    public void setReceivers(RealmList<Receiver> receivers) {
-        this.receivers = receivers;
+    public void setReceiverInfos(RealmList<ReceiverInfo> receiverInfos) {
+        this.receiverInfos = receiverInfos;
     }
 
     public TextMessage getTextMessage() {

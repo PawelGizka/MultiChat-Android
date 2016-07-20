@@ -92,9 +92,7 @@ public class NewTextMessageCommandTest {
         verify(messageRestService, timeout(2000)).updateMessageState(Mockito.<MessagesStateChangedRequest>any());
 
         Realm realm = Realm.getDefaultInstance();
-        Message message = realm.where(Message.class)
-                .equalTo("serverId", messageServerId)
-                .findFirst();
+        Message message = realm.where(Message.class).equalTo("serverId", messageServerId).findFirst();
 
         assertNotNull(message);
         TextMessage textMessage = message.getTextMessage();

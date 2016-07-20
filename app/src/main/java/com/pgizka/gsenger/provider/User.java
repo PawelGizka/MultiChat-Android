@@ -24,7 +24,7 @@ public class User extends RealmObject {
     private boolean fromFacebook;
 
     private RealmList<Message> sentMessages;
-    private RealmList<Receiver> receivers;
+    private RealmList<ReceiverInfo> receiverInfos;
     private RealmList<Chat> chats;
 
     public User() {
@@ -156,12 +156,12 @@ public class User extends RealmObject {
         this.sentMessages = sentMessages;
     }
 
-    public RealmList<Receiver> getReceivers() {
-        return receivers;
+    public RealmList<ReceiverInfo> getReceiverInfos() {
+        return receiverInfos;
     }
 
-    public void setReceivers(RealmList<Receiver> receivers) {
-        this.receivers = receivers;
+    public void setReceiverInfos(RealmList<ReceiverInfo> receiverInfos) {
+        this.receiverInfos = receiverInfos;
     }
 
     public RealmList<Chat> getChats() {

@@ -1,7 +1,5 @@
 package com.pgizka.gsenger.jobqueue.setMessageState;
 
-import android.util.Log;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.RetryConstraint;
 import com.pgizka.gsenger.api.MessageRestService;
@@ -9,7 +7,7 @@ import com.pgizka.gsenger.api.dtos.messages.MessagesStateChangedRequest;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
 import com.pgizka.gsenger.provider.Message;
-import com.pgizka.gsenger.provider.Receiver;
+import com.pgizka.gsenger.provider.ReceiverInfo;
 import com.pgizka.gsenger.provider.User;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -72,7 +70,7 @@ public class UpdateMessageStateJob extends BaseJob {
                 .equalTo("id", messagesIds.get(0))
                 .findFirst();
 
-        Receiver receiver = realm.where(Receiver.class)
+        ReceiverInfo receiverInfo = realm.where(ReceiverInfo.class)
                 .equalTo("user.id", owner.getId())
                 .equalTo("message.id", message.getId())
                 .findFirst();
@@ -86,8 +84,8 @@ public class UpdateMessageStateJob extends BaseJob {
         MessagesStateChangedRequest messagesStateChangedRequest = new MessagesStateChangedRequest();
         messagesStateChangedRequest.setMessagesIds(messagesServerIds);
         messagesStateChangedRequest.setReceiverId(owner.getServerId());
-        messagesStateChangedRequest.setDeliveredDate(receiver.getDelivered());
-        messagesStateChangedRequest.setViewedDate(receiver.getViewed());
+        messagesStateChangedRequest.setDeliveredDate(receiverInfo.getDelivered());
+        messagesStateChangedRequest.setViewedDate(receiverInfo.getViewed());
 
         Call<ResponseBody> call = messageRestService.updateMessageState(messagesStateChangedRequest);
 

@@ -32,7 +32,7 @@ import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
-import static com.pgizka.gsenger.TestUtils.createMessage;
+import static com.pgizka.gsenger.TestUtils.createMessageWithReceiverInfo;
 import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
@@ -102,8 +102,8 @@ public class ConversationPresenterTest  {
         User user = createUser();
         User owner = getOrCreateOwner();
         Chat chat = createChatBetweenUsers(owner, user);
-        createMessage(user, chat);
-        createMessage(user, chat);
+        createMessageWithReceiverInfo(chat, user, owner);
+        createMessageWithReceiverInfo(chat, user, owner);
 
         conversationPresenter.onCreate(view, user.getId(), chat.getId());
         conversationPresenter.setOwner(owner);

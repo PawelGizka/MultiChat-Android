@@ -10,7 +10,7 @@ import com.pgizka.gsenger.gcm.commands.MessageStateUpdatedCommand;
 import com.pgizka.gsenger.gcm.commands.NewGroupChatCommand;
 import com.pgizka.gsenger.gcm.commands.NewMediaMessageCommand;
 import com.pgizka.gsenger.gcm.commands.NewTextMessageCommand;
-import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
+import com.pgizka.gsenger.api.dtos.messages.ReceiverInfoData;
 import com.pgizka.gsenger.api.dtos.chats.ChatData;
 import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
@@ -29,7 +29,7 @@ public class GcmMessageHandler extends GcmListenerService {
 
         receivers.put(TextMessageData.ACTION, new NewTextMessageCommand());
         receivers.put(MediaMessageData.ACTION, new NewMediaMessageCommand());
-        receivers.put(ReceiverData.UPDATE_RECEIVER_ACTION, new MessageStateUpdatedCommand());
+        receivers.put(ReceiverInfoData.UPDATE_RECEIVER_ACTION, new MessageStateUpdatedCommand());
         receivers.put(ChatData.NEW_GROUP_CHAT_ACTION, new NewGroupChatCommand());
         receivers.put(ChatData.ADDED_TO_CHAT_ACTION, new OwnerAddedToChatCommand());
         receivers.put(ChatData.USERS_ADDED_TO_CHAT_ACTION, new AddOtherUsersToChatCommand());

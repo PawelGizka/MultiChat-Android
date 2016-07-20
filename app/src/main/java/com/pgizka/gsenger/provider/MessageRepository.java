@@ -3,7 +3,7 @@ package com.pgizka.gsenger.provider;
 
 import com.pgizka.gsenger.api.dtos.messages.MediaMessageData;
 import com.pgizka.gsenger.api.dtos.messages.MessageData;
-import com.pgizka.gsenger.api.dtos.messages.ReceiverData;
+import com.pgizka.gsenger.api.dtos.messages.ReceiverInfoData;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -78,23 +78,23 @@ public class MessageRepository {
         chat.getMessages().add(message);
 
         List<User> participants = chat.getUsers();
-        RealmList<Receiver> receivers = new RealmList<>();
+        RealmList<ReceiverInfo> receiverInfos = new RealmList<>();
         for (User participant : participants) {
             boolean isOwner = participant.getId() == 0;
             if (isOwner) {
                 continue;
             }
 
-            Receiver receiver = new Receiver();
-            receiver = realm.copyToRealm(receiver);
-            receiver.setMessage(message);
-            receiver.setUser(participant);
-            participant.getReceivers().add(receiver);
+            ReceiverInfo receiverInfo = new ReceiverInfo();
+            receiverInfo = realm.copyToRealm(receiverInfo);
+            receiverInfo.setMessage(message);
+            receiverInfo.setUser(participant);
+            participant.getReceiverInfos().add(receiverInfo);
 
-            receivers.add(receiver);
+            receiverInfos.add(receiverInfo);
         }
 
-        message.setReceivers(receivers);
+        message.setReceiverInfos(receiverInfos);
 
         return message;
     }
@@ -164,7 +164,7 @@ public class MessageRepository {
         message.setChat(chat);
         chat.getMessages().add(message);
 
-        List<ReceiverData> receiversData = messageData.getReceiversData();
+        List<ReceiverInfoData> receiversData = messageData.getReceiversData();
         boolean isMessageWithReceiversData = receiversData != null && !receiversData.isEmpty();
         if (isMessageWithReceiversData) {
             insertExistingReceivers(receiversData, message);
@@ -175,21 +175,21 @@ public class MessageRepository {
         return message;
     }
 
-    private void insertExistingReceivers(List<ReceiverData> receiversData, Message message) {
+    private void insertExistingReceivers(List<ReceiverInfoData> receiversData, Message message) {
         Realm realm = Realm.getDefaultInstance();
 
-        for (ReceiverData receiverData : receiversData) {
-            Receiver receiver = new Receiver();
+        for (ReceiverInfoData receiverInfoData : receiversData) {
+            ReceiverInfo receiverInfo = new ReceiverInfo();
 
-            User user = realm.where(User.class).equalTo("serverId", receiverData.getReceiverId()).findFirst();
+            User user = realm.where(User.class).equalTo("serverId", receiverInfoData.getReceiverId()).findFirst();
 
-            receiver.setUser(user);
-            receiver.setMessage(message);
-            receiver.setDelivered(receiverData.getDeliveredDate());
-            receiver.setViewed(receiverData.getViewedDate());
+            receiverInfo.setUser(user);
+            receiverInfo.setMessage(message);
+            receiverInfo.setDelivered(receiverInfoData.getDeliveredDate());
+            receiverInfo.setViewed(receiverInfoData.getViewedDate());
 
-            user.getReceivers().add(receiver);
-            message.getReceivers().add(receiver);
+            user.getReceiverInfos().add(receiverInfo);
+            message.getReceiverInfos().add(receiverInfo);
         }
     }
 
@@ -201,28 +201,28 @@ public class MessageRepository {
             if (participant.getId() == sender.getId()) {
                 continue;
             }
-            Receiver receiver = new Receiver();
-            receiver = realm.copyToRealm(receiver);
+            ReceiverInfo receiverInfo = new ReceiverInfo();
+            receiverInfo = realm.copyToRealm(receiverInfo);
 
-            receiver.setMessage(message);
-            receiver.setUser(participant);
-            message.getReceivers().add(receiver);
-            participant.getReceivers().add(receiver);
+            receiverInfo.setMessage(message);
+            receiverInfo.setUser(participant);
+            message.getReceiverInfos().add(receiverInfo);
+            participant.getReceiverInfos().add(receiverInfo);
         }
     }
 
-    public void updateMessagesState(ReceiverData receiverData) {
+    public void updateMessagesState(ReceiverInfoData receiverInfoData) {
         Realm realm = Realm.getDefaultInstance();
 
-        for (int messageId : receiverData.getMessagesIds()) {
-            Receiver receiver = realm.where(Receiver.class)
-                    .equalTo("user.serverId", receiverData.getReceiverId())
+        for (int messageId : receiverInfoData.getMessagesIds()) {
+            ReceiverInfo receiverInfo = realm.where(ReceiverInfo.class)
+                    .equalTo("user.serverId", receiverInfoData.getReceiverId())
                     .equalTo("message.serverId", messageId)
                     .findFirst();
 
-            if (receiver != null) {
-                receiver.setDelivered(receiverData.getDeliveredDate());
-                receiver.setViewed(receiverData.getViewedDate());
+            if (receiverInfo != null) {
+                receiverInfo.setDelivered(receiverInfoData.getDeliveredDate());
+                receiverInfo.setViewed(receiverInfoData.getViewedDate());
             }
         }
     }
@@ -238,24 +238,24 @@ public class MessageRepository {
     public List<Message> setMessagesState(String method, int chatId) {
         Realm realm = Realm.getDefaultInstance();
 
-        List<Receiver> receivers = realm.where(Receiver.class)
+        List<ReceiverInfo> receiverInfos = realm.where(ReceiverInfo.class)
                 .equalTo("message.chat.id", chatId)
                 .equalTo("user.id", userAccountManager.getOwner().getId())
                 .equalTo(method, 0)
                 .findAll();
 
-        List<Message> messages = new ArrayList<>(receivers.size());
+        List<Message> messages = new ArrayList<>(receiverInfos.size());
 
         long updateTime = System.currentTimeMillis();
-        for (Receiver receiver : receivers) {
+        for (ReceiverInfo receiverInfo : receiverInfos) {
 
             if (method.equals("delivered")) {
-                receiver.setDelivered(updateTime);
+                receiverInfo.setDelivered(updateTime);
             } else if (method.equals("viewed")) {
-                receiver.setViewed(updateTime);
+                receiverInfo.setViewed(updateTime);
             }
 
-            messages.add(receiver.getMessage());
+            messages.add(receiverInfo.getMessage());
         }
 
         return messages;

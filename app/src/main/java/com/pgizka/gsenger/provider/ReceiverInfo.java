@@ -3,7 +3,7 @@ package com.pgizka.gsenger.provider;
 
 import io.realm.RealmObject;
 
-public class Receiver extends RealmObject {
+public class ReceiverInfo extends RealmObject {
 
     private User user;
     private Message message;
@@ -11,7 +11,7 @@ public class Receiver extends RealmObject {
     private long delivered;
     private long viewed;
 
-    public Receiver() {
+    public ReceiverInfo() {
     }
 
     public long getDelivered() {
