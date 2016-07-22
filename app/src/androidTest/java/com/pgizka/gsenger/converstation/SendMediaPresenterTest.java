@@ -31,7 +31,7 @@ import okhttp3.RequestBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
-import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -56,7 +56,7 @@ public class SendMediaPresenterTest {
     @Before
     public void setUp() throws IOException {
         setupRealm();
-        TestApplicationComponent applicationComponent = getTestApplicationComponent();
+        TestApplicationComponent applicationComponent = getDefaultTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
 

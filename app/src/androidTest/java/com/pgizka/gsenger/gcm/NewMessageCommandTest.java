@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import static android.support.test.espresso.core.deps.guava.base.Verify.verify;
 import static com.pgizka.gsenger.TestUtils.getApplication;
-import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.*;
@@ -58,7 +58,7 @@ public class NewMessageCommandTest {
     @Before
     public void setUp() throws IOException {
         gSengerApplication = getApplication();
-        TestApplicationComponent applicationComponent = getTestApplicationComponent();
+        TestApplicationComponent applicationComponent = getDefaultTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
 

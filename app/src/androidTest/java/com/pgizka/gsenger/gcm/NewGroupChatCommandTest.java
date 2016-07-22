@@ -25,7 +25,7 @@ import static com.pgizka.gsenger.TestUtils.createNotPersistedUser;
 import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getApplication;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
-import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +43,7 @@ public class NewGroupChatCommandTest {
     public void setUp() throws IOException {
         setupRealm();
         gSengerApplication = getApplication();
-        TestApplicationComponent applicationComponent = getTestApplicationComponent();
+        TestApplicationComponent applicationComponent = getDefaultTestApplicationComponent();
         GSengerApplication.setApplicationComponent(applicationComponent);
         applicationComponent.inject(this);
 

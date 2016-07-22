@@ -3,6 +3,7 @@ package com.pgizka.gsenger.converstation;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.api.MessageRestService;
 import com.pgizka.gsenger.api.dtos.messages.MessagesStateChangedRequest;
 import com.pgizka.gsenger.api.dtos.messages.PutMessageResponse;
@@ -11,8 +12,11 @@ import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.conversationView.ConversationContract;
 import com.pgizka.gsenger.conversationView.ConversationPresenter;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
+import com.pgizka.gsenger.jobqueue.sendMessge.SendMessageJob;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
+import com.pgizka.gsenger.provider.MessageRepository;
 import com.pgizka.gsenger.provider.User;
 
 import org.junit.Assert;
@@ -35,8 +39,10 @@ import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
 import static com.pgizka.gsenger.TestUtils.createMessageWithReceiverInfo;
 import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -48,11 +54,14 @@ public class ConversationPresenterTest  {
     @Mock
     ConversationContract.View view;
 
-    @Mock
-    ResponseBody responseBody;
+    @Inject
+    MessageRepository messageRepository;
 
     @Inject
-    MessageRestService messageRestService;
+    ChatRepository chatRepository;
+
+    @Inject
+    JobManager jobManager;
 
     private ConversationPresenter conversationPresenter;
 
@@ -67,53 +76,22 @@ public class ConversationPresenterTest  {
     }
 
     @Test
-    public void testSendingTextMessage_whenChatBetweenUsersNotExist() throws Exception {
+    public void testSendingTextMessage() throws Exception {
         Realm realm = Realm.getDefaultInstance();
         User user = createUser();
         User owner = getOrCreateOwner();
-
-        int messageServerId = 12;
-        PutMessageResponse putMessageResponse = new PutMessageResponse(messageServerId);
 
         int chatId = -1;
         conversationPresenter.onCreate(view, user.getId(), chatId);
         conversationPresenter.setFriend(user);
         conversationPresenter.setOwner(owner);
 
-        when(messageRestService.sendTextMessage(Matchers.<PutTextMessageRequest>any()))
-                .thenReturn(createCall(putMessageResponse));
+        when(messageRepository.createOutgoingTextMessageWithReceivers(any(), "message")).thenReturn(new Message());
 
         conversationPresenter.sendMessage("message");
 
-        verify(messageRestService, after(2000)).sendTextMessage(Matchers.<PutTextMessageRequest>any());
-
-        realm.beginTransaction();
-        Message message = realm.where(Message.class)
-                .equalTo("serverId", messageServerId)
-                .findFirst();
-        realm.commitTransaction();
-
-        Assert.assertNotNull(message);
-        Assert.assertEquals(Message.State.SENT.code, message.getState());
-    }
-
-    @Test
-    public void testSettingAllMessagesToViewed() throws Exception {
-        User user = createUser();
-        User owner = getOrCreateOwner();
-        Chat chat = createChatBetweenUsers(owner, user);
-        createMessageWithReceiverInfo(chat, user, owner);
-        createMessageWithReceiverInfo(chat, user, owner);
-
-        conversationPresenter.onCreate(view, user.getId(), chat.getId());
-        conversationPresenter.setOwner(owner);
-        conversationPresenter.setFriend(user);
-        conversationPresenter.setChat(chat);
-
-        when(messageRestService.updateMessageState(Mockito.<MessagesStateChangedRequest>any())).thenReturn(createCall(responseBody));
-        conversationPresenter.setAllMessagesViewed();
-
-        verify(messageRestService, timeout(4000).times(1)).updateMessageState(Mockito.<MessagesStateChangedRequest>any());
+        verify(messageRepository).createOutgoingTextMessageWithReceivers(any(), "message");
+        verify(jobManager).addJobInBackground(new SendMessageJob(any()));
     }
 
 }

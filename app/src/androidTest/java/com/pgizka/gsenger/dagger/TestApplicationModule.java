@@ -21,11 +21,6 @@ public class TestApplicationModule extends ApplicationModule {
     }
 
     @Override
-    public MessageRepository providesMessageRepository(Repository repository, ChatRepository chatRepository, UserRepository userRepository, UserAccountManager userAccountManager) {
-        return mock(MessageRepository.class);
-    }
-
-    @Override
     public JobManager providesJobManager() {
         return mock(JobManager.class);
     }

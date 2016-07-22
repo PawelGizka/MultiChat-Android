@@ -4,6 +4,7 @@ import com.pgizka.gsenger.addUsersToChatView.AddUsersToChatPresenterTest;
 import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.config.ApplicationModule;
+import com.pgizka.gsenger.config.RepositoryModule;
 import com.pgizka.gsenger.converstation.ConversationPresenterTest;
 import com.pgizka.gsenger.converstation.SendMediaPresenterTest;
 import com.pgizka.gsenger.createChatsView.CreateChatPresenterTest;
@@ -17,7 +18,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ApiModule.class})
+@Component(modules = {ApplicationModule.class, ApiModule.class, RepositoryModule.class})
 public interface TestApplicationComponent extends ApplicationComponent {
 
     void inject(ConversationPresenterTest conversationPresenterTest);

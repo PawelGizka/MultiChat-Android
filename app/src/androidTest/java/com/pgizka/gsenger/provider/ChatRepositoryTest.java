@@ -33,7 +33,7 @@ public class ChatRepositoryTest {
     public void setUp() throws IOException {
         setupRealm();
         realm = Realm.getDefaultInstance();
-        TestApplicationComponent applicationComponent = getTestApplicationComponent();
+        TestApplicationComponent applicationComponent = getDefaultTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
     }

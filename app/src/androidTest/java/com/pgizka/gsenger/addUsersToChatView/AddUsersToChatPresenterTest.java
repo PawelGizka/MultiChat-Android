@@ -4,12 +4,13 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.pgizka.gsenger.api.ChatRestService;
 import com.pgizka.gsenger.api.dtos.chats.AddUsersToChatRequest;
-import com.pgizka.gsenger.api.dtos.chats.PutChatRequest;
-import com.pgizka.gsenger.api.dtos.chats.PutChatResponse;
 import com.pgizka.gsenger.config.GSengerApplication;
-import com.pgizka.gsenger.createChatsView.CreateChatPresenter;
+import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
+import com.pgizka.gsenger.dagger.TestApplicationModule;
+import com.pgizka.gsenger.dagger.TestRepositoryModule;
 import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.User;
 
 import org.junit.Before;
@@ -25,13 +26,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
 import okhttp3.ResponseBody;
 
 import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.createGroupChat;
 import static com.pgizka.gsenger.TestUtils.createUser;
+import static com.pgizka.gsenger.TestUtils.getApplication;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
 import static org.junit.Assert.assertArrayEquals;
@@ -54,11 +56,15 @@ public class AddUsersToChatPresenterTest {
     @Inject
     ChatRestService chatRestService;
 
+    @Inject
+    ChatRepository chatRepository;
+
     private AddUsersToChatPresenter addUsersToChatPresenter;
 
     @Before
     public void setUp() throws IOException {
         setupRealm();
+        GSengerApplication application = getApplication();
         TestApplicationComponent applicationComponent = getTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
@@ -76,21 +82,18 @@ public class AddUsersToChatPresenterTest {
         participants.add(createUser());
 
         Chat chat = createGroupChat(participants);
-
-        when(chatRestService.addUsersToChat(Mockito.<AddUsersToChatRequest>any())).thenReturn(createCall(responseBody));
-
         addUsersToChatPresenter.onCreate(view, chat.getId());
 
         List<User> additionalUsers = new ArrayList<>();
         additionalUsers.add(createUser());
         additionalUsers.add(createUser());
 
+        when(chatRestService.addUsersToChat(Mockito.<AddUsersToChatRequest>any())).thenReturn(createCall(responseBody));
+
         addUsersToChatPresenter.addUsers(additionalUsers);
 
         verify(chatRestService, timeout(2000)).addUsersToChat(Mockito.<AddUsersToChatRequest>any());
-
-        int numberOfChatParticipants = 4;
-        assertEquals(numberOfChatParticipants, chat.getUsers().size());
+        verify(chatRepository).addUsersToChat(chat, additionalUsers);
     }
 
 

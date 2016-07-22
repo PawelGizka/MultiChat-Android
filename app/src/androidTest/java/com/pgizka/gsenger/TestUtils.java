@@ -4,14 +4,17 @@ package com.pgizka.gsenger;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 
+import com.pgizka.gsenger.api.ApiModule;
 import com.pgizka.gsenger.api.dtos.messages.ReceiverInfoData;
 import com.pgizka.gsenger.config.ApplicationModule;
 import com.pgizka.gsenger.config.GSengerApplication;
+import com.pgizka.gsenger.config.RepositoryModule;
 import com.pgizka.gsenger.dagger.DaggerTestApplicationComponent;
 import com.pgizka.gsenger.dagger.TestApiModule;
 import com.pgizka.gsenger.dagger.TestApplicationComponent;
 import com.pgizka.gsenger.api.dtos.messages.MessageData;
 import com.pgizka.gsenger.dagger.TestApplicationModule;
+import com.pgizka.gsenger.dagger.TestRepositoryModule;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Message;
@@ -53,10 +56,28 @@ public class TestUtils {
         realm.commitTransaction();
     }
 
+    public static TestApplicationComponent getDefaultTestApplicationComponent() {
+        return DaggerTestApplicationComponent.builder()
+                .applicationModule(new TestApplicationModule(getApplication()))
+                .apiModule(new TestApiModule())
+                .repositoryModule(new RepositoryModule(getApplication()))
+                .build();
+    }
+
     public static TestApplicationComponent getTestApplicationComponent() {
         return DaggerTestApplicationComponent.builder()
                 .applicationModule(new TestApplicationModule(getApplication()))
                 .apiModule(new TestApiModule())
+                .repositoryModule(new RepositoryModule(getApplication()))
+                .build();
+    }
+
+    public static TestApplicationComponent getTestApplicationComponent(
+            ApplicationModule applicationModule, ApiModule apiModule, RepositoryModule repositoryModule) {
+        return DaggerTestApplicationComponent.builder()
+                .applicationModule(applicationModule)
+                .apiModule(apiModule)
+                .repositoryModule(repositoryModule)
                 .build();
     }
 
@@ -158,7 +179,6 @@ public class TestUtils {
         chat.getMessages().add(message);
 
         ReceiverInfo receiverInfo = new ReceiverInfo();
-        receiverInfo.setDelivered(System.currentTimeMillis());
         receiverInfo = realm.copyToRealm(receiverInfo);
         receiverInfo.setMessage(message);
         receiverInfo.setUser(owner);

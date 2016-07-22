@@ -40,7 +40,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ApiModule.class})
+@Component(modules = {ApplicationModule.class, ApiModule.class, RepositoryModule.class})
 public interface ApplicationComponent {
 
     Repository repository();

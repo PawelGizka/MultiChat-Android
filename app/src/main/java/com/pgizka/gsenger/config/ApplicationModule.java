@@ -51,32 +51,6 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public Repository providesRepository() {
-        return new Repository(application);
-    }
-
-    @Provides
-    @Singleton
-    public UserRepository providesUserRepository(Repository repository) {
-        return new UserRepository(repository);
-    }
-
-    @Provides
-    @Singleton
-    public MessageRepository providesMessageRepository(Repository repository, ChatRepository chatRepository,
-                                                       UserRepository userRepository, UserAccountManager userAccountManager) {
-        return new MessageRepository(repository, chatRepository, userRepository, userAccountManager);
-    }
-
-    @Provides
-    @Singleton
-    public ChatRepository providesChatRepository(Repository repository, UserRepository userRepository,
-                                                 UserAccountManager userAccountManager) {
-        return new ChatRepository(repository, userRepository, userAccountManager);
-    }
-
-    @Provides
-    @Singleton
     public JobManager providesJobManager() {
         Configuration config = new Configuration.Builder(application)
                 .consumerKeepAlive(45)
@@ -89,12 +63,6 @@ public class ApplicationModule {
                 })
                 .build();
         return new JobManager(application, config);
-    }
-
-    @Provides
-    @Singleton
-    public UserAccountManager providesUserAccountManager() {
-        return new UserAccountManager(application);
     }
 
     @Provides

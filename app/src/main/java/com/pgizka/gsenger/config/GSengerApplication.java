@@ -30,6 +30,7 @@ public class GSengerApplication extends Application {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .apiModule(new ApiModule())
+                .repositoryModule(new RepositoryModule(this))
                 .build();
 
 

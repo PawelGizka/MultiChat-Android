@@ -27,10 +27,11 @@ import io.realm.Realm;
 import static com.pgizka.gsenger.TestUtils.createCall;
 import static com.pgizka.gsenger.TestUtils.createChatBetweenUsers;
 import static com.pgizka.gsenger.TestUtils.createGroupChat;
+import static com.pgizka.gsenger.TestUtils.createMessageWithReceiverInfo;
 import static com.pgizka.gsenger.TestUtils.createNotPersistedUser;
 import static com.pgizka.gsenger.TestUtils.createUser;
 import static com.pgizka.gsenger.TestUtils.getOrCreateOwner;
-import static com.pgizka.gsenger.TestUtils.getTestApplicationComponent;
+import static com.pgizka.gsenger.TestUtils.getDefaultTestApplicationComponent;
 import static com.pgizka.gsenger.TestUtils.prepareMessageData;
 import static com.pgizka.gsenger.TestUtils.prepareReceiversInfoData;
 import static com.pgizka.gsenger.TestUtils.setupRealm;
@@ -51,7 +52,7 @@ public class MessageRepositoryTest {
     public void setUp() throws IOException {
         setupRealm();
         realm = Realm.getDefaultInstance();
-        TestApplicationComponent applicationComponent = getTestApplicationComponent();
+        TestApplicationComponent applicationComponent = getDefaultTestApplicationComponent();
         applicationComponent.inject(this);
         GSengerApplication.setApplicationComponent(applicationComponent);
     }
@@ -248,6 +249,29 @@ public class MessageRepositoryTest {
             assertEquals(message, actualReceiverInfo.getMessage());
             assertEquals(expectedReceiver, actualReceiverInfo.getUser());
         }
+    }
+
+    @Test
+    public void testSettingAllMessagesToViewed() throws Exception {
+        User user = createUser();
+        User owner = getOrCreateOwner();
+        Chat chat = createChatBetweenUsers(owner, user);
+        Message message1 = createMessageWithReceiverInfo(chat, user, owner);
+        Message message2 = createMessageWithReceiverInfo(chat, user, owner);
+
+        realm.beginTransaction();
+        List<Message> messages = messageRepository.setMessagesViewed(chat.getId());
+        realm.commitTransaction();
+        assertEquals(2, messages.size());
+
+        realm.beginTransaction();
+        ReceiverInfo receiverInfo = realm.where(ReceiverInfo.class)
+                .equalTo("message.id", message1.getId())
+                .equalTo("user.id", owner.getId())
+                .findFirst();
+
+        assertNotSame(0, receiverInfo.getViewed());
+        realm.commitTransaction();
     }
 
 }
