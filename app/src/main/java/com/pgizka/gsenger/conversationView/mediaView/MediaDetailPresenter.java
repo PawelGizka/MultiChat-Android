@@ -38,6 +38,7 @@ public class MediaDetailPresenter implements MediaDetailContract.Presenter {
     @Override
     public void onDestroy() {
         view = null;
+        messages.removeChangeListeners();
     }
 
     @Override

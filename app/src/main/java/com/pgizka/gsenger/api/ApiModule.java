@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
 
-    static final String BASE_URL = "http://192.168.1.4:8080/GSengerGradle-1.0-SNAPSHOT/webresources/";
+    static final String BASE_URL = "http://192.168.1.5:8080/GSengerGradle-1.0-SNAPSHOT/webresources/";
 
     @Provides
     @Singleton

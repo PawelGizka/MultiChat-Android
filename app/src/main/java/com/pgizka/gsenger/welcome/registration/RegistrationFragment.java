@@ -188,8 +188,8 @@ public class RegistrationFragment extends Fragment implements WelcomeActivity.We
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(GcmTokenObtainedEvent tokenObtainedEvent) {
-        progressDialog.dismiss();
         if (waitingForRegistration) {
+            progressDialog.dismiss();
             onLoginButtonClicked();
         }
     }
