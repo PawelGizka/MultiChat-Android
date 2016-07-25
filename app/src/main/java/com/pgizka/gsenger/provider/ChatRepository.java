@@ -147,7 +147,7 @@ public class ChatRepository {
                     .findFirst();
 
             if (alreadyAddedUser == null) {
-                user = realm.copyToRealmOrUpdate(user);
+                user = realm.copyToRealmOrUpdate(userRepository.getOrCreateLocalUser(user));
                 user.getChats().add(chat);
                 chat.getUsers().add(user);
             }

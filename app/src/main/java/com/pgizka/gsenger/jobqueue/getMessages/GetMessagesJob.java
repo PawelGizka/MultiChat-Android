@@ -11,6 +11,7 @@ import com.pgizka.gsenger.api.dtos.messages.MessageBatchResponse;
 import com.pgizka.gsenger.api.dtos.messages.TextMessageData;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.jobqueue.getMediaMessageData.GetMediaMessageDataJob;
 import com.pgizka.gsenger.jobqueue.setMessageState.UpdateMessageStateJob;
 import com.pgizka.gsenger.provider.Chat;
 import com.pgizka.gsenger.provider.Message;
@@ -86,6 +87,7 @@ public class GetMessagesJob extends BaseJob {
             for (MediaMessageData mediaMessageData : messageBatchResponse.getMediaMessages()) {
                 Message insertedMessage = messageRepository.handleIncomingMediaMessage(mediaMessageData);
                 deliveredMessagesIds.add(insertedMessage.getId());
+                jobManager.addJob(new GetMediaMessageDataJob(insertedMessage.getId()));
             }
 
             jobManager.addJob(new UpdateMessageStateJob(deliveredMessagesIds));

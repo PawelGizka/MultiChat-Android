@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ConversationPresenter implements ConversationContract.Presenter {
     static final String TAG = ConversationPresenter.class.getSimpleName();
@@ -130,7 +131,7 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private void getMessages() {
         messages = realm.where(Message.class)
                 .equalTo("chat.id", chat.getId())
-                .findAll();
+                .findAllSorted("sendDate", Sort.ASCENDING);
 
         messages.addChangeListener(element -> {
             Log.i(TAG, "on messages change called");
