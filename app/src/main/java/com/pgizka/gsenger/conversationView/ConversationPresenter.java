@@ -1,7 +1,6 @@
 package com.pgizka.gsenger.conversationView;
 
 import android.support.annotation.VisibleForTesting;
-import android.util.Log;
 
 import com.path.android.jobqueue.JobManager;
 import com.pgizka.gsenger.config.GSengerApplication;
@@ -30,11 +29,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     private ConversationContract.View conversationView;
     private Realm realm;
 
-    private int friendId;
-    private int chatId;
-
-    private User friend;
-    private User owner;
     private Chat chat;
 
     private boolean groupChat;
@@ -55,13 +49,12 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     ChatRepository chatRepository;
 
     @Override
-    public void onCreate(ConversationContract.View view, int friendId, int chatId) {
+    public void onCreate(ConversationContract.View view, int chatId) {
         GSengerApplication.getApplicationComponent().inject(this);
         conversationView = view;
         realm = Realm.getDefaultInstance();
-        groupChat = friendId == -1;
-        this.friendId = friendId;
-        this.chatId = chatId;
+        chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
+        groupChat = chat.getType() == Chat.Type.SINGLE_CONVERSATION.code;
     }
 
     @Override
@@ -72,41 +65,27 @@ public class ConversationPresenter implements ConversationContract.Presenter {
     @Override
     public void onResume() {
         paused = false;
-        owner = userAccountManager.getOwner();
 
-        if (groupChat) {
-            chat = realm.where(Chat.class)
-                    .equalTo("id", chatId)
-                    .findFirst();
-        } else {
-            friend = realm.where(User.class)
-                    .equalTo("id", friendId)
-                    .findFirst();
+        conversationView.setGroupChat(groupChat);
+        fetchMessages();
 
-            chat = chatRepository.getSingleConversationChatWith(friend);
-        }
-
-        conversationView.setChat(chat);
-
-        if (chat != null) {
-            getMessages();
+        messages.addChangeListener(element -> {
+            messages = element;
             conversationView.displayConversationItems(messages);
-        } else {
-            realm.where(Chat.class).findAll().addChangeListener(element -> {
-                chat = chatRepository.getSingleConversationChatWith(friend);
-                if (chat != null) {
-                    getMessages();
-                }
-            });
-        }
-
-        if (chat != null && messages != null) {
             setAllMessagesViewed();
-        }
+        });
 
+        conversationView.displayConversationItems(messages);
+
+        setAllMessagesViewed();
+        displayChatInfo();
+    }
+
+    private void displayChatInfo() {
         if (groupChat) {
             conversationView.displayChatName(chat.getChatName());
         } else {
+            User friend = realm.where(User.class).equalTo("chats.id", chat.getId()).notEqualTo("id", 0).findFirst();
             if (friend.isInContacts()) {
                 conversationView.displayChatName(friend.getUserName());
             } else {
@@ -128,17 +107,10 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         realm.removeAllChangeListeners();
     }
 
-    private void getMessages() {
+    private void fetchMessages() {
         messages = realm.where(Message.class)
                 .equalTo("chat.id", chat.getId())
                 .findAllSorted("sendDate", Sort.ASCENDING);
-
-        messages.addChangeListener(element -> {
-            Log.i(TAG, "on messages change called");
-            messages = element;
-            conversationView.displayConversationItems(messages);
-            setAllMessagesViewed();
-        });
     }
 
     @VisibleForTesting
@@ -166,10 +138,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        if (!groupChat) {
-            chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
-        }
-
         Message message = messageRepository.createOutgoingTextMessageWithReceivers(chat, text);
         realm.commitTransaction();
 
@@ -186,16 +154,6 @@ public class ConversationPresenter implements ConversationContract.Presenter {
             }
 
         }
-    }
-
-    @VisibleForTesting
-    public void setFriend(User friend) {
-        this.friend = friend;
-    }
-
-    @VisibleForTesting
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 
     @VisibleForTesting

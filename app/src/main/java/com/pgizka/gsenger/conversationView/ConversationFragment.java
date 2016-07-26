@@ -51,15 +51,15 @@ public class ConversationFragment extends Fragment implements ConversationContra
     @BindView(R.id.conversation_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.conversation_empty_text_view) TextView emptyTextView;
     @BindView(R.id.conversation_main_edit_text) EditText messageText;
+
     private TextView usernameTextView;
     private ImageView userImageView;
 
     private List<Message> messages = new ArrayList<>();
-    private Chat chat;
+    private boolean groupChat;
 
     private ConversationAdapter conversationAdapter;
 
-    private int friendId;
     private int chatId;
 
     @Override
@@ -69,9 +69,8 @@ public class ConversationFragment extends Fragment implements ConversationContra
         GSengerApplication.getApplicationComponent().inject(this);
         conversationAdapter = new ConversationAdapter(this);
         Bundle arguments = getArguments();
-        friendId = arguments.getInt(ConversationActivity.USER_ID_ARGUMENT, -1);
         chatId = arguments.getInt(ConversationActivity.CHAT_ID_ARGUMENT, -1);
-        presenter.onCreate(this, friendId, chatId);
+        presenter.onCreate(this, chatId);
     }
 
     @Nullable
@@ -120,7 +119,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         MenuItem menuItem = menu.findItem(R.id.add_users_to_chat_action);
-        boolean isVisible = chat != null && chat.getType() == Chat.Type.GROUP.code;
+        boolean isVisible = groupChat;
         menuItem.setVisible(isVisible);
     }
 
@@ -166,7 +165,6 @@ public class ConversationFragment extends Fragment implements ConversationContra
 
             Intent intent = new Intent(getContext(), SendMediaActivity.class);
             intent.putExtra(SendMediaFragment.ACTION_ARGUMENT, action);
-            intent.putExtra(SendMediaFragment.USER_ID_ARGUMENT, friendId);
             intent.putExtra(SendMediaFragment.CHAT_ID_ARGUMENT, chatId);
             startActivity(intent);
             return true;
@@ -221,12 +219,7 @@ public class ConversationFragment extends Fragment implements ConversationContra
     }
 
     @Override
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
-
-    @Override
-    public void setPresenter(ConversationContract.Presenter presenter) {
-        this.presenter = presenter;
+    public void setGroupChat(boolean groupChat) {
+        this.groupChat = groupChat;
     }
 }

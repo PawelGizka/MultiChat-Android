@@ -32,7 +32,15 @@ public class ChatsPresenter implements ChatsContract.Presenter {
 
     @Override
     public void onStart() {
-        chats = realm.where(Chat.class).findAll();
+        chats = realm.where(Chat.class)
+                .equalTo("type", Chat.Type.GROUP.code)
+                .or()
+                .beginGroup()
+                .equalTo("type", Chat.Type.SINGLE_CONVERSATION.code)
+                .isNotEmpty("chats")
+                .endGroup()
+                .findAll();
+
         view.displayChatsList(chats);
 
         chats.addChangeListener(element -> {
@@ -46,9 +54,6 @@ public class ChatsPresenter implements ChatsContract.Presenter {
         Intent intent = new Intent(activity, ConversationActivity.class);
         if (chat.getType() == Chat.Type.GROUP.code) {
             intent.putExtra(ConversationActivity.CHAT_ID_ARGUMENT, chat.getId());
-        } else {
-            //FIXME possible errors when owner id is get
-            intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, chat.getUsers().last().getId());
         }
         activity.startActivity(intent);
     }

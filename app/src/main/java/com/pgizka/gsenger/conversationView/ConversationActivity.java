@@ -9,7 +9,6 @@ import com.pgizka.gsenger.R;
 public class ConversationActivity extends AppCompatActivity {
 
     public static final String CHAT_ID_ARGUMENT = "chatIdArgument";
-    public static final String USER_ID_ARGUMENT = "friendIdArgument";
 
     private ConversationFragment conversationFragment;
 

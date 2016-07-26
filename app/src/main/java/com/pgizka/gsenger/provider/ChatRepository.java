@@ -25,6 +25,12 @@ public class ChatRepository {
         this.userAccountManager = userAccountManager;
     }
 
+    public void createNecessarySingleConversationChats(List<User> users) {
+        for (User user : users) {
+            getOrCreateSingleConversationChatWith(user);
+        }
+    }
+
     public Chat getOrCreateSingleConversationChatWith(User friend) {
         Chat chat = getSingleConversationChatWith(friend);
 
@@ -87,7 +93,6 @@ public class ChatRepository {
         }
 
         chat.setUsers(realmList);
-
 
         return chat;
     }

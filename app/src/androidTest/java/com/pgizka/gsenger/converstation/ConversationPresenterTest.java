@@ -82,9 +82,7 @@ public class ConversationPresenterTest  {
         User owner = getOrCreateOwner();
 
         int chatId = -1;
-        conversationPresenter.onCreate(view, user.getId(), chatId);
-        conversationPresenter.setFriend(user);
-        conversationPresenter.setOwner(owner);
+        conversationPresenter.onCreate(view, chatId);
 
         when(messageRepository.createOutgoingTextMessageWithReceivers(any(), "message")).thenReturn(new Message());
 

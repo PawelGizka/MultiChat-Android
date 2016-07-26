@@ -16,9 +16,7 @@ public interface ConversationContract {
 
         void displayChatName(String userName);
 
-        void setChat(Chat chat);
-
-        void setPresenter(ConversationContract.Presenter presenter);
+        void setGroupChat(boolean groupChat);
 
         void navigateToMediaDetailView(int messageId);
 
@@ -26,7 +24,7 @@ public interface ConversationContract {
 
     interface Presenter {
 
-        void onCreate(View view, int friendId, int chatId);
+        void onCreate(View view, int chatId);
 
         void onDestroy();
 

@@ -10,8 +10,10 @@ import com.pgizka.gsenger.api.dtos.contacts.GetContactsRequest;
 import com.pgizka.gsenger.api.dtos.contacts.GetContactsResponse;
 import com.pgizka.gsenger.config.ApplicationComponent;
 import com.pgizka.gsenger.jobqueue.BaseJob;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.Repository;
 import com.pgizka.gsenger.provider.User;
+import com.pgizka.gsenger.provider.UserRepository;
 import com.pgizka.gsenger.util.ContactsUtil;
 import com.pgizka.gsenger.util.UserAccountManager;
 
@@ -45,10 +47,13 @@ public class GetContactsJob extends BaseJob {
     transient ContactsUtil contactsUtil;
 
     @Inject
-    transient Repository repository;
+    transient UserAccountManager userAccountManager;
 
     @Inject
-    transient UserAccountManager userAccountManager;
+    transient UserRepository userRepository;
+
+    @Inject
+    transient ChatRepository chatRepository;
 
     public GetContactsJob() {
         super(new Params(1).requireNetwork().addTags("getContacts"));
@@ -103,24 +108,11 @@ public class GetContactsJob extends BaseJob {
 
     private void processResponse(GetContactsResponse response) {
         Realm realm = Realm.getDefaultInstance();
-        List<User> foundContacts = response.getContacts();
 
-        for (User foundContact : foundContacts) {
-            User localContact = realm.where(User.class)
-                                    .equalTo("serverId", foundContact.getServerId())
-                                    .findFirst();
-
-            boolean contactExists = localContact != null;
-            if (contactExists) {
-                foundContact.setId(localContact.getId());
-            } else {
-                foundContact.setId(repository.getUserNextId());
-            }
-
-            realm.beginTransaction();
-            realm.copyToRealmOrUpdate(foundContact);
-            realm.commitTransaction();
-        }
+        realm.beginTransaction();
+        List<User> insertedContacts = userRepository.insertFountContacts(response.getContacts());
+        chatRepository.createNecessarySingleConversationChats(insertedContacts);
+        realm.commitTransaction();
     }
 
 

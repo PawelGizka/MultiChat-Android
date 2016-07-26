@@ -8,6 +8,8 @@ import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.conversationView.ConversationActivity;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsFinishedEvent;
 import com.pgizka.gsenger.jobqueue.getContacts.GetContactsJob;
+import com.pgizka.gsenger.provider.Chat;
+import com.pgizka.gsenger.provider.ChatRepository;
 import com.pgizka.gsenger.provider.User;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +35,9 @@ public class ContactsPresenter implements ContactsContract.Presenter {
 
     @Inject
     EventBus eventBus;
+
+    @Inject
+    ChatRepository chatRepository;
 
     @Override
     public void onCreate(ContactsContract.View view) {
@@ -71,7 +76,8 @@ public class ContactsPresenter implements ContactsContract.Presenter {
     @Override
     public void friendClicked(int position, User user) {
         Intent intent = new Intent(activity, ConversationActivity.class);
-        intent.putExtra(ConversationActivity.USER_ID_ARGUMENT, user.getId());
+        Chat chat = chatRepository.getSingleConversationChatWith(user);
+        intent.putExtra(ConversationActivity.CHAT_ID_ARGUMENT, chat.getId());
         activity.startActivity(intent);
     }
 
