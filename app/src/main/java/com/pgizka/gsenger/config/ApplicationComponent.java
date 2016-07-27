@@ -32,8 +32,8 @@ import com.pgizka.gsenger.userStatusView.UserProfileFragment;
 import com.pgizka.gsenger.userStatusView.UserProfilePresenter;
 import com.pgizka.gsenger.util.StorageResolver;
 import com.pgizka.gsenger.util.UserAccountManager;
-import com.pgizka.gsenger.welcome.registration.RegistrationFragment;
-import com.pgizka.gsenger.welcome.registration.RegistrationTask;
+import com.pgizka.gsenger.welcomeView.registration.RegistrationFragment;
+import com.pgizka.gsenger.welcomeView.registration.RegistrationTask;
 
 import javax.inject.Singleton;
 

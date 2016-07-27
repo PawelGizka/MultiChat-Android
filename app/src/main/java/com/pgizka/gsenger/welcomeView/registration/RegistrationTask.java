@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome.registration;
+package com.pgizka.gsenger.welcomeView.registration;
 
 import android.os.AsyncTask;
 import android.util.Log;

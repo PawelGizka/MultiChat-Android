@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome;
+package com.pgizka.gsenger.welcomeView;
 
 import android.content.Intent;
 import android.os.Bundle;

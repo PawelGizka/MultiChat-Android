@@ -43,10 +43,10 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".welcome.WelcomeActivity"
+            android:name=".welcomeView.WelcomeActivity"
             android:label="@string/title_activity_welcome">
         </activity>
-        <activity android:name=".welcome.BootStrapActivity">
+        <activity android:name=".welcomeView.BootStrapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

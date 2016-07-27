@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome;
+package com.pgizka.gsenger.welcomeView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.pgizka.gsenger.R;
 import com.pgizka.gsenger.mainView.MainActivity;
-import com.pgizka.gsenger.welcome.registration.RegistrationFragment;
+import com.pgizka.gsenger.welcomeView.registration.RegistrationFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome;
+package com.pgizka.gsenger.welcomeView;
 
 public class GcmTokenObtainedEvent {
 

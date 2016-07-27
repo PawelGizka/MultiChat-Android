@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.pgizka.gsenger.welcome.WelcomeActivity">
+    tools:context="com.pgizka.gsenger.welcomeView.WelcomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

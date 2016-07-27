@@ -1,4 +1,4 @@
-package com.pgizka.gsenger.welcome.registration;
+package com.pgizka.gsenger.welcomeView.registration;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,8 +30,8 @@ import com.pgizka.gsenger.config.GSengerApplication;
 import com.pgizka.gsenger.gcm.GcmUtil;
 import com.pgizka.gsenger.mainView.MainActivity;
 import com.pgizka.gsenger.util.UserAccountManager;
-import com.pgizka.gsenger.welcome.GcmTokenObtainedEvent;
-import com.pgizka.gsenger.welcome.WelcomeActivity;
+import com.pgizka.gsenger.welcomeView.GcmTokenObtainedEvent;
+import com.pgizka.gsenger.welcomeView.WelcomeActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
