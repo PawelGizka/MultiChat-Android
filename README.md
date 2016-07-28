@@ -1,6 +1,6 @@
 # GSenger-Android
 
-It is a multi chat application. This is app was created only for learning purpose. 
+It is a multi chat application. This app was created only for learning purpose. 
 
 Application feauteres:
 - send message to individual person,
