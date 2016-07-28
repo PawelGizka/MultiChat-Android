@@ -28,6 +28,7 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     ChatRepository chatRepository;
 
     private AddUsersToChatContract.View view;
+    private boolean viewIsPresent;
 
     private Chat chat;
     private List<User> availableUsers;
@@ -39,6 +40,7 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     @Override
     public void onCreate(AddUsersToChatContract.View view, int chatId) {
         this.view = view;
+        this.viewIsPresent = true;
 
         Realm realm = Realm.getDefaultInstance();
         chat = realm.where(Chat.class).equalTo("id", chatId).findFirst();
@@ -47,12 +49,13 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
     @Override
     public void onDestroy() {
         view = null;
+        viewIsPresent = false;
     }
 
     @Override
     public void onResume() {
         getAvailableUsers();
-        view.displayUsersList(availableUsers);
+        if (viewIsPresent) view.displayUsersList(availableUsers);
     }
 
     private void getAvailableUsers() {
@@ -83,26 +86,28 @@ public class AddUsersToChatPresenter implements AddUsersToChatContract.Presenter
         AddUsersToChatRequest addUsersToChatRequest = new AddUsersToChatRequest(chat, users);
         Call<ResponseBody> call = chatRestService.addUsersToChat(addUsersToChatRequest);
 
-        view.showProgressDialog();
+        if (viewIsPresent) view.showProgressDialog();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                view.dismissProgressDialog();
+                if (viewIsPresent) view.dismissProgressDialog();
                 if (response.isSuccess()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.beginTransaction();
                     chatRepository.addUsersToChat(chat, users);
                     realm.commitTransaction();
-                    view.closeWindow();
+                    if (viewIsPresent) view.closeWindow();
                 } else {
-                    view.displayErrorMessage("Could not add selected users to chat");
+                    if (viewIsPresent) view.displayErrorMessage("Could not add selected users to chat");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                view.dismissProgressDialog();
-                view.displayErrorMessage("Could not add selected users to chat");
+                if (viewIsPresent) {
+                    view.dismissProgressDialog();
+                    view.displayErrorMessage("Could not add selected users to chat");
+                }
             }
         });
     }

@@ -9,7 +9,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.pgizka.gsenger.R;
-import com.pgizka.gsenger.welcome.GcmTokenObtainedEvent;
+import com.pgizka.gsenger.welcomeView.GcmTokenObtainedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

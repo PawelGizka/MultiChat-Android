@@ -40,6 +40,7 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     private boolean groupChat;
 
     private SendMediaContract.View view;
+    private boolean viewIsPresent;
 
     private Context context;
 
@@ -47,6 +48,7 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
     public void onCreate(SendMediaContract.View view, Context context, int friendId, int chatId) {
         GSengerApplication.getApplicationComponent().inject(this);
         this.view = view;
+        this.viewIsPresent = true;
         this.context = context;
         this.friendId = friendId;
         this.chatId = chatId;
@@ -66,12 +68,12 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
             chat = realm.where(Chat.class)
                     .equalTo("id", chatId)
                     .findFirst();
-            view.setToolbarSubtitle(chat.getChatName());
+            if (viewIsPresent) view.setToolbarSubtitle(chat.getChatName());
         } else {
             friend = realm.where(User.class)
                     .equalTo("id", friendId)
                     .findFirst();
-            view.setToolbarSubtitle(friend.getUserName());
+            if (viewIsPresent) view.setToolbarSubtitle(friend.getUserName());
         }
     }
 
@@ -82,9 +84,9 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
                 .from(photoUri)
                 .to(StorageResolver.IMAGES_SENT_PATH)
                 .onCopyingFinished((newFileName, path) -> {
-                    view.dismissProgressDialog();
+                    if (viewIsPresent) view.dismissProgressDialog();
                     sendMediaMessage(MediaMessage.Type.PHOTO.code, newFileName, path, description);
-                    view.finish();
+                    if (viewIsPresent) view.finish();
                 })
                 .execute();
     }
@@ -96,9 +98,9 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
                 .from(videoUri)
                 .to(StorageResolver.VIDEO_SENT_PATH)
                 .onCopyingFinished((newFileName, path) -> {
-                    view.dismissProgressDialog();
+                    if (viewIsPresent) view.dismissProgressDialog();
                     sendMediaMessage(MediaMessage.Type.VIDEO.code, newFileName, path, description);
-                    view.finish();
+                    if (viewIsPresent) view.finish();
                 })
                 .execute();
     }
@@ -110,9 +112,9 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
                 .from(fileUri)
                 .to(StorageResolver.FILE_SENT_PATH)
                 .onCopyingFinished((newFileName, path) -> {
-                    view.dismissProgressDialog();
+                    if (viewIsPresent) view.dismissProgressDialog();
                     sendMediaMessage(MediaMessage.Type.FILE.code, newFileName, path, description);
-                    view.finish();
+                    if (viewIsPresent) view.finish();
                 })
                 .execute();
     }
@@ -121,12 +123,7 @@ public class SendMediaPresenter implements SendMediaContract.Presenter {
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        if (!groupChat) {
-            chat = chatRepository.getOrCreateSingleConversationChatWith(friend);
-        }
-
         Message message = messageRepository.createOutgoingMediaMessageWithReceivers(chat, type, fileName, path, description);
-
         realm.commitTransaction();
 
         jobManager.addJob(new SendMessageJob(message.getId()));

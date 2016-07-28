@@ -33,6 +33,7 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
     UserAccountManager userAccountManager;
 
     private CreateChatContract.View view;
+    private boolean viewIsPresent;
 
     private Realm realm;
 
@@ -40,33 +41,38 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
     public void onCreate(CreateChatContract.View view) {
         GSengerApplication.getApplicationComponent().inject(this);
         this.view = view;
+        this.viewIsPresent = true;
         realm = Realm.getDefaultInstance();
     }
 
     @Override
     public void onDestroy() {
         view = null;
+        viewIsPresent = false;
     }
 
     @Override
     public void onResume() {
-        //get all users in contacts except owner of this phone
-        List<User> users = realm.where(User.class)
-                .notEqualTo("id", 0) //owner id = 0
-                .equalTo("inContacts", true) // only show users in contacts
+        List<User> users = listAvailableUsers();
+        if (viewIsPresent) view.displayUsersList(users);
+    }
+
+    private List<User> listAvailableUsers() {
+        return realm.where(User.class)
+                .notEqualTo("id", 0)
+                .equalTo("inContacts", true)
                 .findAll();
-        view.displayUsersList(users);
     }
 
     @Override
     public void createChat(String chatName, List<User> participants) {
         if (TextUtils.isEmpty(chatName)) {
-            view.displayErrorMessage("Please enter chat name");
+            if (viewIsPresent) view.displayErrorMessage("Please enter chat name");
             return;
         }
 
         if (participants.isEmpty()) {
-            view.displayErrorMessage("Please select at least one participant");
+            if (viewIsPresent) view.displayErrorMessage("Please select at least one participant");
             return;
         }
 
@@ -79,23 +85,25 @@ public class CreateChatPresenter implements CreateChatContract.Presenter {
         call.enqueue(new Callback<PutChatResponse>() {
             @Override
             public void onResponse(Call<PutChatResponse> call, Response<PutChatResponse> response) {
-                view.dismissProgressDialog();
+                if (viewIsPresent) view.dismissProgressDialog();
                 if (response.isSuccess()) {
                     PutChatResponse putChatResponse = response.body();
                     Realm realm = Realm.getDefaultInstance();
                     realm.beginTransaction();
                     chatRepository.createGroupChat(putChatRequest, putChatResponse, participants);
                     realm.commitTransaction();
-                    view.closeWindow();
+                    if (viewIsPresent) view.closeWindow();
                 } else {
-                    view.displayErrorMessage("Cannot create Chat, problem with connection.");
+                    if (viewIsPresent) view.displayErrorMessage("Cannot create Chat, problem with connection.");
                 }
             }
 
             @Override
             public void onFailure(Call<PutChatResponse> call, Throwable t) {
-                view.dismissProgressDialog();
-                view.displayErrorMessage("Cannot create Chat, problem with connection.");
+                if (viewIsPresent) {
+                    view.dismissProgressDialog();
+                    view.displayErrorMessage("Cannot create Chat, problem with connection.");
+                }
             }
         });
 

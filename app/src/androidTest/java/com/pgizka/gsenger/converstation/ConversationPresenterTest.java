@@ -77,9 +77,8 @@ public class ConversationPresenterTest  {
 
     @Test
     public void testSendingTextMessage() throws Exception {
-        Realm realm = Realm.getDefaultInstance();
-        User user = createUser();
-        User owner = getOrCreateOwner();
+        createUser();
+        getOrCreateOwner();
 
         int chatId = -1;
         conversationPresenter.onCreate(view, chatId);
