@@ -1,4 +1,4 @@
-# GSenger-Android
+# ChatSenger-Android
 
 It is a multi chat application. This app was created only for learning purpose. 
 
@@ -23,5 +23,3 @@ App uses following libraries:
 - ButterKnife - binding views
 - Event Bus - delivering events
 - Mockito - mocking dependencies during unit tests
-
-Application server code is available here: https://github.com/PawelGizka/GSenger-Server.
