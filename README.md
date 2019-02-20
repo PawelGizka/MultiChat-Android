@@ -1,4 +1,4 @@
-# ChatSenger-Android
+# MultiChat-Android
 
 It is a multi chat application. This app was created only for learning purpose. 
 
@@ -11,7 +11,7 @@ Application feauteres:
 - creating group chat and ability to add other users to existing group chat,
 - each user can set their own user name and image,
 
-GSenger uses REST and Json based protocol to comunicate with remote Server. MVP is used ad main pattern, therefor app has
+MultiChat uses REST and Json based protocol to comunicate with remote Server. MVP is used ad main pattern, therefor app has
 clean and testable architecture. OAuth authentication is used in order to allow users to login with facebook. 
 
 App uses following libraries: 
